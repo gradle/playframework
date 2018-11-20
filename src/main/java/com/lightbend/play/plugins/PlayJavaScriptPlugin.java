@@ -4,6 +4,7 @@ import com.lightbend.play.tasks.JavaScriptMinify;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.plugins.BasePlugin;
 import org.gradle.play.platform.PlayPlatform;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public class PlayJavaScriptPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
+        project.getPluginManager().apply(BasePlugin.class);
         SourceDirectorySet sourceDirectory = createSourceDirectorySet(project);
         createJavaScriptMinify(project, sourceDirectory);
     }
