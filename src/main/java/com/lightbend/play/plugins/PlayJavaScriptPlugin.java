@@ -16,18 +16,18 @@ public class PlayJavaScriptPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         project.getPluginManager().apply(BasePlugin.class);
-        SourceDirectorySet sourceDirectory = createSourceDirectorySet(project);
-        createJavaScriptMinify(project, sourceDirectory);
+        SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
+        createDefaultJavaScriptMinifyTask(project, sourceDirectory);
     }
 
-    private SourceDirectorySet createSourceDirectorySet(Project project) {
+    private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
         SourceDirectorySet sourceDirectory = project.getObjects().sourceDirectorySet("javaScript", "JavaScript source files");
         sourceDirectory.srcDir("app/assets");
         sourceDirectory.include("**/*.js");
         return sourceDirectory;
     }
 
-    private JavaScriptMinify createJavaScriptMinify(Project project, SourceDirectorySet sourceDirectory) {
+    private JavaScriptMinify createDefaultJavaScriptMinifyTask(Project project, SourceDirectorySet sourceDirectory) {
         PlayPlatform playPlatform = createDefaultPlayPlatform();
 
         return project.getTasks().create("minifyJavaScript", JavaScriptMinify.class, javaScriptMinify -> {
