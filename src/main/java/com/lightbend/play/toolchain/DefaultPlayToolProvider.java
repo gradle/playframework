@@ -1,0 +1,92 @@
+package com.lightbend.play.toolchain;
+
+import com.lightbend.play.javascript.GoogleClosureCompiler;
+import com.lightbend.play.javascript.JavaScriptCompileSpec;
+import com.lightbend.play.javascript.PlayCompileSpec;
+import org.gradle.internal.file.PathToFileResolver;
+import org.gradle.internal.fingerprint.classpath.ClasspathFingerprinter;
+import org.gradle.language.base.internal.compile.CompileSpec;
+import org.gradle.language.base.internal.compile.Compiler;
+import org.gradle.play.internal.platform.PlayMajorVersion;
+import org.gradle.play.internal.run.PlayApplicationRunner;
+import org.gradle.play.internal.run.PlayApplicationRunnerFactory;
+import org.gradle.play.platform.PlayPlatform;
+import org.gradle.process.internal.worker.WorkerProcessFactory;
+import org.gradle.util.TreeVisitor;
+import org.gradle.workers.internal.WorkerDaemonFactory;
+
+import java.io.File;
+import java.util.Set;
+
+class DefaultPlayToolProvider implements PlayToolProvider {
+
+    private final PathToFileResolver fileResolver;
+    private final WorkerDaemonFactory workerDaemonFactory;
+    private final File daemonWorkingDir;
+    private final PlayPlatform targetPlatform;
+    private WorkerProcessFactory workerProcessBuilderFactory;
+    private final Set<File> twirlClasspath;
+    private final Set<File> routesClasspath;
+    private final Set<File> javaScriptClasspath;
+    private final ClasspathFingerprinter fingerprinter;
+
+    public DefaultPlayToolProvider(PathToFileResolver fileResolver, File daemonWorkingDir, WorkerDaemonFactory workerDaemonFactory,
+                                   WorkerProcessFactory workerProcessBuilderFactory, PlayPlatform targetPlatform,
+                                   Set<File> twirlClasspath, Set<File> routesClasspath, Set<File> javaScriptClasspath,
+                                   ClasspathFingerprinter fingerprinter) {
+        this.fileResolver = fileResolver;
+        this.daemonWorkingDir = daemonWorkingDir;
+        this.workerDaemonFactory = workerDaemonFactory;
+        this.workerProcessBuilderFactory = workerProcessBuilderFactory;
+        this.targetPlatform = targetPlatform;
+        this.twirlClasspath = twirlClasspath;
+        this.routesClasspath = routesClasspath;
+        this.javaScriptClasspath = javaScriptClasspath;
+        this.fingerprinter = fingerprinter;
+        // validate that the targetPlatform is valid
+        PlayMajorVersion.forPlatform(targetPlatform);
+    }
+
+    @Override
+    public <T extends CompileSpec> Compiler<T> newCompiler(Class<T> spec) {
+//        if (TwirlCompileSpec.class.isAssignableFrom(spec)) {
+//            TwirlCompiler twirlCompiler = TwirlCompilerFactory.create(targetPlatform);
+//            return cast(new DaemonPlayCompiler<TwirlCompileSpec>(daemonWorkingDir, twirlCompiler, workerDaemonFactory, twirlClasspath, twirlCompiler.getClassLoaderPackages(), fileResolver));
+//        } else if (RoutesCompileSpec.class.isAssignableFrom(spec)) {
+//            RoutesCompiler routesCompiler = RoutesCompilerFactory.create(targetPlatform);
+//            return cast(new DaemonPlayCompiler<RoutesCompileSpec>(daemonWorkingDir, routesCompiler, workerDaemonFactory, routesClasspath, routesCompiler.getClassLoaderPackages(), fileResolver));
+//        } else if (JavaScriptCompileSpec.class.isAssignableFrom(spec)) {
+//            GoogleClosureCompiler javaScriptCompiler = new GoogleClosureCompiler();
+//            return cast(new DaemonPlayCompiler<JavaScriptCompileSpec>(daemonWorkingDir, javaScriptCompiler, workerDaemonFactory, javaScriptClasspath, javaScriptCompiler.getClassLoaderPackages(), fileResolver));
+//        }
+
+        if (JavaScriptCompileSpec.class.isAssignableFrom(spec)) {
+            GoogleClosureCompiler javaScriptCompiler = new GoogleClosureCompiler();
+            return cast(new DaemonPlayCompiler<JavaScriptCompileSpec>(daemonWorkingDir, javaScriptCompiler, workerDaemonFactory, javaScriptClasspath, javaScriptCompiler.getClassLoaderPackages(), fileResolver));
+        }
+        throw new IllegalArgumentException(String.format("Cannot create Compiler for unsupported CompileSpec type '%s'", spec.getSimpleName()));
+    }
+
+    @Override
+    public <T> T get(Class<T> toolType) {
+        if (PlayApplicationRunner.class.isAssignableFrom(toolType)) {
+            return toolType.cast(PlayApplicationRunnerFactory.create(targetPlatform, workerProcessBuilderFactory, fingerprinter));
+        }
+        throw new IllegalArgumentException(String.format("Don't know how to provide tool of type %s.", toolType.getSimpleName()));
+    }
+
+    private <T extends CompileSpec> Compiler<T> cast(Compiler<? extends PlayCompileSpec> raw) {
+        @SuppressWarnings("unchecked")
+        Compiler<T> converted = (Compiler<T>) raw;
+        return converted;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return true;
+    }
+
+    @Override
+    public void explain(TreeVisitor<? super String> visitor) {
+    }
+}

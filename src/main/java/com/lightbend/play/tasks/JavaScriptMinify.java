@@ -1,5 +1,10 @@
 package com.lightbend.play.tasks;
 
+import com.lightbend.play.javascript.DefaultJavaScriptCompileSpec;
+import com.lightbend.play.javascript.JavaScriptCompileSpec;
+import com.lightbend.play.toolchain.DefaultPlayToolChain;
+import com.lightbend.play.toolchain.PlayToolChain;
+import com.lightbend.play.toolchain.PlayToolChainInternal;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.FileVisitor;
@@ -14,13 +19,14 @@ import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.compile.BaseForkOptions;
+import org.gradle.internal.file.PathToFileResolver;
+import org.gradle.internal.fingerprint.classpath.ClasspathFingerprinter;
 import org.gradle.language.base.internal.compile.Compiler;
 import org.gradle.platform.base.internal.toolchain.ToolProvider;
-import org.gradle.play.internal.javascript.DefaultJavaScriptCompileSpec;
-import org.gradle.play.internal.javascript.JavaScriptCompileSpec;
-import org.gradle.play.internal.toolchain.PlayToolChainInternal;
 import org.gradle.play.platform.PlayPlatform;
-import org.gradle.play.toolchain.PlayToolChain;
+import org.gradle.process.internal.worker.WorkerProcessFactory;
+import org.gradle.process.internal.worker.child.WorkerDirectoryProvider;
+import org.gradle.workers.internal.WorkerDaemonFactory;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -41,13 +47,28 @@ public class JavaScriptMinify extends SourceTask {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Returns the tool chain that will be used to compile the JavaScript source.
-     *
-     * @return The tool chain.
-     */
     @Inject
-    public PlayToolChain getToolChain() {
+    protected PathToFileResolver getPathToFileResolver() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Inject
+    protected WorkerDaemonFactory getWorkerDaemonFactory() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Inject
+    protected WorkerProcessFactory getWorkerProcessFactory() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Inject
+    protected WorkerDirectoryProvider getWorkerDirectoryProvider() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Inject
+    protected ClasspathFingerprinter getClasspathFingerprinter() {
         throw new UnsupportedOperationException();
     }
 
@@ -89,7 +110,9 @@ public class JavaScriptMinify extends SourceTask {
     }
 
     private Compiler<JavaScriptCompileSpec> getCompiler() {
-        ToolProvider select = ((PlayToolChainInternal) getToolChain()).select(playPlatform);
+        PlayToolChain playToolChain = new DefaultPlayToolChain(getPathToFileResolver(), getWorkerDaemonFactory(), getProject().getConfigurations(), getProject().getDependencies(), getWorkerProcessFactory(), getWorkerDirectoryProvider(), getClasspathFingerprinter());
+
+        ToolProvider select = ((PlayToolChainInternal) playToolChain).select(playPlatform);
         return select.newCompiler(JavaScriptCompileSpec.class);
     }
 
