@@ -30,7 +30,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
     }
 
     String getMainTask() {
-        return "assemble"
+        'assemble'
     }
 
     abstract String getPluginName()
