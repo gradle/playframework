@@ -11,6 +11,10 @@ dependencies {
     implementation(kotlin("gradle-plugin"))
 }
 
+kotlinDslPluginOptions {
+    experimentalWarning.set(false)
+}
+
 gradlePlugin {
     plugins {
         register("integration-test-plugin") {
