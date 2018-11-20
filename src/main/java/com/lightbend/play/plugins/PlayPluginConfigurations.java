@@ -12,9 +12,11 @@ import org.gradle.api.internal.file.FileCollectionInternal;
 import org.gradle.api.internal.file.collections.ImmutableFileCollection;
 import org.gradle.api.internal.file.collections.LazilyInitializedFileCollection;
 import org.gradle.api.internal.tasks.TaskDependencyResolveContext;
-import org.gradle.internal.impldep.com.google.common.collect.ImmutableSet;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PlayPluginConfigurations {
 
@@ -110,13 +112,13 @@ public class PlayPluginConfigurations {
 
         @Override
         public FileCollectionInternal createDelegate() {
-            ImmutableSet.Builder<File> files = ImmutableSet.builder();
+            Set<File> files = new HashSet<>();
             for (ResolvedArtifact artifact : configuration.getResolvedConfiguration().getResolvedArtifacts()) {
                 if ((artifact.getId().getComponentIdentifier() instanceof ProjectComponentIdentifier) == matchProjectComponents) {
                     files.add(artifact.getFile());
                 }
             }
-            return ImmutableFileCollection.of(files.build());
+            return ImmutableFileCollection.of(Collections.unmodifiableSet(files));
         }
 
         @Override
