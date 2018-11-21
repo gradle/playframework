@@ -30,7 +30,7 @@ class PlayTwirlPluginIntegrationTest extends AbstractIntegrationTest {
         build(TWIRL_COMPILE_TASK_NAME)
 
         then:
-        File outputDir = new File(projectDir, "build/src/twirl/js")
+        File outputDir = new File(projectDir, 'build/src/twirl/js')
         outputDir.isDirectory()
         File[] compiledTwirlFiles = outputDir.listFiles()
         compiledTwirlFiles.length == 1

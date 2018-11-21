@@ -11,6 +11,9 @@ import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
 
+/**
+ * Plugin for Play Framework component support.
+ */
 public class PlayApplicationPlugin implements Plugin<Project> {
 
     public static final String PLAY_EXTENSION_NAME = "play";

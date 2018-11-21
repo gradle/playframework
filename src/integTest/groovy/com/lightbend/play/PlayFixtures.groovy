@@ -21,6 +21,17 @@ final class PlayFixtures {
         """
     }
 
+    static String javascriptRepository() {
+        """
+            repositories {
+                maven {
+                    name = "gradle-js"
+                    url = "https://repo.gradle.org/gradle/javascript-public"
+                }
+            }
+        """
+    }
+
     static File findFile(File[] files, String fileName) {
         files.find { it.name == fileName }
     }

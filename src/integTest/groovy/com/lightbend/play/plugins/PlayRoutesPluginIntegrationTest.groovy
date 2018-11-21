@@ -30,7 +30,7 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         build(ROUTES_COMPILE_TASK_NAME)
 
         then:
-        File controllersOutputDir = new File(projectDir, "build/src/routes/controllers")
+        File controllersOutputDir = new File(projectDir, 'build/src/routes/controllers')
         controllersOutputDir.isDirectory()
         File[] compiledControllersFiles = controllersOutputDir.listFiles()
         compiledControllersFiles.length == 3
@@ -41,7 +41,7 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         File[] compiledControllersJavascriptFiles = controllersJavascriptOutputDir.listFiles()
         compiledControllersJavascriptFiles.length == 1
         findFile(compiledControllersJavascriptFiles, 'JavaScriptReverseRoutes.scala')
-        File routerOutputDir = new File(projectDir, "build/src/routes/router")
+        File routerOutputDir = new File(projectDir, 'build/src/routes/router')
         routerOutputDir.isDirectory()
         File[] compiledRouterFiles = routerOutputDir.listFiles()
         compiledRouterFiles.length == 2
@@ -67,7 +67,7 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         build(ROUTES_COMPILE_TASK_NAME)
 
         then:
-        File controllersOutputDir = new File(projectDir, "build/src/routes/controllers")
+        File controllersOutputDir = new File(projectDir, 'build/src/routes/controllers')
         controllersOutputDir.isDirectory()
         File[] compiledControllersFiles = controllersOutputDir.listFiles()
         compiledControllersFiles.length == 3
@@ -78,7 +78,7 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         File[] compiledControllersJavascriptFiles = controllersJavascriptOutputDir.listFiles()
         compiledControllersJavascriptFiles.length == 1
         findFile(compiledControllersJavascriptFiles, 'JavaScriptReverseRoutes.scala')
-        File routerOutputDir = new File(projectDir, "build/src/routes/router")
+        File routerOutputDir = new File(projectDir, 'build/src/routes/router')
         routerOutputDir.isDirectory()
         File[] compiledRouterFiles = routerOutputDir.listFiles()
         compiledRouterFiles.length == 2
