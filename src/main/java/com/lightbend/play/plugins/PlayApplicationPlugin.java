@@ -1,30 +1,40 @@
 package com.lightbend.play.plugins;
 
+import com.lightbend.play.extensions.PlayExtension;
+import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.scala.ScalaPlugin;
+import org.gradle.play.internal.DefaultPlayPlatform;
 import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
 
-import static com.lightbend.play.plugins.PlayPlatformHelper.createDefaultPlayPlatform;
-
 public class PlayApplicationPlugin implements Plugin<Project> {
 
+    public static final String PLAY_EXTENSION_NAME = "play";
     public static final String PLAY_CONFIGURATIONS_EXTENSION_NAME = "playConfigurations";
 
     @Override
     public void apply(Project project) {
+        PlayExtension playExtension = createPlayExtension(project);
         PlayPluginConfigurations playPluginConfigurations = project.getExtensions().create(PLAY_CONFIGURATIONS_EXTENSION_NAME, PlayPluginConfigurations.class, project.getConfigurations(), project.getDependencies());
-        PlayPlatform playPlatform = createDefaultPlayPlatform();
 
         project.getPluginManager().apply(JavaPlugin.class);
         project.getPluginManager().apply(ScalaPlugin.class);
         project.getPluginManager().apply(PlayTwirlPlugin.class);
         project.getPluginManager().apply(PlayRoutesPlugin.class);
 
-        initialiseConfigurations(playPluginConfigurations, playPlatform);
+        project.afterEvaluate(project1 -> initialiseConfigurations(playPluginConfigurations, playExtension.asPlayPlatform()));
+    }
+
+    private PlayExtension createPlayExtension(Project project) {
+        PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project);
+        playExtension.getPlayVersion().set(DefaultPlayPlatform.DEFAULT_PLAY_VERSION);
+        playExtension.getScalaVersion().set("2.11");
+        playExtension.getJavaVersion().set(JavaVersion.current());
+        return playExtension;
     }
 
     private void initialiseConfigurations(PlayPluginConfigurations configurations, PlayPlatform playPlatform) {

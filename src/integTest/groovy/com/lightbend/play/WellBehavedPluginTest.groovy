@@ -24,6 +24,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
     protected applyPlugin(File target = buildFile) {
         target << """
             plugins {
+                id 'com.lightbend.play-application'
                 id '${getPluginName()}'
             }
         """

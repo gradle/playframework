@@ -1,5 +1,6 @@
 package com.lightbend.play.plugins;
 
+import com.lightbend.play.extensions.PlayExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
@@ -13,7 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME;
-import static com.lightbend.play.plugins.PlayPlatformHelper.createDefaultPlayPlatform;
+import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
 
 /**
  * Plugin for compiling Twirl sources in a Play application.
@@ -25,8 +26,9 @@ public class PlayTwirlPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         project.getPluginManager().apply(BasePlugin.class);
-        PlayPlatform playPlatform = createDefaultPlayPlatform();
-        PlayPluginConfigurations configurations = (PlayPluginConfigurations) project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
+
+        PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).asPlayPlatform();
+        PlayPluginConfigurations configurations = (PlayPluginConfigurations)project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
         SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
         TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, sourceDirectory, playPlatform);
