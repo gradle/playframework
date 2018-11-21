@@ -4,6 +4,7 @@ import com.lightbend.play.AbstractIntegrationTest
 import spock.lang.Ignore
 
 import static com.lightbend.play.PlayFixtures.playRepositories
+import static com.lightbend.play.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
 
 class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
 
@@ -24,15 +25,15 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
         new File(assetsDir, 'test.js') << 'test'
 
         when:
-        build('minifyJavascript')
+        build(JS_MINIFY_TASK_NAME)
 
         then:
         File outputDir = new File(projectDir, "build/src/javaScript")
         outputDir.isDirectory()
         File[] jsFles = outputDir.listFiles()
         jsFles.length == 2
-        jsFles.find { it.name == "test.js" }
-        jsFles.find { it.name == "test.min.js" }
+        findFile(jsFles, 'test.js')
+        findFile(jsFles, 'test.min.js')
     }
 
     @Ignore
@@ -47,16 +48,20 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
         """
 
         when:
-        build('minifyJavascript')
+        build(JS_MINIFY_TASK_NAME)
 
         then:
         File outputDir = new File(projectDir, "build/src/javaScript")
         outputDir.isDirectory()
         File[] jsFles = outputDir.listFiles()
         jsFles.length == 4
-        jsFles.find { it.name == "test.js" }
-        jsFles.find { it.name == "test.min.js" }
-        jsFles.find { it.name == "extra.js" }
-        jsFles.find { it.name == "extra.min.js" }
+        findFile(jsFles, 'test.js')
+        findFile(jsFles, 'test.min.js')
+        findFile(jsFles, 'extra.js')
+        findFile(jsFles, 'extra.min.js')
+    }
+
+    static File findFile(File[] files, String fileName) {
+        files.find { it.name == fileName }
     }
 }

@@ -13,6 +13,8 @@ import static com.lightbend.play.plugins.PlayPlatformHelper.createDefaultPlayPla
 
 public class PlayJavaScriptPlugin implements Plugin<Project> {
 
+    public static final String JS_MINIFY_TASK_NAME = "minifyJavaScript";
+
     @Override
     public void apply(Project project) {
         project.getPluginManager().apply(BasePlugin.class);
@@ -30,7 +32,7 @@ public class PlayJavaScriptPlugin implements Plugin<Project> {
     private JavaScriptMinify createDefaultJavaScriptMinifyTask(Project project, SourceDirectorySet sourceDirectory) {
         PlayPlatform playPlatform = createDefaultPlayPlatform();
 
-        return project.getTasks().create("minifyJavaScript", JavaScriptMinify.class, javaScriptMinify -> {
+        return project.getTasks().create(JS_MINIFY_TASK_NAME, JavaScriptMinify.class, javaScriptMinify -> {
             javaScriptMinify.setDescription("Minifies javascript for the " + sourceDirectory.getDisplayName() + ".");
             File generatedSourceDir = new File(project.getBuildDir(), "src");
             File outputDirectory = new File(generatedSourceDir, sourceDirectory.getName());
