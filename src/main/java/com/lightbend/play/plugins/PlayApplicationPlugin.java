@@ -34,6 +34,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         playExtension.getPlatform().getPlayVersion().set(DefaultPlayPlatform.DEFAULT_PLAY_VERSION);
         playExtension.getPlatform().getScalaVersion().set("2.11");
         playExtension.getPlatform().getJavaVersion().set(JavaVersion.current());
+        playExtension.getPlatform().getInjectedRoutesGenerator().set(false);
         return playExtension;
     }
 

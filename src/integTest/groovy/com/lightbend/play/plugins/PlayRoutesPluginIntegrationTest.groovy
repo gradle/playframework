@@ -48,4 +48,41 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         findFile(compiledRouterFiles, 'RoutesPrefix.scala')
         findFile(compiledRouterFiles, 'Routes.scala')
     }
+
+    def "can configure static routes generator"() {
+        given:
+        File confDir = temporaryFolder.newFolder('conf')
+        new File(confDir, 'routes') << """
+            GET     /                           controllers.HomeController.index
+        """
+        buildFile << """
+            play {
+                platform {
+                    injectedRoutesGenerator.set(true)
+                }
+            }
+        """
+
+        when:
+        build(ROUTES_COMPILE_TASK_NAME)
+
+        then:
+        File controllersOutputDir = new File(projectDir, "build/src/routes/controllers")
+        controllersOutputDir.isDirectory()
+        File[] compiledControllersFiles = controllersOutputDir.listFiles()
+        compiledControllersFiles.length == 3
+        findFile(compiledControllersFiles, 'routes.java')
+        findFile(compiledControllersFiles, 'ReverseRoutes.scala')
+        File controllersJavascriptOutputDir = new File(controllersOutputDir, 'javascript')
+        controllersJavascriptOutputDir.isDirectory()
+        File[] compiledControllersJavascriptFiles = controllersJavascriptOutputDir.listFiles()
+        compiledControllersJavascriptFiles.length == 1
+        findFile(compiledControllersJavascriptFiles, 'JavaScriptReverseRoutes.scala')
+        File routerOutputDir = new File(projectDir, "build/src/routes/router")
+        routerOutputDir.isDirectory()
+        File[] compiledRouterFiles = routerOutputDir.listFiles()
+        compiledRouterFiles.length == 2
+        findFile(compiledRouterFiles, 'RoutesPrefix.scala')
+        findFile(compiledRouterFiles, 'Routes.scala')
+    }
 }

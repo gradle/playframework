@@ -1,5 +1,6 @@
 package com.lightbend.play.plugins;
 
+import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -21,10 +22,14 @@ public class PlayRoutesPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform().asPlayPlatform();
+        Platform platform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform();
+        PlayPlatform playPlatform = platform.asPlayPlatform();
 
         SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
-        createDefaultRoutesCompileTask(project, sourceDirectory, playPlatform);
+        RoutesCompile routesCompile = createDefaultRoutesCompileTask(project, sourceDirectory, playPlatform);
+
+        // TODO: RoutesCompile should use Provider types to avoid afterEvaluate
+        project.afterEvaluate(project1 -> routesCompile.setInjectedRoutesGenerator(platform.getInjectedRoutesGenerator().get()));
     }
 
     private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
@@ -44,7 +49,6 @@ public class PlayRoutesPlugin implements Plugin<Project> {
             routesCompile.setAdditionalImports(new ArrayList<>());
             routesCompile.setSource(sourceDirectory.getSrcDirs());
             routesCompile.setOutputDirectory(outputDirectory);
-            routesCompile.setInjectedRoutesGenerator(false); // TODO: Needs to become configurable
         });
     }
 }

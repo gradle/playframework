@@ -15,11 +15,13 @@ public class Platform {
     private final Property<String> playVersion;
     private final Property<String> scalaVersion;
     private final Property<JavaVersion> javaVersion;
+    private final Property<Boolean> injectedRoutesGenerator;
 
     public Platform(Project project) {
         playVersion = project.getObjects().property(String.class);
         scalaVersion = project.getObjects().property(String.class);
         javaVersion = project.getObjects().property(JavaVersion.class);
+        injectedRoutesGenerator = project.getObjects().property(Boolean.class);
     }
 
     public Property<String> getPlayVersion() {
@@ -32,6 +34,10 @@ public class Platform {
 
     public Property<JavaVersion> getJavaVersion() {
         return javaVersion;
+    }
+
+    public Property<Boolean> getInjectedRoutesGenerator() {
+        return injectedRoutesGenerator;
     }
 
     public PlayPlatform asPlayPlatform() {
