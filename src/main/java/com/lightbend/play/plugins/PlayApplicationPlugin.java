@@ -12,7 +12,7 @@ import static com.lightbend.play.plugins.PlayPlatformHelper.createDefaultPlayPla
 
 public class PlayApplicationPlugin implements Plugin<Project> {
 
-    public static final String EXTENSION_NAME = "playConfigurations";
+    public static final String PLAY_CONFIGURATIONS_EXTENSION_NAME = "playConfigurations";
 
     @Override
     public void apply(Project project) {
@@ -23,7 +23,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         //project.getPluginManager().apply(PlayTwirlPlugin.class);
         //project.getPluginManager().apply(PlayRoutesPlugin.class);
 
-        PlayPluginConfigurations playPluginConfigurations = project.getExtensions().create(EXTENSION_NAME, PlayPluginConfigurations.class, project.getConfigurations(), project.getDependencies());
+        PlayPluginConfigurations playPluginConfigurations = project.getExtensions().create(PLAY_CONFIGURATIONS_EXTENSION_NAME, PlayPluginConfigurations.class, project.getConfigurations(), project.getDependencies());
         PlayPlatform playPlatform = createDefaultPlayPlatform();
 
         initialiseConfigurations(playPluginConfigurations, playPlatform);

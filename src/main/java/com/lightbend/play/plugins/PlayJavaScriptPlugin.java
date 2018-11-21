@@ -11,6 +11,9 @@ import java.io.File;
 
 import static com.lightbend.play.plugins.PlayPlatformHelper.createDefaultPlayPlatform;
 
+/**
+ * Plugin for adding javascript processing to a Play application.
+ */
 public class PlayJavaScriptPlugin implements Plugin<Project> {
 
     public static final String JS_MINIFY_TASK_NAME = "minifyJavaScript";
