@@ -33,9 +33,11 @@ class PlayApplicationPluginIntegrationTest  extends AbstractIntegrationTest {
     def "can resolve dependencies for Play platform configured by extension"() {
         buildFile << """
             play {
-                playVersion = '2.6.14'
-                scalaVersion = '2.12'
-                javaVersion = JavaVersion.VERSION_1_8
+                platform {
+                    playVersion.set('2.6.14')
+                    scalaVersion.set('2.12')
+                    javaVersion.set(JavaVersion.VERSION_1_8)
+                }
             }
         """
 

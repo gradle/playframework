@@ -27,7 +27,7 @@ public class PlayTwirlPlugin implements Plugin<Project> {
     public void apply(Project project) {
         project.getPluginManager().apply(BasePlugin.class);
 
-        PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).asPlayPlatform();
+        PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform().asPlayPlatform();
         PlayPluginConfigurations configurations = (PlayPluginConfigurations)project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
         SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);

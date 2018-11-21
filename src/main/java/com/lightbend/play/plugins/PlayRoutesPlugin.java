@@ -21,7 +21,7 @@ public class PlayRoutesPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).asPlayPlatform();
+        PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform().asPlayPlatform();
 
         SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
         createDefaultRoutesCompileTask(project, sourceDirectory, playPlatform);

@@ -26,14 +26,14 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         project.getPluginManager().apply(PlayTwirlPlugin.class);
         project.getPluginManager().apply(PlayRoutesPlugin.class);
 
-        project.afterEvaluate(project1 -> initialiseConfigurations(playPluginConfigurations, playExtension.asPlayPlatform()));
+        project.afterEvaluate(project1 -> initialiseConfigurations(playPluginConfigurations, playExtension.getPlatform().asPlayPlatform()));
     }
 
     private PlayExtension createPlayExtension(Project project) {
         PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project);
-        playExtension.getPlayVersion().set(DefaultPlayPlatform.DEFAULT_PLAY_VERSION);
-        playExtension.getScalaVersion().set("2.11");
-        playExtension.getJavaVersion().set(JavaVersion.current());
+        playExtension.getPlatform().getPlayVersion().set(DefaultPlayPlatform.DEFAULT_PLAY_VERSION);
+        playExtension.getPlatform().getScalaVersion().set("2.11");
+        playExtension.getPlatform().getJavaVersion().set(JavaVersion.current());
         return playExtension;
     }
 
