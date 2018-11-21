@@ -31,6 +31,7 @@ public class PlayTwirlPlugin implements Plugin<Project> {
         SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
         TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, sourceDirectory, playPlatform);
 
+        // TODO: Revisit later - this likely won't work
         project.afterEvaluate(project1 -> {
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
                 configurations.getPlay().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-java"));
