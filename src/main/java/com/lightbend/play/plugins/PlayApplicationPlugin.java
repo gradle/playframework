@@ -22,9 +22,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         project.getPluginManager().apply(JavaPlugin.class);
         project.getPluginManager().apply(ScalaPlugin.class);
         project.getPluginManager().apply(PlayTwirlPlugin.class);
-
-        // TODO: Migrate plugins and add them
-        //project.getPluginManager().apply(PlayRoutesPlugin.class);
+        project.getPluginManager().apply(PlayRoutesPlugin.class);
 
         initialiseConfigurations(playPluginConfigurations, playPlatform);
     }
