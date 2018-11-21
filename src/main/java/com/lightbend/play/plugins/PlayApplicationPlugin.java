@@ -2,18 +2,23 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
-import org.gradle.api.Action;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.gradle.api.GradleException;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.plugins.JavaPlugin;
+import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.scala.ScalaPlugin;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.play.internal.DefaultPlayPlatform;
 import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.util.VersionNumber;
+
+import java.util.Arrays;
 
 /**
  * Plugin for Play Framework component support.
@@ -32,6 +37,8 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         project.getPluginManager().apply(ScalaPlugin.class);
         project.getPluginManager().apply(PlayTwirlPlugin.class);
         project.getPluginManager().apply(PlayRoutesPlugin.class);
+
+        configureJavaAndScalaSourceSet(project);
 
         project.afterEvaluate(project1 -> {
             failIfInjectedRouterIsUsedWithOldVersion(playExtension.getPlatform());
@@ -72,5 +79,17 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             // if the project is Java or Scala based.
             configurations.getPlayPlatform().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-java-forms"));
         }
+    }
+
+    private void configureJavaAndScalaSourceSet(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+        SourceDirectorySet mainSourceDirectorySet = mainSourceSet.getJava();
+        mainSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
+        mainSourceDirectorySet.include("**/*.java");
+
+        SourceDirectorySet scalaSourceDirectorySet = ((SourceDirectorySet)InvokerHelper.invokeMethod(mainSourceSet, "getScala", null));
+        scalaSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
+        scalaSourceDirectorySet.include("**/*.scala");
     }
 }

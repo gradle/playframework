@@ -71,4 +71,45 @@ class PlayApplicationPluginIntegrationTest  extends AbstractIntegrationTest {
         expect:
         build('checkDeps')
     }
+
+    def "can compile Java code"() {
+        given:
+        File appDir = temporaryFolder.newFolder('app', 'com', 'lightbend')
+        new File(appDir, 'JavaHelloWorld.java') << """
+            package com.lightbend;
+
+            public class JavaHelloWorld {}
+        """
+
+        when:
+        build('classes')
+
+        then:
+        File classesOutputDir = new File(projectDir, 'build/classes')
+        new File(classesOutputDir, 'java/main/com/lightbend/JavaHelloWorld.class').isFile()
+    }
+
+    def "can compile Scala code"() {
+        given:
+        File appDir = temporaryFolder.newFolder('app', 'com', 'lightbend')
+
+        new File(appDir, 'ScalaHelloWorld.scala') << """
+            package com.lightbend
+
+            object ScalaHelloWorld {}
+        """
+
+        buildFile << """
+            dependencies {
+                implementation 'org.scala-lang:scala-library:2.11.12'
+            }
+        """
+
+        when:
+        build('classes')
+
+        then:
+        File classesOutputDir = new File(projectDir, 'build/classes')
+        new File(classesOutputDir, 'scala/main/com/lightbend/ScalaHelloWorld.class').isFile()
+    }
 }
