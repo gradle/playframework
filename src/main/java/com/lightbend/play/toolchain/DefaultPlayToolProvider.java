@@ -61,10 +61,15 @@ class DefaultPlayToolProvider implements PlayToolProvider {
 //        }
 
         if (JavaScriptCompileSpec.class.isAssignableFrom(spec)) {
+            javaScriptClasspath.add(getPluginClasspath());
             GoogleClosureCompiler javaScriptCompiler = new GoogleClosureCompiler();
             return cast(new DaemonPlayCompiler<>(daemonWorkingDir, javaScriptCompiler, workerDaemonFactory, javaScriptClasspath, javaScriptCompiler.getClassLoaderPackages(), fileResolver));
         }
         throw new IllegalArgumentException(String.format("Cannot create Compiler for unsupported CompileSpec type '%s'", spec.getSimpleName()));
+    }
+
+    private File getPluginClasspath() {
+        return new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
     }
 
     @Override
