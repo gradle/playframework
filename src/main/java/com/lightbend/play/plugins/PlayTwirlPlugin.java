@@ -39,6 +39,7 @@ public class PlayTwirlPlugin implements Plugin<Project> {
     private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
         SourceDirectorySet sourceDirectory = project.getObjects().sourceDirectorySet("twirl", "Twirl source files");
         sourceDirectory.srcDir("app");
+        sourceDirectory.include("**/*.scala.*");
         return sourceDirectory;
     }
 
