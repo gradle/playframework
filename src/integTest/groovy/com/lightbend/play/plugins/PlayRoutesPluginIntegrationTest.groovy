@@ -1,6 +1,7 @@
 package com.lightbend.play.plugins
 
 import com.lightbend.play.AbstractIntegrationTest
+import org.gradle.testkit.runner.BuildResult
 
 import static com.lightbend.play.PlayFixtures.findFile
 import static com.lightbend.play.PlayFixtures.playRepositories
@@ -84,5 +85,23 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         compiledRouterFiles.length == 2
         findFile(compiledRouterFiles, 'RoutesPrefix.scala')
         findFile(compiledRouterFiles, 'Routes.scala')
+    }
+
+    def "fails build if injected routes generator was configured for Play version < 2.4.0"() {
+        given:
+        buildFile << """
+            play {
+                platform {
+                    playVersion.set('2.3.0')
+                    injectedRoutesGenerator.set(true)
+                }
+            }
+        """
+
+        when:
+        BuildResult result = buildAndFail(ROUTES_COMPILE_TASK_NAME)
+
+        then:
+        result.output.contains('Injected routers are only supported in Play 2.4 or newer.')
     }
 }

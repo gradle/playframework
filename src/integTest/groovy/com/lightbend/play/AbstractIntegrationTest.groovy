@@ -25,6 +25,10 @@ class AbstractIntegrationTest extends Specification {
         createAndConfigureGradleRunner(arguments).build()
     }
 
+    protected BuildResult buildAndFail(String... arguments) {
+        createAndConfigureGradleRunner(arguments).buildAndFail()
+    }
+
     private GradleRunner createAndConfigureGradleRunner(String... arguments) {
         GradleRunner.create()
                 .withProjectDir(projectDir)
