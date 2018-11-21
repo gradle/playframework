@@ -20,4 +20,8 @@ final class PlayFixtures {
             }
         """
     }
+
+    static File findFile(File[] files, String fileName) {
+        files.find { it.name == fileName }
+    }
 }

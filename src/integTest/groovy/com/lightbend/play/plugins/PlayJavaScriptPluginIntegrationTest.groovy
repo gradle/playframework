@@ -4,6 +4,7 @@ import com.lightbend.play.AbstractIntegrationTest
 import spock.lang.Ignore
 
 import static com.lightbend.play.PlayFixtures.playRepositories
+import static com.lightbend.play.PlayFixtures.findFile
 import static com.lightbend.play.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
 
 class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
@@ -59,9 +60,5 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
         findFile(jsFles, 'test.min.js')
         findFile(jsFles, 'extra.js')
         findFile(jsFles, 'extra.min.js')
-    }
-
-    static File findFile(File[] files, String fileName) {
-        files.find { it.name == fileName }
     }
 }

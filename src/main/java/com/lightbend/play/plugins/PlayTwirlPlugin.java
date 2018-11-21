@@ -3,6 +3,7 @@ package com.lightbend.play.plugins;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.plugins.BasePlugin;
 import org.gradle.language.twirl.TwirlImports;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
@@ -23,6 +24,7 @@ public class PlayTwirlPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
+        project.getPluginManager().apply(BasePlugin.class);
         PlayPlatform playPlatform = createDefaultPlayPlatform();
         PlayPluginConfigurations configurations = (PlayPluginConfigurations) project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
@@ -38,7 +40,7 @@ public class PlayTwirlPlugin implements Plugin<Project> {
 
     private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
         SourceDirectorySet sourceDirectory = project.getObjects().sourceDirectorySet("twirl", "Twirl source files");
-        sourceDirectory.srcDir("app");
+        sourceDirectory.srcDir("app/views");
         sourceDirectory.include("**/*.scala.*");
         return sourceDirectory;
     }

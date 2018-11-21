@@ -16,15 +16,15 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        project.getPluginManager().apply(JavaPlugin.class);
-        project.getPluginManager().apply(ScalaPlugin.class);
-
-        // TODO: Migrate plugins and add them
-        //project.getPluginManager().apply(PlayTwirlPlugin.class);
-        //project.getPluginManager().apply(PlayRoutesPlugin.class);
-
         PlayPluginConfigurations playPluginConfigurations = project.getExtensions().create(PLAY_CONFIGURATIONS_EXTENSION_NAME, PlayPluginConfigurations.class, project.getConfigurations(), project.getDependencies());
         PlayPlatform playPlatform = createDefaultPlayPlatform();
+
+        project.getPluginManager().apply(JavaPlugin.class);
+        project.getPluginManager().apply(ScalaPlugin.class);
+        project.getPluginManager().apply(PlayTwirlPlugin.class);
+
+        // TODO: Migrate plugins and add them
+        //project.getPluginManager().apply(PlayRoutesPlugin.class);
 
         initialiseConfigurations(playPluginConfigurations, playPlatform);
     }
