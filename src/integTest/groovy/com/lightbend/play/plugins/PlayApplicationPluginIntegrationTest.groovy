@@ -52,4 +52,23 @@ class PlayApplicationPluginIntegrationTest  extends AbstractIntegrationTest {
         result.output.contains("""playTest
 +--- com.typesafe.play:play_2.12:2.6.14""")
     }
+
+    def "can add dependencies to Play application"() {
+        given:
+        buildFile << """
+            dependencies {
+                play 'commons-lang:commons-lang:2.6'
+                play 'ch.qos.logback:logback-classic:1.2.3'
+            }
+            
+            task checkDeps {
+                doLast {
+                    assert configurations.play.findAll { it.name == 'commons-lang-2.6.jar' || it.name == 'logback-classic-1.2.3.jar' }.size() == 2
+                }
+            }
+        """
+
+        expect:
+        build('checkDeps')
+    }
 }
