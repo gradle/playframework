@@ -2,7 +2,9 @@ package com.lightbend.play.plugins
 
 import com.lightbend.play.AbstractIntegrationTest
 
-import static com.lightbend.play.Repositories.*
+import static com.lightbend.play.fixtures.AssertionHelper.findFile
+import static com.lightbend.play.fixtures.Repositories.gradleJavascriptRepository
+import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayCoffeeScriptPlugin.COFFEESCRIPT_COMPILE_TASK_NAME
 
 class PlayCoffeeScriptPluginIntegrationTest extends AbstractIntegrationTest {

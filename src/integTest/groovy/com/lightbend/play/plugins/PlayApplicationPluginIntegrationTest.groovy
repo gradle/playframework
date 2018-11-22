@@ -3,7 +3,7 @@ package com.lightbend.play.plugins
 import com.lightbend.play.AbstractIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 
-import static com.lightbend.play.Repositories.playRepositories
+import static com.lightbend.play.fixtures.Repositories.playRepositories
 
 class PlayApplicationPluginIntegrationTest  extends AbstractIntegrationTest {
 

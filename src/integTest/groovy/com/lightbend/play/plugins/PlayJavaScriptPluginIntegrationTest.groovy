@@ -2,8 +2,8 @@ package com.lightbend.play.plugins
 
 import com.lightbend.play.AbstractIntegrationTest
 
-import static com.lightbend.play.Repositories.findFile
-import static com.lightbend.play.Repositories.playRepositories
+import static com.lightbend.play.fixtures.AssertionHelper.findFile
+import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
 
 class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {

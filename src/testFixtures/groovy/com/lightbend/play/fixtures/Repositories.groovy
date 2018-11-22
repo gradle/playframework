@@ -1,4 +1,4 @@
-package com.lightbend.play
+package com.lightbend.play.fixtures
 
 final class Repositories {
 
@@ -30,9 +30,5 @@ final class Repositories {
                 }
             }
         """
-    }
-
-    static File findFile(File[] files, String fileName) {
-        files.find { it.name == fileName }
     }
 }
