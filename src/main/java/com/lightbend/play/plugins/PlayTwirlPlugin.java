@@ -1,10 +1,16 @@
 package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
+import com.lightbend.play.sourcesets.DefaultTwirlSourceSet;
+import com.lightbend.play.sourcesets.TwirlSourceSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.plugins.DslObject;
+import org.gradle.api.internal.tasks.DefaultSourceSet;
 import org.gradle.api.plugins.BasePlugin;
+import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.language.twirl.TwirlImports;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
@@ -30,22 +36,24 @@ public class PlayTwirlPlugin implements Plugin<Project> {
         PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform().asPlayPlatform();
         PlayPluginConfigurations configurations = (PlayPluginConfigurations)project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
-        SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
-        TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, sourceDirectory, playPlatform);
+        TwirlSourceSet twirlSourceSet = createTwirlSourceSet(project);
+        TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet.getTwirl(), playPlatform);
 
-        // TODO: Revisit later - this likely won't work
         project.afterEvaluate(project1 -> {
+            // TODO: Revisit later - this likely won't work
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
                 configurations.getPlay().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-java"));
             }
         });
     }
 
-    private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
-        SourceDirectorySet sourceDirectory = project.getObjects().sourceDirectorySet("twirl", "Twirl source files");
-        sourceDirectory.srcDir("app/views");
-        sourceDirectory.include("**/*.scala.*");
-        return sourceDirectory;
+    private TwirlSourceSet createTwirlSourceSet(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+
+        TwirlSourceSet twirlSourceSet = new DefaultTwirlSourceSet("twirl", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        new DslObject(mainSourceSet).getConvention().getPlugins().put("twirl", twirlSourceSet);
+        return twirlSourceSet;
     }
 
     private TwirlCompile createDefaultTwirlCompileTask(Project project, SourceDirectorySet sourceDirectory, PlayPlatform playPlatform) {
@@ -53,7 +61,7 @@ public class PlayTwirlPlugin implements Plugin<Project> {
             twirlCompile.setDescription("Compiles Twirl templates for the '" + sourceDirectory.getDisplayName() + "' source set.");
             File generatedSourceDir = new File(project.getBuildDir(), "src");
             twirlCompile.setPlatform(playPlatform);
-            twirlCompile.setSource(sourceDirectory.getSrcDirs());
+            twirlCompile.setSource(sourceDirectory);
             File outputDirectory = new File(generatedSourceDir, sourceDirectory.getName());
             twirlCompile.setOutputDirectory(outputDirectory);
             twirlCompile.setDefaultImports(TwirlImports.SCALA);

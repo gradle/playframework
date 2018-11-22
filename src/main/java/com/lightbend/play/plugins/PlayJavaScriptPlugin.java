@@ -1,10 +1,16 @@
 package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
+import com.lightbend.play.sourcesets.DefaultJavaScriptSourceSet;
+import com.lightbend.play.sourcesets.JavaScriptSourceSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.plugins.DslObject;
+import org.gradle.api.internal.tasks.DefaultSourceSet;
 import org.gradle.api.plugins.BasePlugin;
+import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.play.tasks.JavaScriptMinify;
 
@@ -23,15 +29,17 @@ public class PlayJavaScriptPlugin implements Plugin<Project> {
     public void apply(Project project) {
         project.getPluginManager().apply(BasePlugin.class);
 
-        SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
-        createDefaultJavaScriptMinifyTask(project, sourceDirectory);
+        JavaScriptSourceSet javaScriptSourceSet = createJavaScriptSourceSet(project);
+        createDefaultJavaScriptMinifyTask(project, javaScriptSourceSet.getJavaScript());
     }
 
-    private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
-        SourceDirectorySet sourceDirectory = project.getObjects().sourceDirectorySet("javaScript", "JavaScript source files");
-        sourceDirectory.srcDir("app/assets");
-        sourceDirectory.include("**/*.js");
-        return sourceDirectory;
+    private JavaScriptSourceSet createJavaScriptSourceSet(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+
+        JavaScriptSourceSet javaScriptSourceSet = new DefaultJavaScriptSourceSet("javaScript", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        new DslObject(mainSourceSet).getConvention().getPlugins().put("javaScript", javaScriptSourceSet);
+        return javaScriptSourceSet;
     }
 
     private JavaScriptMinify createDefaultJavaScriptMinifyTask(Project project, SourceDirectorySet sourceDirectory) {
@@ -42,8 +50,8 @@ public class PlayJavaScriptPlugin implements Plugin<Project> {
             File generatedSourceDir = new File(project.getBuildDir(), "src");
             File outputDirectory = new File(generatedSourceDir, sourceDirectory.getName());
             javaScriptMinify.setDestinationDir(outputDirectory);
-            javaScriptMinify.setSource(sourceDirectory.getSrcDirs());
             javaScriptMinify.setPlayPlatform(playPlatform);
+            javaScriptMinify.setSource(sourceDirectory);
             javaScriptMinify.dependsOn(sourceDirectory);
         });
     }

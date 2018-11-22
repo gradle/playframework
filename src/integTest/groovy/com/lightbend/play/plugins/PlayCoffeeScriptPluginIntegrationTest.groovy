@@ -2,9 +2,7 @@ package com.lightbend.play.plugins
 
 import com.lightbend.play.AbstractIntegrationTest
 
-import static com.lightbend.play.PlayFixtures.findFile
-import static com.lightbend.play.PlayFixtures.playRepositories
-import static com.lightbend.play.PlayFixtures.javascriptRepository
+import static com.lightbend.play.PlayFixtures.*
 import static com.lightbend.play.plugins.PlayCoffeeScriptPlugin.COFFEESCRIPT_COMPILE_TASK_NAME
 
 class PlayCoffeeScriptPluginIntegrationTest extends AbstractIntegrationTest {
@@ -36,6 +34,36 @@ class PlayCoffeeScriptPluginIntegrationTest extends AbstractIntegrationTest {
         File[] compiledCoffeeScriptFiles = outputDir.listFiles()
         compiledCoffeeScriptFiles.length == 1
         findFile(compiledCoffeeScriptFiles, 'test.js')
+    }
+
+    def "can add source directories to default source set"() {
+        given:
+        File appAssetsDir = temporaryFolder.newFolder('app', 'assets')
+        new File(appAssetsDir, 'test.coffee') << coffeeScriptSource()
+        File extraCoffeeScriptDir = temporaryFolder.newFolder('extra', 'coffeescript')
+        new File(extraCoffeeScriptDir, 'extra.coffee') << coffeeScriptSource()
+
+        buildFile << """
+            sourceSets {
+                main {
+                    coffeeScript {
+                        srcDir 'extra/coffeescript'
+                    }
+                }
+            }
+        """
+
+        when:
+        build(COFFEESCRIPT_COMPILE_TASK_NAME)
+
+        then:
+        then:
+        File outputDir = new File(projectDir, 'build/src/coffeescript')
+        outputDir.isDirectory()
+        File[] compiledCoffeeScriptFiles = outputDir.listFiles()
+        compiledCoffeeScriptFiles.length == 2
+        findFile(compiledCoffeeScriptFiles, 'test.js')
+        findFile(compiledCoffeeScriptFiles, 'extra.js')
     }
 
     static String coffeeScriptSource() {

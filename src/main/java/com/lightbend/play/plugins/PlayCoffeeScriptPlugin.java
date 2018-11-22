@@ -1,8 +1,14 @@
 package com.lightbend.play.plugins;
 
+import com.lightbend.play.sourcesets.CoffeeScriptSourceSet;
+import com.lightbend.play.sourcesets.DefaultCoffeeScriptSourceSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.plugins.DslObject;
+import org.gradle.api.internal.tasks.DefaultSourceSet;
+import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;
 
 import java.io.File;
@@ -26,21 +32,23 @@ public class PlayCoffeeScriptPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
+        CoffeeScriptSourceSet coffeeScriptSourceSet = createCoffeeScriptSourceSet(project);
 
         project.getTasks().withType(PlayCoffeeScriptCompile.class, coffeeScriptCompile -> {
             coffeeScriptCompile.setRhinoClasspathNotation(getDefaultRhinoDependencyNotation());
             coffeeScriptCompile.setCoffeeScriptJsNotation(getDefaultCoffeeScriptDependencyNotation());
         });
 
-        createDefaultCoffeeScriptCompileTask(project, sourceDirectory);
+        createDefaultCoffeeScriptCompileTask(project, coffeeScriptSourceSet.getCoffeeScript());
     }
 
-    private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
-        SourceDirectorySet sourceDirectory = project.getObjects().sourceDirectorySet("coffeeScript", "CoffeeScript source files");
-        sourceDirectory.srcDir("app/assets");
-        sourceDirectory.include("**/*.coffee");
-        return sourceDirectory;
+    private CoffeeScriptSourceSet createCoffeeScriptSourceSet(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+
+        CoffeeScriptSourceSet coffeeScriptSourceSet = new DefaultCoffeeScriptSourceSet("coffeeScript", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        new DslObject(mainSourceSet).getConvention().getPlugins().put("coffeeScript", coffeeScriptSourceSet);
+        return coffeeScriptSourceSet;
     }
 
     private PlayCoffeeScriptCompile createDefaultCoffeeScriptCompileTask(Project project, SourceDirectorySet sourceDirectory) {
@@ -50,7 +58,7 @@ public class PlayCoffeeScriptPlugin implements Plugin<Project> {
             File outputDirectory = new File(generatedSourceDir, sourceDirectory.getName());
 
             coffeeScriptCompile.setDestinationDir(outputDirectory);
-            coffeeScriptCompile.setSource(sourceDirectory.getSrcDirs());
+            coffeeScriptCompile.setSource(sourceDirectory);
         });
     }
 }

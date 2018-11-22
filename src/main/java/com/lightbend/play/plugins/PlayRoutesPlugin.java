@@ -2,9 +2,15 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
+import com.lightbend.play.sourcesets.DefaultRoutesSourceSet;
+import com.lightbend.play.sourcesets.RoutesSourceSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.plugins.DslObject;
+import org.gradle.api.internal.tasks.DefaultSourceSet;
+import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.play.tasks.RoutesCompile;
 
@@ -25,18 +31,20 @@ public class PlayRoutesPlugin implements Plugin<Project> {
         Platform platform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform();
         PlayPlatform playPlatform = platform.asPlayPlatform();
 
-        SourceDirectorySet sourceDirectory = createDefaultSourceDirectorySet(project);
-        RoutesCompile routesCompile = createDefaultRoutesCompileTask(project, sourceDirectory, playPlatform);
+        RoutesSourceSet routesSourceSet = createRoutesSourceSet(project);
+        RoutesCompile routesCompile = createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), playPlatform);
 
         // TODO: RoutesCompile should use Provider types to avoid afterEvaluate
         project.afterEvaluate(project1 -> routesCompile.setInjectedRoutesGenerator(platform.getInjectedRoutesGenerator().get()));
     }
 
-    private SourceDirectorySet createDefaultSourceDirectorySet(Project project) {
-        SourceDirectorySet sourceDirectory = project.getObjects().sourceDirectorySet("routes", "Routes source files");
-        sourceDirectory.srcDir("conf");
-        sourceDirectory.include("routes", "*.routes");
-        return sourceDirectory;
+    private RoutesSourceSet createRoutesSourceSet(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+
+        RoutesSourceSet routesSourceSet = new DefaultRoutesSourceSet("routes", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        new DslObject(mainSourceSet).getConvention().getPlugins().put("routes", routesSourceSet);
+        return routesSourceSet;
     }
 
     private RoutesCompile createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, PlayPlatform playPlatform) {
@@ -47,7 +55,7 @@ public class PlayRoutesPlugin implements Plugin<Project> {
 
             routesCompile.setPlatform(playPlatform);
             routesCompile.setAdditionalImports(new ArrayList<>());
-            routesCompile.setSource(sourceDirectory.getSrcDirs());
+            routesCompile.setSource(sourceDirectory);
             routesCompile.setOutputDirectory(outputDirectory);
         });
     }
