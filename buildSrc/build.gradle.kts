@@ -16,6 +16,12 @@ kotlinDslPluginOptions {
 
 gradlePlugin {
     plugins {
+        register("test-fixtures-plugin") {
+            id = "com.lightbend.play.test-fixtures"
+            implementationClass = "com.lightbend.play.TestFixturesPlugin"
+        }
+    }
+    plugins {
         register("integration-test-plugin") {
             id = "com.lightbend.play.integration-test"
             implementationClass = "com.lightbend.play.IntegrationTestPlugin"

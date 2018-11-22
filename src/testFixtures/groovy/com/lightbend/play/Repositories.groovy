@@ -1,8 +1,8 @@
 package com.lightbend.play
 
-final class PlayFixtures {
+final class Repositories {
 
-    private PlayFixtures() {}
+    private Repositories() {}
 
     static String playRepositories() {
         """
@@ -21,7 +21,7 @@ final class PlayFixtures {
         """
     }
 
-    static String javascriptRepository() {
+    static String gradleJavascriptRepository() {
         """
             repositories {
                 maven {

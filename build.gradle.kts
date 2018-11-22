@@ -1,6 +1,7 @@
 plugins {
     groovy
     `java-gradle-plugin`
+    id("com.lightbend.play.test-fixtures")
     id("com.lightbend.play.integration-test")
 }
 

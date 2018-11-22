@@ -3,8 +3,8 @@ package com.lightbend.play.plugins
 import com.lightbend.play.AbstractIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 
-import static com.lightbend.play.PlayFixtures.findFile
-import static com.lightbend.play.PlayFixtures.playRepositories
+import static com.lightbend.play.Repositories.findFile
+import static com.lightbend.play.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
 class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
