@@ -12,13 +12,17 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.play.internal.DefaultPlayPlatform;
 import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.util.VersionNumber;
 
+import java.io.File;
 import java.util.Arrays;
+
+import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
 
 /**
  * Plugin for Play Framework component support.
@@ -27,6 +31,8 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     public static final String PLAY_EXTENSION_NAME = "play";
     public static final String PLAY_CONFIGURATIONS_EXTENSION_NAME = "playConfigurations";
+    public static final String JAR_TASK_NAME = "createJar";
+    public static final String ASSETS_JAR_TASK_NAME = "createAssetsJar";
 
     @Override
     public void apply(Project project) {
@@ -39,6 +45,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         project.getPluginManager().apply(PlayRoutesPlugin.class);
 
         configureJavaAndScalaSourceSet(project);
+        createJarTasks(project);
 
         project.afterEvaluate(project1 -> {
             failIfInjectedRouterIsUsedWithOldVersion(playExtension.getPlatform());
@@ -91,5 +98,24 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         SourceDirectorySet scalaSourceDirectorySet = ((SourceDirectorySet)InvokerHelper.invokeMethod(mainSourceSet, "getScala", null));
         scalaSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
         scalaSourceDirectorySet.include("**/*.scala");
+    }
+
+    private void createJarTasks(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+
+        project.getTasks().create(JAR_TASK_NAME, Jar.class, jar -> {
+            jar.setDescription("Assembles the application jar.");
+            jar.from(mainSourceSet.getOutput().getClassesDirs());
+            jar.from(mainSourceSet.getOutput().getResourcesDir());
+            jar.dependsOn(project.getTasks().getByName(CLASSES_TASK_NAME));
+        });
+
+        project.getTasks().create(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
+            jar.setDescription("Assembles the assets jar for the application.");
+            jar.setClassifier("assets");
+            jar.from(new File(project.getProjectDir(), "public"));
+            jar.into("public");
+        });
     }
 }
