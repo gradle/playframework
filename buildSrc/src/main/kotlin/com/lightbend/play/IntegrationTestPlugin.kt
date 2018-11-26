@@ -11,13 +11,14 @@ class IntegrationTestPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         val sourceSets = the<SourceSetContainer>()
         val testRuntimeClasspath by configurations
+        val testFixturesRuntimeClasspath by configurations
 
         val integrationTestSourceSet = sourceSets.create("integTest") {
             withConvention(GroovySourceSet::class) {
                 groovy.srcDir("src/integTest/groovy")
             }
             resources.srcDir("src/integTest/resources")
-            compileClasspath += sourceSets["main"]!!.output + sourceSets["testFixtures"]!!.output + testRuntimeClasspath
+            compileClasspath += sourceSets["main"]!!.output + sourceSets["testFixtures"]!!.output + testRuntimeClasspath + testFixturesRuntimeClasspath
             runtimeClasspath += output + compileClasspath
         }
 
