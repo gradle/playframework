@@ -33,7 +33,7 @@ class AbstractIntegrationTest extends Specification {
         GradleRunner.create()
                 .withProjectDir(projectDir)
                 .withArguments(arguments + '-s' as List<String>)
-                .withPluginClasspath()
+                .withPluginClasspath().forwardOutput()
     }
 
     protected File file(String path) {
