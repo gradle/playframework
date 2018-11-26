@@ -102,6 +102,8 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         SourceDirectorySet mainSourceDirectorySet = mainSourceSet.getJava();
         mainSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
         mainSourceDirectorySet.include("**/*.java");
+        SourceDirectorySet mainResourcesDirectorySet = mainSourceSet.getResources();
+        mainResourcesDirectorySet.setSrcDirs(Arrays.asList("conf"));
 
         SourceDirectorySet scalaSourceDirectorySet = ((SourceDirectorySet)InvokerHelper.invokeMethod(mainSourceSet, "getScala", null));
         scalaSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
