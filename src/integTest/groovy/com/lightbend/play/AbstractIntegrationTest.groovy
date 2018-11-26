@@ -35,4 +35,8 @@ class AbstractIntegrationTest extends Specification {
                 .withArguments(arguments + '-s' as List<String>)
                 .withPluginClasspath()
     }
+
+    protected File file(String path) {
+        new File(projectDir, path)
+    }
 }

@@ -99,12 +99,6 @@ class PlayApplicationPluginIntegrationTest  extends AbstractIntegrationTest {
             object ScalaHelloWorld {}
         """
 
-        buildFile << """
-            dependencies {
-                implementation 'org.scala-lang:scala-library:2.11.12'
-            }
-        """
-
         when:
         build('classes')
 

@@ -1,7 +1,5 @@
-package com.lightbend.play.basicplayapp
-
 plugins {
-    id 'play'
+    id 'com.lightbend.play'
 }
 
 // repositories added in PlayApp class
