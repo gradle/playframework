@@ -28,7 +28,7 @@ class PlayTwirlPluginIntegrationTest extends AbstractIntegrationTest {
         build(TWIRL_COMPILE_TASK_NAME)
 
         then:
-        File outputDir = new File(projectDir, 'build/src/twirl/js')
+        File outputDir = new File(projectDir, 'build/src/twirl/views/js')
         outputDir.isDirectory()
         File[] compiledTwirlFiles = outputDir.listFiles()
         compiledTwirlFiles.length == 1
@@ -56,12 +56,16 @@ class PlayTwirlPluginIntegrationTest extends AbstractIntegrationTest {
         build(TWIRL_COMPILE_TASK_NAME)
 
         then:
-        File outputDir = new File(projectDir, 'build/src/twirl/js')
+        File outputDir = new File(projectDir, 'build/src/twirl/views/js')
         outputDir.isDirectory()
         File[] compiledTwirlFiles = outputDir.listFiles()
-        compiledTwirlFiles.length == 2
+        compiledTwirlFiles.length == 1
         findFile(compiledTwirlFiles, 'test.template.scala')
-        findFile(compiledTwirlFiles, 'extra.template.scala')
+        File extraOutputDir = new File(projectDir, 'build/src/twirl/js')
+        extraOutputDir.isDirectory()
+        File[] extraCompiledTwirlFiles = extraOutputDir.listFiles()
+        extraCompiledTwirlFiles.length == 1
+        findFile(extraCompiledTwirlFiles, 'extra.template.scala')
     }
 
     static String jsTwirlTemplate() {

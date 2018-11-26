@@ -13,7 +13,7 @@ public class DefaultTwirlSourceSet implements TwirlSourceSet {
 
     public DefaultTwirlSourceSet(String name, String displayName, ObjectFactory objectFactory) {
         twirl = objectFactory.sourceDirectorySet(name, displayName +  " Twirl source");
-        twirl.srcDirs("app/views");
+        twirl.srcDirs("app");
         twirl.include("**/*.scala.*");
     }
 

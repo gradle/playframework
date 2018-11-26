@@ -27,7 +27,7 @@ import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NA
  */
 public class PlayTwirlPlugin implements Plugin<Project> {
 
-    public static final String TWIRL_COMPILE_TASK_NAME = "compileTwirl";
+    public static final String TWIRL_COMPILE_TASK_NAME = "compilePlayTwirlTemplates";
 
     @Override
     public void apply(Project project) {
