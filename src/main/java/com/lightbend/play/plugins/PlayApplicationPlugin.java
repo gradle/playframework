@@ -10,6 +10,7 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.scala.ScalaPlugin;
@@ -19,16 +20,20 @@ import org.gradle.api.tasks.scala.ScalaCompile;
 import org.gradle.play.internal.DefaultPlayPlatform;
 import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
+import org.gradle.play.internal.toolchain.PlayToolChainInternal;
 import org.gradle.play.platform.PlayPlatform;
+import org.gradle.play.tasks.PlayRun;
 import org.gradle.play.tasks.RoutesCompile;
 import org.gradle.play.tasks.TwirlCompile;
 import org.gradle.util.VersionNumber;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME;
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME;
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
+import static org.gradle.api.plugins.JavaBasePlugin.BUILD_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
 
 /**
@@ -38,27 +43,37 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     public static final String PLAY_EXTENSION_NAME = "play";
     public static final String PLAY_CONFIGURATIONS_EXTENSION_NAME = "playConfigurations";
-    public static final String JAR_TASK_NAME = "createJar";
-    public static final String ASSETS_JAR_TASK_NAME = "createAssetsJar";
+    public static final String JAR_TASK_NAME = "createPlayJar";
+    public static final String ASSETS_JAR_TASK_NAME = "createPlayAssetsJar";
+    public static final String RUN_TASK_NAME = "runPlay";
+    public static final int DEFAULT_HTTP_PORT = 9000;
+    public static final String RUN_GROUP = "Run";
 
     @Override
     public void apply(Project project) {
         PlayExtension playExtension = createPlayExtension(project);
         PlayPluginConfigurations playPluginConfigurations = project.getExtensions().create(PLAY_CONFIGURATIONS_EXTENSION_NAME, PlayPluginConfigurations.class, project.getConfigurations(), project.getDependencies());
 
+        applyPlugins(project);
+
+        configureJavaAndScalaSourceSet(project);
+        Jar mainJarTask = createMainJarTask(project);
+        Jar assetsJarTask = createAssetsJarTask(project);
+
+        project.afterEvaluate(project1 -> {
+            failIfInjectedRouterIsUsedWithOldVersion(playExtension.getPlatform());
+            PlayPlatform playPlatform = playExtension.getPlatform().asPlayPlatform();
+            initialiseConfigurations(playPluginConfigurations, playPlatform);
+            configureScalaCompileTask(project, playPluginConfigurations);
+            createRunTask(project, playPluginConfigurations, playPlatform, mainJarTask, assetsJarTask);
+        });
+    }
+
+    private void applyPlugins(Project project) {
         project.getPluginManager().apply(JavaPlugin.class);
         project.getPluginManager().apply(ScalaPlugin.class);
         project.getPluginManager().apply(PlayTwirlPlugin.class);
         project.getPluginManager().apply(PlayRoutesPlugin.class);
-
-        configureJavaAndScalaSourceSet(project);
-        createJarTasks(project);
-
-        project.afterEvaluate(project1 -> {
-            failIfInjectedRouterIsUsedWithOldVersion(playExtension.getPlatform());
-            initialiseConfigurations(playPluginConfigurations, playExtension.getPlatform().asPlayPlatform());
-            configureScalaCompileTask(project, playPluginConfigurations);
-        });
     }
 
     private PlayExtension createPlayExtension(Project project) {
@@ -97,8 +112,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private void configureJavaAndScalaSourceSet(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+        SourceSet mainSourceSet = getMainSourceSet(project);
         SourceDirectorySet mainSourceDirectorySet = mainSourceSet.getJava();
         mainSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
         mainSourceDirectorySet.include("**/*.java");
@@ -113,26 +127,33 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         scalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).getOutputDirectory());
     }
 
-    private void createJarTasks(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+    private Jar createMainJarTask(Project project) {
+        SourceSet mainSourceSet = getMainSourceSet(project);
 
-        Jar appJarTask = project.getTasks().create(JAR_TASK_NAME, Jar.class, jar -> {
+        Jar mainJarTask = project.getTasks().create(JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the application jar.");
             jar.from(mainSourceSet.getOutput().getClassesDirs());
             jar.from(mainSourceSet.getOutput().getResourcesDir());
             jar.dependsOn(project.getTasks().getByName(CLASSES_TASK_NAME));
         });
 
-        Jar appAssetsJarTask = project.getTasks().create(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
+        Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);
+        assembleTask.dependsOn(mainJarTask);
+
+        return mainJarTask;
+    }
+
+    private Jar createAssetsJarTask(Project project) {
+        Jar assetsJarTask = project.getTasks().create(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the assets jar for the application.");
             jar.setClassifier("assets");
             jar.from(project.file("public"), copySpec -> copySpec.into("public"));
         });
 
         Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);
-        assembleTask.dependsOn(appJarTask);
-        assembleTask.dependsOn(appAssetsJarTask);
+        assembleTask.dependsOn(assetsJarTask);
+
+        return assetsJarTask;
     }
 
     private void configureScalaCompileTask(Project project, PlayPluginConfigurations configurations) {
@@ -152,5 +173,28 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     private static RoutesCompile getRoutesCompileTask(Project project) {
         return (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
+    }
+
+    private static SourceSet getMainSourceSet(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        return javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+    }
+
+    private void createRunTask(Project project, PlayPluginConfigurations configurations, PlayPlatform playPlatform, Jar mainJarTask, Jar assetsJarTask) {
+        PlayToolChainInternal playToolChain = ((ProjectInternal) project).getServices().get(PlayToolChainInternal.class);
+
+        project.getTasks().create(RUN_TASK_NAME, PlayRun.class, playRun -> {
+            playRun.setDescription("Runs the Play application for local development.");
+            playRun.setGroup(RUN_GROUP);
+            playRun.setHttpPort(DEFAULT_HTTP_PORT);
+            playRun.getWorkingDir().set(project.getProjectDir());
+            playRun.setPlayToolProvider(playToolChain.select(playPlatform));
+            playRun.setApplicationJar(mainJarTask.getArchivePath());
+            playRun.setAssetsJar(assetsJarTask.getArchivePath());
+            playRun.setAssetsDirs(new HashSet<>(Arrays.asList(project.file("public"))));
+            playRun.setRuntimeClasspath(configurations.getPlayRun().getNonChangingArtifacts());
+            playRun.setChangingClasspath(configurations.getPlayRun().getChangingArtifacts());
+            playRun.dependsOn(project.getTasks().getByName(BUILD_TASK_NAME));
+        });
     }
 }
