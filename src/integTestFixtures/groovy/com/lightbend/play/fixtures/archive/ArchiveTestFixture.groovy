@@ -3,6 +3,7 @@ package com.lightbend.play.fixtures.archive
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.LinkedListMultimap
 import com.google.common.collect.ListMultimap
+import org.hamcrest.Matcher
 
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assert.assertEquals
@@ -25,6 +26,16 @@ class ArchiveTestFixture {
         this
     }
 
+    String content(String relativePath) {
+        List<String> files = filesByRelativePath.get(relativePath)
+        assert files.size() == 1
+        files.get(0)
+    }
+
+    Integer countFiles(String relativePath) {
+        filesByRelativePath.get(relativePath).size()
+    }
+
     def hasDescendants(String... relativePaths) {
         hasDescendants(relativePaths as List)
     }
@@ -45,6 +56,18 @@ class ArchiveTestFixture {
         for (String path : relativePaths) {
             assertContainsFile(path)
         }
+        this
+    }
+
+    /**
+     * Asserts that there is exactly one file present with the given path, and that this file has the given content.
+     */
+    def assertFileContent(String relativePath, String fileContent) {
+        assertFileContent(relativePath, equalTo(fileContent))
+    }
+
+    def assertFileContent(String relativePath, Matcher contentMatcher) {
+        assertThat(content(relativePath), contentMatcher)
         this
     }
 }

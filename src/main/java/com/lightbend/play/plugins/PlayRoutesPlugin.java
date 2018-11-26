@@ -24,7 +24,7 @@ import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NA
  */
 public class PlayRoutesPlugin implements Plugin<Project> {
 
-    public static final String ROUTES_COMPILE_TASK_NAME = "compileRoutes";
+    public static final String ROUTES_COMPILE_TASK_NAME = "compilePlayRoutes";
 
     @Override
     public void apply(Project project) {

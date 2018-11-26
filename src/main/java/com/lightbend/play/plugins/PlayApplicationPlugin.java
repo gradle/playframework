@@ -20,11 +20,14 @@ import org.gradle.play.internal.DefaultPlayPlatform;
 import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
+import org.gradle.play.tasks.RoutesCompile;
+import org.gradle.play.tasks.TwirlCompile;
 import org.gradle.util.VersionNumber;
 
-import java.io.File;
 import java.util.Arrays;
 
+import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME;
+import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME;
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
 
@@ -102,16 +105,10 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
         SourceDirectorySet scalaSourceDirectorySet = ((SourceDirectorySet)InvokerHelper.invokeMethod(mainSourceSet, "getScala", null));
         scalaSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
-        scalaSourceDirectorySet.include("**/*.scala");
-    }
+        scalaSourceDirectorySet.include("**/*.scala", "**/*.java");
 
-    private void configureScalaCompileTask(Project project, PlayPluginConfigurations configurations) {
-        FileCollection playArtifacts = configurations.getPlay().getAllArtifacts();
-
-        project.getTasks().withType(ScalaCompile.class, scalaCompile -> {
-            scalaCompile.setClasspath(playArtifacts);
-            scalaCompile.getOptions().setAnnotationProcessorPath(playArtifacts);
-        });
+        scalaSourceDirectorySet.srcDir(getTwirlCompileTask(project).getOutputDirectory());
+        scalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).getOutputDirectory());
     }
 
     private void createJarTasks(Project project) {
@@ -128,11 +125,30 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         Jar appAssetsJarTask = project.getTasks().create(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the assets jar for the application.");
             jar.setClassifier("assets");
-            jar.from(new File(project.getProjectDir(), "public"), copySpec -> copySpec.into("public"));
+            jar.from(project.file("public"), copySpec -> copySpec.into("public"));
         });
 
         Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);
         assembleTask.dependsOn(appJarTask);
         assembleTask.dependsOn(appAssetsJarTask);
+    }
+
+    private void configureScalaCompileTask(Project project, PlayPluginConfigurations configurations) {
+        FileCollection playArtifacts = configurations.getPlay().getAllArtifacts();
+
+        project.getTasks().withType(ScalaCompile.class, scalaCompile -> {
+            scalaCompile.setClasspath(playArtifacts);
+            scalaCompile.getOptions().setAnnotationProcessorPath(playArtifacts);
+            scalaCompile.dependsOn(getTwirlCompileTask(project));
+            scalaCompile.dependsOn(getRoutesCompileTask(project));
+        });
+    }
+
+    private static TwirlCompile getTwirlCompileTask(Project project) {
+        return (TwirlCompile) project.getTasks().getByName(TWIRL_COMPILE_TASK_NAME);
+    }
+
+    private static RoutesCompile getRoutesCompileTask(Project project) {
+        return (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
     }
 }
