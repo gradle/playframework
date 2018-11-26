@@ -11,7 +11,7 @@ public class PlayExtension {
         platform = new Platform(project);
     }
 
-    public void platform(Action<Platform> action) {
+    public void platform(Action<? super Platform> action) {
         action.execute(platform);
     }
 
