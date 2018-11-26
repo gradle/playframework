@@ -10,7 +10,6 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
-import org.gradle.api.internal.artifacts.publish.DefaultPublishArtifact;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.scala.ScalaPlugin;
@@ -25,7 +24,6 @@ import org.gradle.util.VersionNumber;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
@@ -130,8 +128,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         Jar appAssetsJarTask = project.getTasks().create(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the assets jar for the application.");
             jar.setClassifier("assets");
-            jar.from(new File(project.getProjectDir(), "public"));
-            jar.into("public");
+            jar.from(new File(project.getProjectDir(), "public"), copySpec -> copySpec.into("public"));
         });
 
         Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);

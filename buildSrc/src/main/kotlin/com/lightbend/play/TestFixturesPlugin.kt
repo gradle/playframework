@@ -10,13 +10,14 @@ import org.gradle.kotlin.dsl.*
 class TestFixturesPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         val sourceSets = the<SourceSetContainer>()
+        val testRuntimeClasspath by configurations
 
         sourceSets.create("testFixtures") {
             withConvention(GroovySourceSet::class) {
                 groovy.srcDir("src/testFixtures/groovy")
             }
             resources.srcDir("src/testFixtures/resources")
-            compileClasspath += sourceSets["main"]!!.output + configurations["runtimeClasspath"]
+            compileClasspath += sourceSets["main"]!!.output + configurations["runtimeClasspath"] + testRuntimeClasspath
             runtimeClasspath += output + compileClasspath
         }
     }
