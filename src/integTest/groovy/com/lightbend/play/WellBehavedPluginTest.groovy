@@ -10,7 +10,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
         build('tasks')
 
         then:
-        !new File(projectDir, 'build').exists()
+        !file('build').exists()
     }
 
     def "plugin can build with empty project"() {

@@ -85,7 +85,7 @@ class PlayApplicationPluginIntegrationTest  extends AbstractIntegrationTest {
         build('classes')
 
         then:
-        File classesOutputDir = new File(projectDir, 'build/classes')
+        File classesOutputDir = file('build/classes')
         new File(classesOutputDir, 'java/main/com/lightbend/JavaHelloWorld.class').isFile()
     }
 
@@ -103,7 +103,7 @@ class PlayApplicationPluginIntegrationTest  extends AbstractIntegrationTest {
         build('classes')
 
         then:
-        File classesOutputDir = new File(projectDir, 'build/classes')
+        File classesOutputDir = file('build/classes')
         new File(classesOutputDir, 'scala/main/com/lightbend/ScalaHelloWorld.class').isFile()
     }
 }
