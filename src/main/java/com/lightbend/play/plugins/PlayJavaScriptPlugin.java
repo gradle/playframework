@@ -23,7 +23,7 @@ import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NA
  */
 public class PlayJavaScriptPlugin implements Plugin<Project> {
 
-    public static final String JS_MINIFY_TASK_NAME = "minifyJavaScript";
+    public static final String JS_MINIFY_TASK_NAME = "minifyPlayJavaScript";
 
     @Override
     public void apply(Project project) {

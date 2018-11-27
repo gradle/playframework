@@ -18,7 +18,7 @@ import java.io.File;
  */
 public class PlayCoffeeScriptPlugin implements Plugin<Project> {
 
-    public static final String COFFEESCRIPT_COMPILE_TASK_NAME = "compileCoffeeScript";
+    public static final String COFFEESCRIPT_COMPILE_TASK_NAME = "compilePlayCoffeeScript";
     private static final String DEFAULT_COFFEESCRIPT_VERSION = "1.8.0";
     private static final String DEFAULT_RHINO_VERSION = "1.7R4";
 
