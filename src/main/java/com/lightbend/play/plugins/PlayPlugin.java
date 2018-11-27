@@ -3,6 +3,7 @@ package com.lightbend.play.plugins;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.file.FileTree;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.play.tasks.JavaScriptMinify;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;
@@ -27,10 +28,15 @@ public class PlayPlugin implements Plugin<Project> {
     }
 
     private static void configureJavaScriptTasks(Project project) {
-        Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);
+        PlayCoffeeScriptCompile playCoffeeScriptCompileTask = getCoffeeScriptCompileTask(project);
         JavaScriptMinify javaScriptMinifyTask = getJavaScriptMinifyTask(project);
+        javaScriptMinifyTask.mustRunAfter(playCoffeeScriptCompileTask);
+        FileTree combinedJavaScriptSources = javaScriptMinifyTask.getSource().plus(project.fileTree(playCoffeeScriptCompileTask.getDestinationDir()));
+        javaScriptMinifyTask.setSource(combinedJavaScriptSources);
+
+        Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);
+        assembleTask.dependsOn(playCoffeeScriptCompileTask);
         assembleTask.dependsOn(javaScriptMinifyTask);
-        assembleTask.dependsOn(getCoffeeScriptCompileTask(project));
 
         Jar assetsJarTask = (Jar) project.getTasks().getByName(ASSETS_JAR_TASK_NAME);
         assetsJarTask.dependsOn(javaScriptMinifyTask);
