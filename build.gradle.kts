@@ -1,6 +1,7 @@
 plugins {
     groovy
     `java-gradle-plugin`
+    `build-scan`
     id("com.lightbend.play.integration-test-fixtures")
     id("com.lightbend.play.integration-test")
 }
@@ -64,5 +65,15 @@ gradlePlugin {
             id = "com.lightbend.play"
             implementationClass = "com.lightbend.play.plugins.PlayPlugin"
         }
+    }
+}
+
+buildScan {
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
+
+    if (!System.getenv("CI").isNullOrEmpty()) {
+        publishAlways()
+        tag("CI")
     }
 }
