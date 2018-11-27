@@ -5,7 +5,6 @@ import com.lightbend.play.sourcesets.DefaultTwirlSourceSet;
 import com.lightbend.play.sourcesets.TwirlSourceSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.internal.tasks.DefaultSourceSet;
 import org.gradle.api.plugins.BasePlugin;
@@ -17,7 +16,6 @@ import org.gradle.play.platform.PlayPlatform;
 import org.gradle.play.tasks.TwirlCompile;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME;
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
@@ -37,10 +35,11 @@ public class PlayTwirlPlugin implements Plugin<Project> {
         PlayPluginConfigurations configurations = (PlayPluginConfigurations)project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
         TwirlSourceSet twirlSourceSet = createTwirlSourceSet(project);
-        TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet.getTwirl(), playPlatform);
+        TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet, playPlatform);
 
         project.afterEvaluate(project1 -> {
-            // TODO: Revisit later - this likely won't work
+            configureTwirlCompileTaskFromSourceSet(twirlCompile, twirlSourceSet);
+
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
                 configurations.getPlay().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-java"));
             }
@@ -56,18 +55,21 @@ public class PlayTwirlPlugin implements Plugin<Project> {
         return twirlSourceSet;
     }
 
-    private TwirlCompile createDefaultTwirlCompileTask(Project project, SourceDirectorySet sourceDirectory, PlayPlatform playPlatform) {
+    private TwirlCompile createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, PlayPlatform playPlatform) {
         return project.getTasks().create(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
-            twirlCompile.setDescription("Compiles Twirl templates for the '" + sourceDirectory.getDisplayName() + "' source set.");
+            twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
             File generatedSourceDir = new File(project.getBuildDir(), "src");
             twirlCompile.setPlatform(playPlatform);
-            twirlCompile.setSource(sourceDirectory);
-            File outputDirectory = new File(generatedSourceDir, sourceDirectory.getName());
+            twirlCompile.setSource(twirlSourceSet.getTwirl());
+            File outputDirectory = new File(generatedSourceDir, twirlSourceSet.getTwirl().getName());
             twirlCompile.setOutputDirectory(outputDirectory);
-            twirlCompile.setDefaultImports(TwirlImports.SCALA);
-            twirlCompile.setUserTemplateFormats(new ArrayList<>());
-            twirlCompile.setAdditionalImports(new ArrayList<>());
         });
+    }
+
+    private void configureTwirlCompileTaskFromSourceSet(TwirlCompile twirlCompile, TwirlSourceSet twirlSourceSet) {
+        twirlCompile.setDefaultImports(twirlSourceSet.getDefaultImports());
+        twirlCompile.setUserTemplateFormats(twirlSourceSet.getUserTemplateFormats());
+        twirlCompile.setAdditionalImports(twirlSourceSet.getAdditionalImports());
     }
 
     private boolean hasTwirlSourceSetsWithJavaImports(TwirlCompile twirlCompile) {
