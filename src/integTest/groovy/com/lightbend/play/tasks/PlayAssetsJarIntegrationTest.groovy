@@ -1,8 +1,7 @@
-package com.lightbend.play.plugins
+package com.lightbend.play.tasks
 
 import com.lightbend.play.AbstractIntegrationTest
 import com.lightbend.play.fixtures.app.BasicPlayApp
-import com.lightbend.play.fixtures.archive.JarTestFixture
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -65,9 +64,5 @@ class PlayAssetsJarIntegrationTest extends AbstractIntegrationTest {
 
         and:
         jar(ASSETS_JAR_FILE_PATH).countFiles('public/stylesheets/main.css') == 0
-    }
-
-    JarTestFixture jar(String fileName) {
-        new JarTestFixture(file(fileName))
     }
 }
