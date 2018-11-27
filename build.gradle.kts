@@ -27,4 +27,41 @@ java {
 
 gradlePlugin {
     testSourceSets(sourceSets["integTest"])
+
+    plugins {
+        register("play-twirl-plugin") {
+            id = "com.lightbend.play-twirl"
+            implementationClass = "com.lightbend.play.plugins.PlayTwirlPlugin"
+        }
+    }
+    plugins {
+        register("play-routes-plugin") {
+            id = "com.lightbend.play-routes"
+            implementationClass = "com.lightbend.play.plugins.PlayRoutesPlugin"
+        }
+    }
+    plugins {
+        register("play-application-plugin") {
+            id = "com.lightbend.play-application"
+            implementationClass = "com.lightbend.play.plugins.PlayApplicationPlugin"
+        }
+    }
+    plugins {
+        register("play-javascript-plugin") {
+            id = "com.lightbend.play-javascript"
+            implementationClass = "com.lightbend.play.plugins.PlayJavaScriptPlugin"
+        }
+    }
+    plugins {
+        register("play-coffeescript-plugin") {
+            id = "com.lightbend.play-coffeescript"
+            implementationClass = "com.lightbend.play.plugins.PlayCoffeeScriptPlugin"
+        }
+    }
+    plugins {
+        register("play-plugin") {
+            id = "com.lightbend.play"
+            implementationClass = "com.lightbend.play.plugins.PlayPlugin"
+        }
+    }
 }
