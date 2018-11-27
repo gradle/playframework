@@ -1,0 +1,1 @@
+= Gradle Play Plugin image:https://travis-ci.org/gradle/play.svg?branch=master["Build Status", link="https://travis-ci.org/gradle/play"]
