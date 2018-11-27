@@ -6,6 +6,7 @@ plugins {
 }
 
 group = "com.lightbend"
+version = "0.1"
 
 repositories {
     jcenter()
