@@ -13,6 +13,10 @@ final class FileFixtures {
 
     private FileFixtures() {}
 
+    static File findFile(File[] files, String fileName) {
+        files.find { it.name == fileName }
+    }
+
     static Snapshot snapshot(File file) {
         assertIsFile(file)
         return new Snapshot(file.lastModified(), md5(file))

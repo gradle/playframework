@@ -2,7 +2,7 @@ package com.lightbend.play.plugins
 
 import com.lightbend.play.AbstractIntegrationTest
 
-import static com.lightbend.play.fixtures.AssertionHelper.findFile
+import static com.lightbend.play.fixtures.FileFixtures.findFile
 import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
 
