@@ -5,12 +5,15 @@ import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.model.ObjectFactory;
 
+import javax.inject.Inject;
+
 import static org.gradle.util.ConfigureUtil.configure;
 
 public class DefaultJavaScriptSourceSet implements JavaScriptSourceSet {
 
     private final SourceDirectorySet javaScript;
 
+    @Inject
     public DefaultJavaScriptSourceSet(String name, String displayName, ObjectFactory objectFactory) {
         javaScript = objectFactory.sourceDirectorySet(name, displayName +  " JavaScript source");
         javaScript.srcDirs("app/assets");

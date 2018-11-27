@@ -51,7 +51,7 @@ public class PlayTwirlPlugin implements Plugin<Project> {
         JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
         SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
-        TwirlSourceSet twirlSourceSet = new DefaultTwirlSourceSet("twirl", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        TwirlSourceSet twirlSourceSet = project.getObjects().newInstance(DefaultTwirlSourceSet.class, "twirl", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
         new DslObject(mainSourceSet).getConvention().getPlugins().put("twirl", twirlSourceSet);
         return twirlSourceSet;
     }

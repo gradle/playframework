@@ -46,7 +46,7 @@ public class PlayCoffeeScriptPlugin implements Plugin<Project> {
         JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
         SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
-        CoffeeScriptSourceSet coffeeScriptSourceSet = new DefaultCoffeeScriptSourceSet("coffeeScript", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        CoffeeScriptSourceSet coffeeScriptSourceSet = project.getObjects().newInstance(DefaultCoffeeScriptSourceSet.class, "coffeeScript", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
         new DslObject(mainSourceSet).getConvention().getPlugins().put("coffeeScript", coffeeScriptSourceSet);
         return coffeeScriptSourceSet;
     }

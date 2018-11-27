@@ -42,7 +42,7 @@ public class PlayRoutesPlugin implements Plugin<Project> {
         JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
         SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
-        RoutesSourceSet routesSourceSet = new DefaultRoutesSourceSet("routes", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        RoutesSourceSet routesSourceSet = project.getObjects().newInstance(DefaultRoutesSourceSet.class, "routes", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
         new DslObject(mainSourceSet).getConvention().getPlugins().put("routes", routesSourceSet);
         return routesSourceSet;
     }

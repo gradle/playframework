@@ -37,7 +37,7 @@ public class PlayJavaScriptPlugin implements Plugin<Project> {
         JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
         SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
-        JavaScriptSourceSet javaScriptSourceSet = new DefaultJavaScriptSourceSet("javaScript", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
+        JavaScriptSourceSet javaScriptSourceSet = project.getObjects().newInstance(DefaultJavaScriptSourceSet.class, "javaScript", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
         new DslObject(mainSourceSet).getConvention().getPlugins().put("javaScript", javaScriptSourceSet);
         return javaScriptSourceSet;
     }

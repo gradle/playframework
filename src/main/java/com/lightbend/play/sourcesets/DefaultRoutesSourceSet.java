@@ -5,12 +5,15 @@ import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.model.ObjectFactory;
 
+import javax.inject.Inject;
+
 import static org.gradle.util.ConfigureUtil.configure;
 
 public class DefaultRoutesSourceSet implements RoutesSourceSet {
 
     private final SourceDirectorySet routes;
 
+    @Inject
     public DefaultRoutesSourceSet(String name, String displayName, ObjectFactory objectFactory) {
         routes = objectFactory.sourceDirectorySet(name, displayName +  " Routes source");
         routes.srcDirs("conf");

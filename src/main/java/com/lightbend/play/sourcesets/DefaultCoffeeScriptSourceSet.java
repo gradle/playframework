@@ -5,12 +5,15 @@ import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.model.ObjectFactory;
 
+import javax.inject.Inject;
+
 import static org.gradle.util.ConfigureUtil.configure;
 
 public class DefaultCoffeeScriptSourceSet implements CoffeeScriptSourceSet {
 
     private final SourceDirectorySet coffeeScript;
 
+    @Inject
     public DefaultCoffeeScriptSourceSet(String name, String displayName, ObjectFactory objectFactory) {
         coffeeScript = objectFactory.sourceDirectorySet(name, displayName +  " CoffeeScript source");
         coffeeScript.srcDirs("app/assets");

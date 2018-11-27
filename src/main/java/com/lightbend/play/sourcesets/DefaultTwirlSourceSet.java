@@ -5,12 +5,15 @@ import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.model.ObjectFactory;
 
+import javax.inject.Inject;
+
 import static org.gradle.util.ConfigureUtil.configure;
 
 public class DefaultTwirlSourceSet implements TwirlSourceSet {
 
     private final SourceDirectorySet twirl;
 
+    @Inject
     public DefaultTwirlSourceSet(String name, String displayName, ObjectFactory objectFactory) {
         twirl = objectFactory.sourceDirectorySet(name, displayName +  " Twirl source");
         twirl.srcDirs("app");
