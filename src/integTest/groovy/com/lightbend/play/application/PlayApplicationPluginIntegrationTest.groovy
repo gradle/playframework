@@ -11,6 +11,10 @@ import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
 abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationTest {
 
+    private static final String TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
+    private static final String JAR_TASK_PATH = ":$JAR_TASK_NAME".toString()
+    private static final String ASSETS_JAR_TASK_PATH = ":$ASSETS_JAR_TASK_NAME".toString()
+
     def setup() {
         getPlayApp().writeSources(projectDir)
         settingsFile << "rootProject.name = 'play-app'"
@@ -32,9 +36,9 @@ abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationT
         result = build('assemble')
 
         then:
-        result.task(":$TWIRL_COMPILE_TASK_NAME".toString()).outcome == TaskOutcome.UP_TO_DATE
-        result.task(":$JAR_TASK_NAME".toString()).outcome == TaskOutcome.UP_TO_DATE
-        result.task(":$ASSETS_JAR_TASK_NAME".toString()).outcome == TaskOutcome.UP_TO_DATE
+        result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
+        result.task(JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
+        result.task(ASSETS_JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
     }
 
     static String[] getBuildTasks() {
