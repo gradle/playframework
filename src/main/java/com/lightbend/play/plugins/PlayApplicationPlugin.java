@@ -113,9 +113,6 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     private void configureJavaAndScalaSourceSet(Project project) {
         SourceSet mainSourceSet = getMainSourceSet(project);
-        SourceDirectorySet mainSourceDirectorySet = mainSourceSet.getJava();
-        mainSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
-        mainSourceDirectorySet.include("**/*.java");
         SourceDirectorySet mainResourcesDirectorySet = mainSourceSet.getResources();
         mainResourcesDirectorySet.setSrcDirs(Arrays.asList("conf"));
 
@@ -157,14 +154,12 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private void configureScalaCompileTask(Project project, PlayPluginConfigurations configurations) {
+        ScalaCompile scalaCompile = (ScalaCompile) project.getTasks().getByName("compileScala");
         FileCollection playArtifacts = configurations.getPlay().getAllArtifacts();
-
-        project.getTasks().withType(ScalaCompile.class, scalaCompile -> {
-            scalaCompile.setClasspath(playArtifacts);
-            scalaCompile.getOptions().setAnnotationProcessorPath(playArtifacts);
-            scalaCompile.dependsOn(getTwirlCompileTask(project));
-            scalaCompile.dependsOn(getRoutesCompileTask(project));
-        });
+        scalaCompile.setClasspath(playArtifacts);
+        scalaCompile.getOptions().setAnnotationProcessorPath(playArtifacts);
+        scalaCompile.dependsOn(getTwirlCompileTask(project));
+        scalaCompile.dependsOn(getRoutesCompileTask(project));
     }
 
     private static TwirlCompile getTwirlCompileTask(Project project) {

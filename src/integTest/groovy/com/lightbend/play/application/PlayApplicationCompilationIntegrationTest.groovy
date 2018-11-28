@@ -30,7 +30,7 @@ class PlayApplicationCompilationIntegrationTest extends AbstractIntegrationTest 
 
         then:
         File classesOutputDir = file('build/classes')
-        new File(classesOutputDir, 'java/main/com/lightbend/JavaHelloWorld.class').isFile()
+        new File(classesOutputDir, 'scala/main/com/lightbend/JavaHelloWorld.class').isFile()
     }
 
     def "can compile Scala code"() {
