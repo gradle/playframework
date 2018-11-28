@@ -1,7 +1,7 @@
 package com.lightbend.play.application
 
 import com.lightbend.play.AbstractIntegrationTest
-import com.lightbend.play.fixtures.app.BasicPlayApp
+import com.lightbend.play.fixtures.app.PlayApp
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -9,10 +9,10 @@ import static com.lightbend.play.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_N
 import static com.lightbend.play.plugins.PlayApplicationPlugin.JAR_TASK_NAME
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
-class PlayApplicationPluginIntegrationTest extends AbstractIntegrationTest {
+abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationTest {
 
     def setup() {
-        new BasicPlayApp().writeSources(projectDir)
+        getPlayApp().writeSources(projectDir)
         settingsFile << "rootProject.name = 'play-app'"
     }
 
@@ -61,4 +61,6 @@ class PlayApplicationPluginIntegrationTest extends AbstractIntegrationTest {
                 'public/stylesheets/main.css',
                 'public/javascripts/hello.js')
     }
+
+    abstract PlayApp getPlayApp()
 }
