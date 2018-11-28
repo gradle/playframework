@@ -6,8 +6,7 @@ import org.gradle.internal.hash.HashingOutputStream
 
 import java.nio.file.Files
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import static org.junit.Assert.*
 
 final class FileFixtures {
 
@@ -26,6 +25,11 @@ final class FileFixtures {
         Snapshot now = snapshot(file)
         assertEquals(oldSnapshot.modTime, now.modTime)
         assertEquals(oldSnapshot.hash, now.hash)
+    }
+
+    static void assertContentsHaveChangedSince(Snapshot oldSnapshot, File file) {
+        Snapshot now = snapshot(file)
+        assertNotEquals(oldSnapshot.hash, now.hash)
     }
 
     private static File assertIsFile(File file) {
