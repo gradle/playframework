@@ -1,6 +1,6 @@
 package com.lightbend.play.tasks
 
-class AbstractCoffeeScriptCompileIntegrationTest extends AbstractJavaScriptMinifyIntegrationTest {
+abstract class AbstractCoffeeScriptCompileIntegrationTest extends AbstractJavaScriptMinifyIntegrationTest {
 
     File getProcessedJavaScriptDir() {
         file("build/src/javaScript")
