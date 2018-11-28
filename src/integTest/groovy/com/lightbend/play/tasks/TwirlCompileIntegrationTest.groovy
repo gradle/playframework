@@ -8,6 +8,7 @@ import spock.lang.Unroll
 
 import static com.lightbend.play.fixtures.FileFixtures.assertHasNotChangedSince
 import static com.lightbend.play.fixtures.FileFixtures.snapshot
+import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
 import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
@@ -18,7 +19,7 @@ class TwirlCompileIntegrationTest extends AbstractIntegrationTest {
     private static final SCALA_COMPILE_TASK_PATH = ":$SCALA_COMPILE_TASK_NAME".toString()
 
     // TODO: Hard-coded version - can later support multi-version testing
-    VersionNumber versionNumber = VersionNumber.parse("2.3.0")
+    VersionNumber versionNumber = DEFAULT_PLAY_VERSION
     File destinationDir
 
     def setup() {

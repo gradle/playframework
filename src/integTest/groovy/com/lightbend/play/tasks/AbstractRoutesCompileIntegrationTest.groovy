@@ -7,6 +7,7 @@ import org.gradle.util.VersionNumber
 
 import static com.lightbend.play.fixtures.FileFixtures.assertContentsHaveChangedSince
 import static com.lightbend.play.fixtures.FileFixtures.snapshot
+import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
 import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
@@ -15,7 +16,7 @@ abstract class AbstractRoutesCompileIntegrationTest extends AbstractIntegrationT
     protected static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
 
     // TODO: Hard-coded version - can later support multi-version testing
-    VersionNumber versionNumber = VersionNumber.parse("2.6.15")
+    VersionNumber versionNumber = DEFAULT_PLAY_VERSION
     String destinationDirPath = "build/src/routes"
     File destinationDir
 
