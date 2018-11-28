@@ -4,7 +4,6 @@ import com.lightbend.play.AbstractIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
-import spock.lang.Ignore
 
 import static com.lightbend.play.fixtures.FileFixtures.assertContentsHaveChangedSince
 import static com.lightbend.play.fixtures.FileFixtures.snapshot
@@ -145,7 +144,6 @@ GET     /newroute                          ${controllers()}.Application.index()
         new File(destinationDir, getReverseRoutesFileName('', ''))
     }
 
-    @Ignore
     def "compiles additional routes file and cleans up output on removal"() {
         when:
         withRoutesTemplate()
@@ -176,7 +174,6 @@ GET     /newroute                          ${controllers()}.Application.index()
         createRouteFileList('foo').each { assert !new File(destinationDir, it).isFile() }
     }
 
-    @Ignore
     def "can run RoutesCompile with namespaceReverseRouter set"() {
         given:
         withRoutesTemplate("org.gradle.test")
@@ -235,7 +232,7 @@ GET     /                          ${controllers()}${packageId}.Application.inde
             temporaryFolder.newFolder('conf')
         }
 
-        def routesFile = packageName.isEmpty() ? new File(routesDir, "routes") : new File(packageName + ".routes")
+        def routesFile = packageName.isEmpty() ? new File(routesDir, "routes") : new File(routesDir, packageName + ".routes")
         def packageId = packageName.isEmpty() ? "" : ".$packageName"
         withRoutesSource(routesFile, packageId)
     }
