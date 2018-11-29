@@ -6,8 +6,8 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
 import spock.lang.Unroll
 
-import static com.lightbend.play.fixtures.FileFixtures.assertHasNotChangedSince
-import static com.lightbend.play.fixtures.FileFixtures.snapshot
+import static com.lightbend.play.fixtures.file.FileFixtures.assertHasNotChangedSince
+import static com.lightbend.play.fixtures.file.FileFixtures.snapshot
 import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
 import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME

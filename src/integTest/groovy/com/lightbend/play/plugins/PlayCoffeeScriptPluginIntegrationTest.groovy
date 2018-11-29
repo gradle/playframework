@@ -2,7 +2,7 @@ package com.lightbend.play.plugins
 
 import com.lightbend.play.AbstractIntegrationTest
 
-import static com.lightbend.play.fixtures.FileFixtures.findFile
+import static com.lightbend.play.fixtures.file.FileFixtures.findFile
 import static com.lightbend.play.fixtures.Repositories.gradleJavascriptRepository
 import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayCoffeeScriptPlugin.COFFEESCRIPT_COMPILE_TASK_NAME

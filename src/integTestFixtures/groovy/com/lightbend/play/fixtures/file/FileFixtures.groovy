@@ -1,4 +1,4 @@
-package com.lightbend.play.fixtures
+package com.lightbend.play.fixtures.file
 
 import org.gradle.internal.hash.HashCode
 import org.gradle.internal.hash.Hashing

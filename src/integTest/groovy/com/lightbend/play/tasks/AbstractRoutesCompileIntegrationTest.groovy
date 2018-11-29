@@ -5,8 +5,8 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
 
-import static com.lightbend.play.fixtures.FileFixtures.assertContentsHaveChangedSince
-import static com.lightbend.play.fixtures.FileFixtures.snapshot
+import static com.lightbend.play.fixtures.file.FileFixtures.assertContentsHaveChangedSince
+import static com.lightbend.play.fixtures.file.FileFixtures.snapshot
 import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
 import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
