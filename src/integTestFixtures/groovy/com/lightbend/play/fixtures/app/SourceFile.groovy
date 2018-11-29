@@ -49,12 +49,4 @@ class SourceFile {
         }
         file.write(content)
     }
-
-    String withPath(String basePath) {
-        StringJoiner joiner = new StringJoiner('/')
-        joiner.add(basePath)
-        joiner.add(path)
-        joiner.add(name)
-        joiner.toString()
-    }
 }
