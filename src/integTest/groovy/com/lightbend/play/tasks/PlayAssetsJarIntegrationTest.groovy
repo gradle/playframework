@@ -6,7 +6,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
-import static com.lightbend.play.plugins.PlayApplicationPlugin.JAR_TASK_NAME
+import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME
 
 class PlayAssetsJarIntegrationTest extends AbstractIntegrationTest {
 

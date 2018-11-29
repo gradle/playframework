@@ -40,7 +40,7 @@ import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NA
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME;
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaBasePlugin.BUILD_TASK_NAME;
-import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
+import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME;
 
 /**
@@ -50,7 +50,6 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     public static final String PLAY_EXTENSION_NAME = "play";
     public static final String PLAY_CONFIGURATIONS_EXTENSION_NAME = "playConfigurations";
-    public static final String JAR_TASK_NAME = "createPlayJar";
     public static final String ASSETS_JAR_TASK_NAME = "createPlayAssetsJar";
     public static final String RUN_TASK_NAME = "runPlay";
     public static final int DEFAULT_HTTP_PORT = 9000;
@@ -64,9 +63,9 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         applyPlugins(project);
 
         configureJavaAndScalaSourceSet(project);
-        Jar mainJarTask = createMainJarTask(project);
+        Jar mainJarTask = (Jar) project.getTasks().getByName(JAR_TASK_NAME);
         Jar assetsJarTask = createAssetsJarTask(project);
-        registerOutgoingArtifacts(project, mainJarTask, assetsJarTask);
+        registerOutgoingArtifact(project, assetsJarTask);
 
         project.afterEvaluate(project1 -> {
             failIfInjectedRouterIsUsedWithOldVersion(playExtension.getPlatform());
@@ -132,22 +131,6 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         scalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).getOutputDirectory());
     }
 
-    private Jar createMainJarTask(Project project) {
-        SourceSet mainSourceSet = getMainSourceSet(project);
-
-        Jar mainJarTask = project.getTasks().create(JAR_TASK_NAME, Jar.class, jar -> {
-            jar.setDescription("Assembles the application jar.");
-            jar.from(mainSourceSet.getOutput().getClassesDirs());
-            jar.from(mainSourceSet.getOutput().getResourcesDir());
-            jar.dependsOn(project.getTasks().getByName(CLASSES_TASK_NAME));
-        });
-
-        Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);
-        assembleTask.dependsOn(mainJarTask);
-
-        return mainJarTask;
-    }
-
     private Jar createAssetsJarTask(Project project) {
         Jar assetsJarTask = project.getTasks().create(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the assets jar for the application.");
@@ -161,14 +144,9 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         return assetsJarTask;
     }
 
-    private void registerOutgoingArtifacts(Project project, Jar mainJarTask, Jar assetsJarTask) {
+    private void registerOutgoingArtifact(Project project, Jar assetsJarTask) {
         Configuration runtimeElementsConfiguration = project.getConfigurations().getByName(RUNTIME_ELEMENTS_CONFIGURATION_NAME);
-        addOutgoingArtifact(runtimeElementsConfiguration, mainJarTask);
-        addOutgoingArtifact(runtimeElementsConfiguration, assetsJarTask);
-    }
-
-    private void addOutgoingArtifact(Configuration runtimeElementsConfiguration, Jar jar) {
-        PublishArtifact jarArtifact = new ArchivePublishArtifact(jar);
+        PublishArtifact jarArtifact = new ArchivePublishArtifact(assetsJarTask);
         ConfigurationPublications publications = runtimeElementsConfiguration.getOutgoing();
         publications.getArtifacts().add(jarArtifact);
         publications.getAttributes().attribute(ArtifactAttributes.ARTIFACT_FORMAT, ArtifactTypeDefinition.JAR_TYPE);

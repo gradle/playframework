@@ -5,8 +5,8 @@ import org.gradle.testkit.runner.TaskOutcome
 
 import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
-import static com.lightbend.play.plugins.PlayApplicationPlugin.JAR_TASK_NAME
 import static com.lightbend.play.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
+import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME
 
 class JavaScriptMinifyIntegrationTest extends AbstractJavaScriptMinifyIntegrationTest {
 

@@ -13,7 +13,9 @@ import org.gradle.api.tasks.util.PatternSet;
 
 import java.io.File;
 
-import static com.lightbend.play.plugins.PlayApplicationPlugin.*;
+import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME;
+import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
+import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME;
 
 public class PlayTestPlugin implements Plugin<Project> {
 

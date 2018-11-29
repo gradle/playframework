@@ -8,9 +8,9 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
-import static com.lightbend.play.plugins.PlayApplicationPlugin.JAR_TASK_NAME
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
+import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME
 import static org.gradle.api.plugins.JavaPlugin.TEST_TASK_NAME
 
 abstract class PlayTestApplicationIntegrationTest extends AbstractIntegrationTest {

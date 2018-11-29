@@ -6,14 +6,19 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
-import static com.lightbend.play.plugins.PlayApplicationPlugin.JAR_TASK_NAME
+import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
+import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME
+import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME
 
 abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationTest {
 
+    private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
     private static final String TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
+    private static final String SCALA_COMPILE_TASK_PATH = ':compileScala'
     private static final String JAR_TASK_PATH = ":$JAR_TASK_NAME".toString()
     private static final String ASSETS_JAR_TASK_PATH = ":$ASSETS_JAR_TASK_NAME".toString()
+    private static final String ASSEMBLE_TASK_PATH = ":$ASSEMBLE_TASK_NAME".toString()
 
     def setup() {
         getPlayApp().writeSources(projectDir)
@@ -43,12 +48,12 @@ abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationT
 
     static String[] getBuildTasks() {
         [
-            ':compilePlayRoutes',
-            ':compilePlayTwirlTemplates',
-            ':compileScala',
-            ':createPlayJar',
-            ':createPlayAssetsJar',
-            ':assemble'
+            ROUTES_COMPILE_TASK_PATH,
+            TWIRL_COMPILE_TASK_PATH,
+            SCALA_COMPILE_TASK_PATH,
+            JAR_TASK_PATH,
+            ASSETS_JAR_TASK_PATH,
+            ASSEMBLE_TASK_PATH
         ]
     }
 
