@@ -36,6 +36,12 @@ plugins {
     id 'com.lightbend.play-application'
 }
 
+play {
+    platform {
+        playVersion.set('$versionNumber')
+    }
+}
+
 ${playRepositories()}
 """
     }
