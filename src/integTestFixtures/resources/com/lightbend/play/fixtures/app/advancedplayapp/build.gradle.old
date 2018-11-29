@@ -1,0 +1,15 @@
+plugins {
+    id 'com.lightbend.play'
+}
+
+// repositories added in PlayApp class
+
+sourceSets {
+    main {
+        twirl {
+            defaultImports = TwirlImports.JAVA
+            srcDir "templates"
+            include "jva/**/*"
+        }
+    }
+}
