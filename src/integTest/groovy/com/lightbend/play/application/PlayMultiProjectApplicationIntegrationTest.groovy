@@ -28,10 +28,9 @@ class PlayMultiProjectApplicationIntegrationTest extends AbstractIntegrationTest
                 "controllers/Application.class")
         jar("primary/build/libs/primary-assets.jar").hasDescendants(
                 "public/primary.txt")
-        // TODO: JARs need to be declared as outgoing artifacts
-//        jar("submodule/build/libs/submodule.jar").containsDescendants(
-//                "controllers/submodule/Application.class")
-//        jar("submodule/build/libs/submodule-assets.jar").hasDescendants(
-//                "public/submodule.txt")
+        jar("submodule/build/libs/submodule.jar").containsDescendants(
+                "controllers/submodule/Application.class")
+        jar("submodule/build/libs/submodule-assets.jar").hasDescendants(
+                "public/submodule.txt")
     }
 }

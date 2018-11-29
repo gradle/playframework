@@ -8,8 +8,14 @@ import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.ConfigurationPublications;
+import org.gradle.api.artifacts.PublishArtifact;
+import org.gradle.api.artifacts.type.ArtifactTypeDefinition;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.artifacts.ArtifactAttributes;
+import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact;
 import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
@@ -35,6 +41,7 @@ import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaBasePlugin.BUILD_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
+import static org.gradle.api.plugins.JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME;
 
 /**
  * Plugin for Play Framework component support.
@@ -59,6 +66,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         configureJavaAndScalaSourceSet(project);
         Jar mainJarTask = createMainJarTask(project);
         Jar assetsJarTask = createAssetsJarTask(project);
+        registerOutgoingArtifacts(project, mainJarTask, assetsJarTask);
 
         project.afterEvaluate(project1 -> {
             failIfInjectedRouterIsUsedWithOldVersion(playExtension.getPlatform());
@@ -151,6 +159,19 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         assembleTask.dependsOn(assetsJarTask);
 
         return assetsJarTask;
+    }
+
+    private void registerOutgoingArtifacts(Project project, Jar mainJarTask, Jar assetsJarTask) {
+        Configuration runtimeElementsConfiguration = project.getConfigurations().getByName(RUNTIME_ELEMENTS_CONFIGURATION_NAME);
+        addOutgoingArtifact(runtimeElementsConfiguration, mainJarTask);
+        addOutgoingArtifact(runtimeElementsConfiguration, assetsJarTask);
+    }
+
+    private void addOutgoingArtifact(Configuration runtimeElementsConfiguration, Jar jar) {
+        PublishArtifact jarArtifact = new ArchivePublishArtifact(jar);
+        ConfigurationPublications publications = runtimeElementsConfiguration.getOutgoing();
+        publications.getArtifacts().add(jarArtifact);
+        publications.getAttributes().attribute(ArtifactAttributes.ARTIFACT_FORMAT, ArtifactTypeDefinition.JAR_TYPE);
     }
 
     private void configureScalaCompileTask(Project project, PlayPluginConfigurations configurations) {
