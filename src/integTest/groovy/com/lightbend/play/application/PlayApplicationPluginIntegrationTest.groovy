@@ -46,7 +46,7 @@ abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationT
         result.task(ASSETS_JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
     }
 
-    static String[] getBuildTasks() {
+    String[] getBuildTasks() {
         [
             ROUTES_COMPILE_TASK_PATH,
             TWIRL_COMPILE_TASK_PATH,
