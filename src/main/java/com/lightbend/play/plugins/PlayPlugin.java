@@ -27,6 +27,7 @@ public class PlayPlugin implements Plugin<Project> {
         project.getPluginManager().apply(PlayCoffeeScriptPlugin.class);
         project.getPluginManager().apply(PlayTestPlugin.class);
         project.getPluginManager().apply(PlayDistributionPlugin.class);
+        project.getPluginManager().apply(PlayIdePlugin.class);
     }
 
     private static void configureJavaScriptTasks(Project project) {

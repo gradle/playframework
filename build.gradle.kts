@@ -73,6 +73,12 @@ gradlePlugin {
         }
     }
     plugins {
+        register("play-ide-plugin") {
+            id = "com.lightbend.play-ide"
+            implementationClass = "com.lightbend.play.plugins.PlayIdePlugin"
+        }
+    }
+    plugins {
         register("play-plugin") {
             id = "com.lightbend.play"
             implementationClass = "com.lightbend.play.plugins.PlayPlugin"
