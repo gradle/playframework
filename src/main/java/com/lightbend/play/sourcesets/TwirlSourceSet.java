@@ -11,7 +11,6 @@ import java.util.List;
 public interface TwirlSourceSet {
 
     SourceDirectorySet getTwirl();
-    TwirlSourceSet twirl(Closure configureClosure);
     TwirlSourceSet twirl(Action<? super SourceDirectorySet> configureAction);
     TwirlImports getDefaultImports();
     void setDefaultImports(TwirlImports defaultImports);

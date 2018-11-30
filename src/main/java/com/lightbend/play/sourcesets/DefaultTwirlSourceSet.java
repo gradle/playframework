@@ -35,12 +35,6 @@ public class DefaultTwirlSourceSet implements TwirlSourceSet {
     }
 
     @Override
-    public TwirlSourceSet twirl(Closure configureClosure) {
-        configure(configureClosure, getTwirl());
-        return this;
-    }
-
-    @Override
     public TwirlSourceSet twirl(Action<? super SourceDirectorySet> configureAction) {
         configureAction.execute(getTwirl());
         return this;
