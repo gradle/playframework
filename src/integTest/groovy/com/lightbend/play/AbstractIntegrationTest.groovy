@@ -47,11 +47,11 @@ class AbstractIntegrationTest extends Specification {
         new JarTestFixture(file(fileName))
     }
 
-    ZipTestFixture zip(String fileName) {
+    protected ZipTestFixture zip(String fileName) {
         new ZipTestFixture(file(fileName))
     }
 
-    TarTestFixture tar(String fileName) {
+    protected TarTestFixture tar(String fileName) {
         new TarTestFixture(file(fileName))
     }
 }
