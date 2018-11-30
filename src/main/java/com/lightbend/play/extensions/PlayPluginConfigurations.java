@@ -1,4 +1,4 @@
-package com.lightbend.play.plugins;
+package com.lightbend.play.extensions;
 
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationContainer;
@@ -64,34 +64,34 @@ public class PlayPluginConfigurations {
     /**
      * Wrapper around a Configuration instance used by the PlayApplicationPlugin.
      */
-    class PlayConfiguration {
+    public class PlayConfiguration {
         private final String name;
 
         PlayConfiguration(String name) {
             this.name = name;
         }
 
-        Configuration getConfiguration() {
+        public Configuration getConfiguration() {
             return configurations.getByName(name);
         }
 
-        FileCollection getAllArtifacts() {
+        public FileCollection getAllArtifacts() {
             return getConfiguration();
         }
 
-        FileCollection getChangingArtifacts() {
+        public FileCollection getChangingArtifacts() {
             return new FilterByProjectComponentTypeFileCollection(getConfiguration(), true);
         }
 
-        FileCollection getNonChangingArtifacts() {
+        public FileCollection getNonChangingArtifacts() {
             return new FilterByProjectComponentTypeFileCollection(getConfiguration(), false);
         }
 
-        void addDependency(Object notation) {
+        public void addDependency(Object notation) {
             dependencyHandler.add(name, notation);
         }
 
-        void addArtifact(PublishArtifact artifact) {
+        public void addArtifact(PublishArtifact artifact) {
             configurations.getByName(name).getArtifacts().add(artifact);
         }
     }

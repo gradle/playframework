@@ -2,6 +2,7 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
+import com.lightbend.play.extensions.PlayPluginConfigurations;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.gradle.api.GradleException;
 import org.gradle.api.JavaVersion;

@@ -1,6 +1,7 @@
 package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
+import com.lightbend.play.extensions.PlayPluginConfigurations;
 import com.lightbend.play.sourcesets.DefaultTwirlSourceSet;
 import com.lightbend.play.sourcesets.TwirlSourceSet;
 import org.gradle.api.Plugin;

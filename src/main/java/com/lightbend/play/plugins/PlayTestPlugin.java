@@ -1,6 +1,7 @@
 package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
+import com.lightbend.play.extensions.PlayPluginConfigurations;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
