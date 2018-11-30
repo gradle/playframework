@@ -1,6 +1,8 @@
 package com.lightbend.play
 
 import com.lightbend.play.fixtures.archive.JarTestFixture
+import com.lightbend.play.fixtures.archive.TarTestFixture
+import com.lightbend.play.fixtures.archive.ZipTestFixture
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
@@ -43,5 +45,13 @@ class AbstractIntegrationTest extends Specification {
 
     protected JarTestFixture jar(String fileName) {
         new JarTestFixture(file(fileName))
+    }
+
+    ZipTestFixture zip(String fileName) {
+        new ZipTestFixture(file(fileName))
+    }
+
+    TarTestFixture tar(String fileName) {
+        new TarTestFixture(file(fileName))
     }
 }

@@ -36,7 +36,6 @@ import java.util.stream.Stream;
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.*;
 import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME;
-import static org.gradle.internal.FileUtils.hasExtension;
 
 public class PlayDistributionPlugin implements Plugin<Project> {
 
@@ -89,7 +88,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.dependsOn(mainJarTask, assetsJarTask);
             jar.from(project.zipTree(mainJarTask.getArchivePath()));
             jar.setDestinationDir(distJarDir);
-            jar.setArchiveName(mainJarTask.getName());
+            jar.setBaseName(mainJarTask.getBaseName());
 
             Map<String, Object> classpath = new HashMap<>();
             classpath.put("Class-Path", new PlayManifestClasspath(configurations.getPlayRun(), assetsJarTask.getArchivePath()));
@@ -156,7 +155,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         final String distributionZipTaskName = "create" + capitalizedDistName + "ZipDist";
         Zip distZipTask = project.getTasks().create(distributionZipTaskName, Zip.class, zip -> {
             zip.setDescription("Packages the '" + distribution.getName() + "' distribution as a zip file.");
-            zip.setArchiveName(baseName);
+            zip.setBaseName(baseName);
             zip.setDestinationDir(new File(project.getBuildDir(), "distributions"));
             zip.from(stageSyncTask);
         });
@@ -164,7 +163,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         final String distributionTarTaskName = "create" + capitalizedDistName + "TarDist";
         Tar distTarTask = project.getTasks().create(distributionTarTaskName, Tar.class, tar -> {
             tar.setDescription("Packages the '" + distribution.getName() + "' distribution as a tar file.");
-            tar.setArchiveName(baseName);
+            tar.setBaseName(baseName);
             tar.setDestinationDir(new File(project.getBuildDir(), "distributions"));
             tar.from(stageSyncTask);
         });
@@ -286,5 +285,9 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         private static boolean shouldBeRenamed(File file) {
             return hasExtension(file, ".jar");
         }
+    }
+
+    private static boolean hasExtension(File file, String extension) {
+        return file.getPath().endsWith(extension);
     }
 }

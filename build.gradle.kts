@@ -67,6 +67,12 @@ gradlePlugin {
         }
     }
     plugins {
+        register("play-distribution-plugin") {
+            id = "com.lightbend.play-distribution"
+            implementationClass = "com.lightbend.play.plugins.PlayDistributionPlugin"
+        }
+    }
+    plugins {
         register("play-plugin") {
             id = "com.lightbend.play"
             implementationClass = "com.lightbend.play.plugins.PlayPlugin"
