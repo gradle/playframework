@@ -15,7 +15,6 @@ import org.gradle.api.distribution.DistributionContainer;
 import org.gradle.api.distribution.plugins.DistributionPlugin;
 import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.FileCopyDetails;
-import org.gradle.api.internal.file.copy.CopySpecInternal;
 import org.gradle.api.tasks.Sync;
 import org.gradle.api.tasks.application.CreateStartScripts;
 import org.gradle.api.tasks.bundling.Jar;
@@ -23,7 +22,6 @@ import org.gradle.api.tasks.bundling.Tar;
 import org.gradle.api.tasks.bundling.Zip;
 import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.platform.PlayPlatform;
-import org.gradle.util.GUtil;
 
 import java.io.File;
 import java.util.Collections;
@@ -105,19 +103,20 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             createStartScripts.setOutputDir(scriptsDir);
         });
 
-        CopySpecInternal distSpec = (CopySpecInternal) distribution.getContents();
-        CopySpec libSpec = distSpec.addChild().into("lib");
-        libSpec.from(distributionJarTask);
-        libSpec.from(assetsJarTask.getArchivePath());
-        libSpec.from(configurations.getPlayRun().getAllArtifacts());
-        libSpec.eachFile(new PrefixArtifactFileNames(configurations.getPlayRun()));
+        CopySpec distSpec = distribution.getContents();
+        distSpec.into("lib", copySpec -> {
+            copySpec.from(distributionJarTask);
+            copySpec.from(assetsJarTask.getArchivePath());
+            copySpec.from(configurations.getPlayRun().getAllArtifacts());
+            copySpec.eachFile(new PrefixArtifactFileNames(configurations.getPlayRun()));
+        });
 
-        CopySpec binSpec = distSpec.addChild().into("bin");
-        binSpec.from(createStartScriptsTask);
-        binSpec.setFileMode(0755);
+        distSpec.into("bin", copySpec -> {
+            copySpec.from(createStartScriptsTask);
+            copySpec.setFileMode(0755);
+        });
 
-        CopySpec confSpec = distSpec.addChild().into("conf");
-        confSpec.from("conf").exclude("routes");
+        distSpec.into("conf", copySpec -> copySpec.from("conf").exclude("routes"));
         distSpec.from("README");
     }
 
@@ -145,9 +144,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             sync.setDescription("Copies the '" + distribution.getName() + "' distribution to a staging directory.");
             sync.setDestinationDir(stageDir);
 
-            CopySpecInternal baseSpec = sync.getRootSpec().addChild();
-            baseSpec.into(baseName);
-            baseSpec.with(distribution.getContents());
+            sync.into(baseName, copySpec -> copySpec.with(distribution.getContents()));
         });
 
         stageLifecycleTask.dependsOn(stageSyncTask);
@@ -269,7 +266,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         }
 
         private static String maybePrefix(String prefix, File file) {
-            if (!GUtil.isTrue(prefix)) {
+            if (!(prefix != null && prefix.length() > 0)) {
                 return file.getName();
             }
             return prefix + "-" + file.getName();
