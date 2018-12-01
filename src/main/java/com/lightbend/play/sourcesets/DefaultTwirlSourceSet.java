@@ -1,6 +1,5 @@
 package com.lightbend.play.sourcesets;
 
-import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.model.ObjectFactory;
@@ -12,8 +11,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.gradle.util.ConfigureUtil.configure;
 
 public class DefaultTwirlSourceSet implements TwirlSourceSet {
 

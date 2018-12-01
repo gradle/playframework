@@ -1,13 +1,10 @@
 package com.lightbend.play.sourcesets;
 
-import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.model.ObjectFactory;
 
 import javax.inject.Inject;
-
-import static org.gradle.util.ConfigureUtil.configure;
 
 public class DefaultRoutesSourceSet implements RoutesSourceSet {
 
@@ -23,12 +20,6 @@ public class DefaultRoutesSourceSet implements RoutesSourceSet {
     @Override
     public SourceDirectorySet getRoutes() {
         return routes;
-    }
-
-    @Override
-    public RoutesSourceSet routes(Closure configureClosure) {
-        configure(configureClosure, getRoutes());
-        return this;
     }
 
     @Override

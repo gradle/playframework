@@ -1,6 +1,5 @@
 package com.lightbend.play.sourcesets;
 
-import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.language.twirl.TwirlImports;
