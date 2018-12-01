@@ -35,9 +35,7 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
         withInjectedRoutesController()
         buildFile << """
 play {
-    platform {
-        injectedRoutesGenerator.set(true)
-    }
+    injectedRoutesGenerator = true
 }
 """
         expect:
@@ -58,9 +56,7 @@ play {
         withInjectedRoutesController()
         buildFile << """
 play {
-    platform {
-        injectedRoutesGenerator.set(true)
-    }
+    injectedRoutesGenerator = true
 }
 """
         then:

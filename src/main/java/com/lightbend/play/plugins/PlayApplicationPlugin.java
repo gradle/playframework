@@ -1,6 +1,5 @@
 package com.lightbend.play.plugins;
 
-import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
 import org.codehaus.groovy.runtime.InvokerHelper;
@@ -69,7 +68,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         registerOutgoingArtifact(project, assetsJarTask);
 
         project.afterEvaluate(project1 -> {
-            failIfInjectedRouterIsUsedWithOldVersion(playExtension.getPlatform());
+            failIfInjectedRouterIsUsedWithOldVersion(playExtension.getInjectedRoutesGenerator().get(), playExtension.getPlatform().asPlayPlatform());
             PlayPlatform playPlatform = playExtension.getPlatform().asPlayPlatform();
             initialiseConfigurations(playPluginConfigurations, playPlatform);
             configureScalaCompileTask(project, playPluginConfigurations);
@@ -89,13 +88,12 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         playExtension.getPlatform().getPlayVersion().set(DefaultPlayPlatform.DEFAULT_PLAY_VERSION);
         playExtension.getPlatform().getScalaVersion().set("2.11");
         playExtension.getPlatform().getJavaVersion().set(JavaVersion.current());
-        playExtension.getPlatform().getInjectedRoutesGenerator().set(false);
+        playExtension.getInjectedRoutesGenerator().set(false);
         return playExtension;
     }
 
-    private void failIfInjectedRouterIsUsedWithOldVersion(Platform platform) {
-        if (Boolean.TRUE.equals(platform.getInjectedRoutesGenerator().get())) {
-            PlayPlatform playPlatform = platform.asPlayPlatform();
+    private void failIfInjectedRouterIsUsedWithOldVersion(Boolean injectedRoutesGenerator,PlayPlatform playPlatform) {
+        if (Boolean.TRUE.equals(injectedRoutesGenerator)) {
             VersionNumber minSupportedVersion = VersionNumber.parse("2.4.0");
             VersionNumber playVersion = VersionNumber.parse(playPlatform.getPlayVersion());
             if (playVersion.compareTo(minSupportedVersion) < 0) {

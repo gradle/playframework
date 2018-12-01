@@ -3,8 +3,8 @@ package com.lightbend.play.plugins
 import com.lightbend.play.AbstractIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 
-import static com.lightbend.play.fixtures.file.FileFixtures.findFile
 import static com.lightbend.play.fixtures.Repositories.playRepositories
+import static com.lightbend.play.fixtures.file.FileFixtures.findFile
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
 class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
@@ -94,9 +94,7 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
 
         buildFile << """
             play {
-                platform {
-                    injectedRoutesGenerator.set(true)
-                }
+                injectedRoutesGenerator = true
             }
         """
 
@@ -129,8 +127,8 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
             play {
                 platform {
                     playVersion = '2.3.0'
-                    injectedRoutesGenerator.set(true)
                 }
+                injectedRoutesGenerator = true
             }
         """
 

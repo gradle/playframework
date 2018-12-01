@@ -1,6 +1,5 @@
 package com.lightbend.play.plugins;
 
-import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.sourcesets.DefaultRoutesSourceSet;
 import com.lightbend.play.sourcesets.RoutesSourceSet;
@@ -28,14 +27,14 @@ public class PlayRoutesPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        Platform platform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform();
-        PlayPlatform playPlatform = platform.asPlayPlatform();
+        PlayExtension playExtension = ((PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME));
+        PlayPlatform playPlatform = playExtension.getPlatform().asPlayPlatform();
 
         RoutesSourceSet routesSourceSet = createRoutesSourceSet(project);
         RoutesCompile routesCompile = createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), playPlatform);
 
         // TODO: RoutesCompile should use Provider types to avoid afterEvaluate
-        project.afterEvaluate(project1 -> routesCompile.setInjectedRoutesGenerator(platform.getInjectedRoutesGenerator().get()));
+        project.afterEvaluate(project1 -> routesCompile.setInjectedRoutesGenerator(playExtension.getInjectedRoutesGenerator().get()));
     }
 
     private RoutesSourceSet createRoutesSourceSet(Project project) {
