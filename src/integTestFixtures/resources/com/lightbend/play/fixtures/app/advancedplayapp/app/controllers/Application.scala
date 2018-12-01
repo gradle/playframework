@@ -27,7 +27,7 @@ class Application @Inject() extends InjectedController {
     Ok(views.html.index("Your new application is ready."))
   }
   def root = Action {
-    Ok(views.html.awesome.index(List(new DataType("bar", 2))))
+    Ok(views.html.awesome.index(java.util.Arrays.asList(new DataType("bar", 2))))
   }
   def shutdown = Action {
     Runtime.getRuntime().halt(0)

@@ -3,12 +3,10 @@ package com.lightbend.play.application.advanced
 import com.lightbend.play.application.PlayApplicationPluginIntegrationTest
 import com.lightbend.play.fixtures.app.AdvancedPlayApp
 import com.lightbend.play.fixtures.app.PlayApp
-import spock.lang.Ignore
 
 import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
-@Ignore("fails due to a compilation issue")
 class PlayBinaryAdvancedAppIntegrationTest extends PlayApplicationPluginIntegrationTest {
 
     private static final TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()

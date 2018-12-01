@@ -22,7 +22,9 @@ abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationT
 
     def setup() {
         getPlayApp().writeSources(projectDir)
-        settingsFile << "rootProject.name = 'play-app'"
+        settingsFile << """
+            rootProject.name = '${playApp.name}'
+        """
     }
 
     def "can build application binaries"() {
@@ -58,14 +60,14 @@ abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationT
     }
 
     void verifyJars() {
-        jar('build/libs/play-app.jar').containsDescendants(
+        jar("build/libs/${playApp.name}.jar").containsDescendants(
                 'router/Routes.class',
                 'views/html/index.class',
                 'views/html/main.class',
                 'controllers/Application.class',
                 'application.conf',
                 'logback.xml')
-        jar('build/libs/play-app-assets.jar').containsDescendants(
+        jar("build/libs/${playApp.name}-assets.jar").containsDescendants(
                 'public/images/favicon.svg',
                 'public/stylesheets/main.css',
                 'public/javascripts/hello.js')
