@@ -9,7 +9,7 @@ To engage in the development of the plugin, follow the minimum requirements show
 [options="header"]
 |==========================
 |Tool    |Minimum Version
-|JDK     |Oracle JDK or OpenJDK 8.x
+|JDK     |Oracle JDK or OpenJDK 8.x, anything higher won't work with Scala 2.11
 |Gradle  |5.0 or higher
 |IDE     |IntelliJ 2018.2 or higher
 |==========================
