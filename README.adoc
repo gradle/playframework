@@ -1,1 +1,36 @@
 = Gradle Play Plugin image:https://travis-ci.org/gradle/play.svg?branch=master["Build Status", link="https://travis-ci.org/gradle/play"]
+
+== Development
+
+=== Minimum requirements
+
+To engage in the development of the plugin, follow the minimum requirements shown in the table below.
+
+[options="header"]
+|==========================
+|Tool    |Minimum Version
+|JDK     |Oracle JDK or OpenJDK 8.x
+|Gradle  |5.0 or higher
+|IDE     |IntelliJ 2018.2 or higher
+|==========================
+
+=== Executing the build
+
+The plugin follows the standard conventions of a Java project modeled with Gradle. Furthermore, the project defines a task for running integration tests. To compile the code, execute all tests and build the plugin's artifact, run the following command.
+
+**Linux & MacOSX**
+
+----
+./gradlew build
+----
+
+**Windows**
+
+----
+gradlew.bat build
+----
+
+=== Working in the IDE
+
+Importing the project into IntelliJ is straight forward. From the menu select _File > Open... > Open as Project_ and point it to the `build.gradle.kts` file. In the following pop-up window, ensure that the default Gradle Wrapper is selected and "Create separate module per source set" is checked.
+
