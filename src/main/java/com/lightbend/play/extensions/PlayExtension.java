@@ -1,14 +1,14 @@
 package com.lightbend.play.extensions;
 
 import org.gradle.api.Action;
-import org.gradle.api.Project;
+import org.gradle.api.model.ObjectFactory;
 
 public class PlayExtension {
 
     private final Platform platform;
 
-    public PlayExtension(Project project) {
-        platform = new Platform(project);
+    public PlayExtension(ObjectFactory objectFactory) {
+        platform = objectFactory.newInstance(Platform.class, objectFactory);
     }
 
     public void platform(Action<? super Platform> action) {

@@ -85,7 +85,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private PlayExtension createPlayExtension(Project project) {
-        PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project);
+        PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project.getObjects());
         playExtension.getPlatform().getPlayVersion().set(DefaultPlayPlatform.DEFAULT_PLAY_VERSION);
         playExtension.getPlatform().getScalaVersion().set("2.11");
         playExtension.getPlatform().getJavaVersion().set(JavaVersion.current());

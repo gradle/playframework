@@ -128,7 +128,7 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         buildFile << """
             play {
                 platform {
-                    playVersion.set('2.3.0')
+                    playVersion = '2.3.0'
                     injectedRoutesGenerator.set(true)
                 }
             }

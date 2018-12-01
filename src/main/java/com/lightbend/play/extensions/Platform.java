@@ -1,7 +1,7 @@
 package com.lightbend.play.extensions;
 
 import org.gradle.api.JavaVersion;
-import org.gradle.api.Project;
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.jvm.platform.JavaPlatform;
 import org.gradle.jvm.platform.internal.DefaultJavaPlatform;
@@ -10,6 +10,8 @@ import org.gradle.language.scala.internal.DefaultScalaPlatform;
 import org.gradle.play.internal.DefaultPlayPlatform;
 import org.gradle.play.platform.PlayPlatform;
 
+import javax.inject.Inject;
+
 public class Platform {
 
     private final Property<String> playVersion;
@@ -17,11 +19,12 @@ public class Platform {
     private final Property<JavaVersion> javaVersion;
     private final Property<Boolean> injectedRoutesGenerator;
 
-    public Platform(Project project) {
-        playVersion = project.getObjects().property(String.class);
-        scalaVersion = project.getObjects().property(String.class);
-        javaVersion = project.getObjects().property(JavaVersion.class);
-        injectedRoutesGenerator = project.getObjects().property(Boolean.class);
+    @Inject
+    public Platform(ObjectFactory objectFactory) {
+        playVersion = objectFactory.property(String.class);
+        scalaVersion = objectFactory.property(String.class);
+        javaVersion = objectFactory.property(JavaVersion.class);
+        injectedRoutesGenerator = objectFactory.property(Boolean.class);
     }
 
     public Property<String> getPlayVersion() {

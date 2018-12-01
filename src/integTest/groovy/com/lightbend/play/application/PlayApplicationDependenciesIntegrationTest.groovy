@@ -34,9 +34,9 @@ class PlayApplicationDependenciesIntegrationTest extends AbstractIntegrationTest
         buildFile << """
             play {
                 platform {
-                    playVersion.set('2.6.14')
-                    scalaVersion.set('2.12')
-                    javaVersion.set(JavaVersion.VERSION_1_8)
+                    playVersion = '2.6.14'
+                    scalaVersion = '2.12'
+                    javaVersion = JavaVersion.VERSION_1_8
                 }
             }
         """

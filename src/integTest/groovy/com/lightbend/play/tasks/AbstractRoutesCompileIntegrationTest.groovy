@@ -38,7 +38,7 @@ plugins {
 
 play {
     platform {
-        playVersion.set('$versionNumber')
+        playVersion = '$versionNumber'
     }
 }
 
