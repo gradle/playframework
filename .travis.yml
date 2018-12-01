@@ -1,10 +1,6 @@
 language: java
 install: true
 
-os:
-  - linux
-  - windows
-
 jdk:
   - oraclejdk8
 
