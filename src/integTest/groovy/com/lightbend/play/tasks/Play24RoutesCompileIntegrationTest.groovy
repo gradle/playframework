@@ -75,7 +75,7 @@ play {
         }
     }
 
-    @Ignore
+    @Ignore("requires Gradle 5.1 to pass")
     def "failure to generate routes fails the build with useful message"() {
         given:
         File confDir = temporaryFolder.newFolder('conf')
