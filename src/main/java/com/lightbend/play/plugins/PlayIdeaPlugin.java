@@ -6,6 +6,7 @@ import com.lightbend.play.extensions.PlayPluginConfigurations;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.internal.ConventionMapping;
@@ -13,6 +14,7 @@ import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.language.scala.internal.DefaultScalaPlatform;
+import org.gradle.play.tasks.JavaScriptMinify;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;
 import org.gradle.play.tasks.RoutesCompile;
 import org.gradle.plugins.ide.idea.GenerateIdeaModule;
@@ -30,27 +32,32 @@ import java.util.concurrent.Callable;
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
 import static com.lightbend.play.plugins.PlayCoffeeScriptPlugin.COFFEESCRIPT_COMPILE_TASK_NAME;
+import static com.lightbend.play.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME;
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME;
+import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
 
 public class PlayIdeaPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        GenerateIdeaModule ideaModule = (GenerateIdeaModule) project.getTasks().getByName("ideaModule");
-        IdeaModule module = ideaModule.getModule();
+        GenerateIdeaModule ideaModuleTask = (GenerateIdeaModule) project.getTasks().getByName("ideaModule");
+        IdeaModule module = ideaModuleTask.getModule();
 
         ConfigurationContainer configurations = project.getConfigurations();
         module.setScopes(buildScopes(configurations));
         ConventionMapping conventionMapping = conventionMappingFor(module);
 
+        Task classesTask = project.getTasks().getByName(CLASSES_TASK_NAME);
+        RoutesCompile routesCompileTask = (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
+        PlayCoffeeScriptCompile playCoffeeScriptCompileTask = (PlayCoffeeScriptCompile) project.getTasks().getByName(COFFEESCRIPT_COMPILE_TASK_NAME);
+        JavaScriptMinify javaScriptMinifyTask = (JavaScriptMinify) project.getTasks().getByName(JS_MINIFY_TASK_NAME);
+
         conventionMapping.map("sourceDirs", (Callable<Set<File>>) () -> {
             // TODO: Assets should probably be a source set too
             Set<File> sourceDirs = new HashSet<>();
             sourceDirs.add(new File(project.getProjectDir(), "public"));
-            RoutesCompile routesCompile = (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
-            sourceDirs.add(routesCompile.getOutputDirectory());
-            PlayCoffeeScriptCompile playCoffeeScriptCompile = (PlayCoffeeScriptCompile) project.getTasks().getByName(COFFEESCRIPT_COMPILE_TASK_NAME);
-            sourceDirs.add(playCoffeeScriptCompile.getDestinationDir());
+            sourceDirs.add(routesCompileTask.getOutputDirectory());
+            sourceDirs.add(playCoffeeScriptCompileTask.getDestinationDir());
             return Collections.unmodifiableSet(sourceDirs);
         });
 
@@ -75,7 +82,9 @@ public class PlayIdeaPlugin implements Plugin<Project> {
 
         conventionMapping.map("targetBytecodeVersion", (Callable<JavaVersion>) () -> getTargetJavaVersion(playExtension.getPlatform()));
         conventionMapping.map("languageLevel", (Callable<IdeaLanguageLevel>) () -> new IdeaLanguageLevel(getTargetJavaVersion(playExtension.getPlatform())));
-        ideaModule.dependsOn("classes");
+        ideaModuleTask.dependsOn(classesTask);
+        ideaModuleTask.dependsOn(playCoffeeScriptCompileTask);
+        ideaModuleTask.dependsOn(javaScriptMinifyTask);
     }
 
     private ConventionMapping conventionMappingFor(IdeaModule module) {
