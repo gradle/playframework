@@ -33,11 +33,6 @@ class IntegrationTestPlugin : Plugin<Project> {
                 html.destination = file("${html.destination}/integration")
                 junitXml.destination = file("${junitXml.destination}/integration")
             }
-
-            // Log test execution so that Travis CI doesn't time out
-            testLogging {
-                events("started")
-            }
         }
 
         tasks["check"].dependsOn(integrationTest)

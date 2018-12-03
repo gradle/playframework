@@ -2,6 +2,7 @@ plugins {
     groovy
     `java-gradle-plugin`
     `build-scan`
+    id("com.lightbend.play.test-setup")
     id("com.lightbend.play.integration-test-fixtures")
     id("com.lightbend.play.integration-test")
 }
