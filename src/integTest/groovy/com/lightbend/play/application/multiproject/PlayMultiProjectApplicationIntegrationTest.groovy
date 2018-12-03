@@ -1,4 +1,4 @@
-package com.lightbend.play.application
+package com.lightbend.play.application.multiproject
 
 import com.lightbend.play.AbstractIntegrationTest
 import com.lightbend.play.fixtures.app.PlayApp

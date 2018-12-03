@@ -1,5 +1,6 @@
-package com.lightbend.play.application
+package com.lightbend.play.application.multiproject
 
+import com.lightbend.play.application.PlayIdeaPluginIntegrationTest
 import com.lightbend.play.fixtures.app.PlayApp
 import com.lightbend.play.fixtures.app.PlayMultiProject
 import org.gradle.play.internal.platform.PlayMajorVersion
