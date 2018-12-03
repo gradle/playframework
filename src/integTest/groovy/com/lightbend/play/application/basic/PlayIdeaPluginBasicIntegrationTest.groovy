@@ -4,9 +4,12 @@ import com.lightbend.play.application.PlayIdeaPluginIntegrationTest
 import com.lightbend.play.fixtures.app.BasicPlayApp
 import com.lightbend.play.fixtures.app.PlayApp
 import org.gradle.play.internal.platform.PlayMajorVersion
+import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.TaskOutcome
 
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
+import static com.lightbend.play.fixtures.ide.IdeaFixtures.parseIml
 
 class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
     private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
@@ -44,5 +47,46 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
 
     int getExpectedScalaClasspathSize() {
         return PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(versionNumber.toString())]
+    }
+
+    def "when model configuration changes, IDEA metadata can be rebuilt"() {
+        applyIdePlugin()
+        build(ideTask)
+        when:
+        file("extra/java").mkdirs()
+        buildFile << """
+sourceSets {
+    main {
+        scala {
+            srcDir "extra/java"
+        }
+    }
+}
+"""
+        and:
+        BuildResult result = build(ideTask)
+        then:
+        result.task(':ideaModule').outcome == TaskOutcome.SUCCESS
+        def content = parseIml(moduleFile).content
+        content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/routes", "build/src/twirl")
+    }
+
+    def "IDEA metadata contains custom source set"() {
+        applyIdePlugin()
+        file("extra/java").mkdirs()
+        buildFile << """
+sourceSets {
+    main {
+        scala {
+            srcDir "extra/java"
+        }
+    }
+}
+"""
+        when:
+        build(ideTask)
+        then:
+        def content = parseIml(moduleFile).content
+        content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/routes", "build/src/twirl")
     }
 }
