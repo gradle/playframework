@@ -23,7 +23,7 @@ class TwirlCompileIntegrationTest extends AbstractIntegrationTest {
     File destinationDir
 
     def setup() {
-        destinationDir = file("build/src/twirl/views")
+        destinationDir = file("build/src/play/twirl/views")
         settingsFile << """ rootProject.name = 'twirl-play-app' """
         buildFile << """
             plugins {

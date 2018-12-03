@@ -3,11 +3,11 @@ package com.lightbend.play.tasks
 abstract class AbstractCoffeeScriptCompileIntegrationTest extends AbstractJavaScriptMinifyIntegrationTest {
 
     File getProcessedJavaScriptDir() {
-        file("build/src/javaScript")
+        file("build/src/play/javaScript")
     }
 
     File getCompiledCoffeeScriptDir() {
-        file("build/src/coffeeScript")
+        file("build/src/play/coffeeScript")
     }
 
     File compiledCoffeeScript(String fileName) {

@@ -15,7 +15,7 @@ class JavaScriptMinifyIntegrationTest extends AbstractJavaScriptMinifyIntegratio
     private static final ASSETS_JAR_TASK_PATH = ":$ASSETS_JAR_TASK_NAME".toString()
 
     File getProcessedJavaScriptDir() {
-        file("build/src/javaScript")
+        file("build/src/play/javaScript")
     }
 
     void hasProcessedJavaScript(String fileName) {

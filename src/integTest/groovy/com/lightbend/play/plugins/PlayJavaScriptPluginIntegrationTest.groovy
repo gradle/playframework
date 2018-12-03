@@ -28,7 +28,7 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
         build(JS_MINIFY_TASK_NAME)
 
         then:
-        File outputDir = file('build/src/javaScript')
+        File outputDir = file('build/src/play/javaScript')
         outputDir.isDirectory()
         File[] jsFles = outputDir.listFiles()
         jsFles.length == 2
@@ -57,7 +57,7 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
         build(JS_MINIFY_TASK_NAME)
 
         then:
-        File outputDir = file('build/src/javaScript')
+        File outputDir = file('build/src/play/javaScript')
         outputDir.isDirectory()
         File[] jsFles = outputDir.listFiles()
         jsFles.length == 4

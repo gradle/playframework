@@ -3,7 +3,6 @@ package com.lightbend.play.plugins;
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.sourcesets.DefaultRoutesSourceSet;
 import com.lightbend.play.sourcesets.RoutesSourceSet;
-import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.plugins.DslObject;
@@ -13,7 +12,6 @@ import org.gradle.api.tasks.SourceSet;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.play.tasks.RoutesCompile;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
@@ -21,7 +19,7 @@ import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NA
 /**
  * Plugin for compiling Play routes sources in a Play application.
  */
-public class PlayRoutesPlugin implements Plugin<Project> {
+public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
     public static final String ROUTES_COMPILE_TASK_NAME = "compilePlayRoutes";
 
@@ -49,13 +47,10 @@ public class PlayRoutesPlugin implements Plugin<Project> {
     private RoutesCompile createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, PlayPlatform playPlatform) {
         return project.getTasks().create(ROUTES_COMPILE_TASK_NAME, RoutesCompile.class, routesCompile -> {
             routesCompile.setDescription("Generates routes for the '" + sourceDirectory.getDisplayName() + "' source set.");
-            File generatedSourceDir = new File(project.getBuildDir(), "src");
-            File outputDirectory = new File(generatedSourceDir, sourceDirectory.getName());
-
             routesCompile.setPlatform(playPlatform);
             routesCompile.setAdditionalImports(new ArrayList<>());
             routesCompile.setSource(sourceDirectory);
-            routesCompile.setOutputDirectory(outputDirectory);
+            routesCompile.setOutputDirectory(getOutputDir(project, sourceDirectory));
         });
     }
 }

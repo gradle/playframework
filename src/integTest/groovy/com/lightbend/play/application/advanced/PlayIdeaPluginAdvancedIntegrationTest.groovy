@@ -32,10 +32,10 @@ class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTes
             // TODO: It's unclear why those directories should be available as source paths ("templates" is a Twirl directory which we add later, "app/assets" sits below "app" so no need to add explictly)
             //"templates",
             //"app/assets",
-            "build/src/twirl",
-            "build/src/coffeeScript",
-            "build/src/javaScript",
-            "build/src/routes"
+            "build/src/play/twirl",
+            "build/src/play/coffeeScript",
+            "build/src/play/javaScript",
+            "build/src/play/routes"
         ]
     }
 

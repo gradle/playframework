@@ -17,7 +17,7 @@ abstract class AbstractRoutesCompileIntegrationTest extends AbstractIntegrationT
 
     // TODO: Hard-coded version - can later support multi-version testing
     VersionNumber versionNumber = DEFAULT_PLAY_VERSION
-    String destinationDirPath = "build/src/routes"
+    String destinationDirPath = "build/src/play/routes"
     File destinationDir
 
     abstract getScalaRoutesFileName(String packageName, String namespace)

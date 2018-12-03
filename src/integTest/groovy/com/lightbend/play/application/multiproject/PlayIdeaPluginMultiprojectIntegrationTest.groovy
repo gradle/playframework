@@ -29,7 +29,7 @@ class PlayIdeaPluginMultiprojectIntegrationTest extends PlayIdeaPluginIntegratio
             "public",
             "conf",
             "app",
-            "build/src/routes"
+            "build/src/play/routes"
         ]
     }
 

@@ -30,7 +30,7 @@ class PlayCoffeeScriptPluginIntegrationTest extends AbstractIntegrationTest {
         build(COFFEESCRIPT_COMPILE_TASK_NAME)
 
         then:
-        File outputDir = file('build/src/coffeeScript')
+        File outputDir = file('build/src/play/coffeeScript')
         outputDir.isDirectory()
         File[] compiledCoffeeScriptFiles = outputDir.listFiles()
         compiledCoffeeScriptFiles.length == 1
@@ -59,7 +59,7 @@ class PlayCoffeeScriptPluginIntegrationTest extends AbstractIntegrationTest {
 
         then:
         then:
-        File outputDir = file('build/src/coffeeScript')
+        File outputDir = file('build/src/play/coffeeScript')
         outputDir.isDirectory()
         File[] compiledCoffeeScriptFiles = outputDir.listFiles()
         compiledCoffeeScriptFiles.length == 2

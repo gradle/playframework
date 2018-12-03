@@ -29,8 +29,8 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
             "conf",
             "app",
             "test",
-            "build/src/routes",
-            "build/src/twirl"
+            "build/src/play/routes",
+            "build/src/play/twirl"
         ]
     }
 
@@ -68,7 +68,7 @@ sourceSets {
         then:
         result.task(':ideaModule').outcome == TaskOutcome.SUCCESS
         def content = parseIml(moduleFile).content
-        content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/routes", "build/src/twirl")
+        content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/play/routes", "build/src/play/twirl")
     }
 
     def "IDEA metadata contains custom source set"() {
@@ -87,6 +87,6 @@ sourceSets {
         build(ideTask)
         then:
         def content = parseIml(moduleFile).content
-        content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/routes", "build/src/twirl")
+        content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/play/routes", "build/src/play/twirl")
     }
 }

@@ -4,7 +4,6 @@ import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
 import com.lightbend.play.sourcesets.DefaultTwirlSourceSet;
 import com.lightbend.play.sourcesets.TwirlSourceSet;
-import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.internal.tasks.DefaultSourceSet;
@@ -16,15 +15,13 @@ import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.play.tasks.TwirlCompile;
 
-import java.io.File;
-
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME;
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
 
 /**
  * Plugin for compiling Twirl sources in a Play application.
  */
-public class PlayTwirlPlugin implements Plugin<Project> {
+public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
 
     public static final String TWIRL_COMPILE_TASK_NAME = "compilePlayTwirlTemplates";
 
@@ -59,11 +56,9 @@ public class PlayTwirlPlugin implements Plugin<Project> {
     private TwirlCompile createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, PlayPlatform playPlatform) {
         return project.getTasks().create(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
             twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
-            File generatedSourceDir = new File(project.getBuildDir(), "src");
             twirlCompile.setPlatform(playPlatform);
             twirlCompile.setSource(twirlSourceSet.getTwirl());
-            File outputDirectory = new File(generatedSourceDir, twirlSourceSet.getTwirl().getName());
-            twirlCompile.setOutputDirectory(outputDirectory);
+            twirlCompile.setOutputDirectory(getOutputDir(project, twirlSourceSet.getTwirl()));
         });
     }
 

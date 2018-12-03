@@ -2,7 +2,6 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.sourcesets.CoffeeScriptSourceSet;
 import com.lightbend.play.sourcesets.DefaultCoffeeScriptSourceSet;
-import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.plugins.DslObject;
@@ -11,12 +10,10 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;
 
-import java.io.File;
-
 /**
  * Plugin for adding coffeescript compilation to a Play application.
  */
-public class PlayCoffeeScriptPlugin implements Plugin<Project> {
+public class PlayCoffeeScriptPlugin implements PlayGeneratedSourcePlugin {
 
     public static final String COFFEESCRIPT_COMPILE_TASK_NAME = "compilePlayCoffeeScript";
     private static final String DEFAULT_COFFEESCRIPT_VERSION = "1.8.0";
@@ -54,10 +51,7 @@ public class PlayCoffeeScriptPlugin implements Plugin<Project> {
     private PlayCoffeeScriptCompile createDefaultCoffeeScriptCompileTask(Project project, SourceDirectorySet sourceDirectory) {
         return project.getTasks().create(COFFEESCRIPT_COMPILE_TASK_NAME, PlayCoffeeScriptCompile.class, coffeeScriptCompile -> {
             coffeeScriptCompile.setDescription("Compiles coffeescript for the '" + sourceDirectory.getDisplayName() + "' source set.");
-            File generatedSourceDir = new File(project.getBuildDir(), "src");
-            File outputDirectory = new File(generatedSourceDir, sourceDirectory.getName());
-
-            coffeeScriptCompile.setDestinationDir(outputDirectory);
+            coffeeScriptCompile.setDestinationDir(getOutputDir(project, sourceDirectory));
             coffeeScriptCompile.setSource(sourceDirectory);
         });
     }
