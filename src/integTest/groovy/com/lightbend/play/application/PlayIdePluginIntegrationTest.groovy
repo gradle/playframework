@@ -1,34 +1,19 @@
 package com.lightbend.play.application
 
-import com.lightbend.play.AbstractIntegrationTest
-import com.lightbend.play.fixtures.app.PlayApp
+import com.lightbend.play.PlayMultiVersionApplicationIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.VersionNumber
 
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
-
-abstract class PlayIdePluginIntegrationTest extends AbstractIntegrationTest {
+abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationIntegrationTest {
 
     abstract String getIdePlugin()
     abstract String getIdeTask()
     abstract List<File> getIdeFiles()
     abstract String[] getBuildTasks()
-    abstract PlayApp getPlayApp()
-
-    VersionNumber versionNumber = DEFAULT_PLAY_VERSION
 
     def setup() {
-        playApp.writeSources(projectDir)
         settingsFile << """
             rootProject.name = '${playApp.name}'
-        """
-        buildFile << """
-            play {
-                platform {
-                    playVersion = '${versionNumber.toString()}'
-                }
-            }
         """
     }
 

@@ -3,13 +3,11 @@ package com.lightbend.play.application
 import com.lightbend.play.fixtures.app.PlayApp
 import com.lightbend.play.fixtures.app.PlayCompositeBuild
 
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
-
 class PlayCompositeBuildIntegrationTest extends PlayApplicationPluginIntegrationTest {
 
     @Override
     PlayApp getPlayApp() {
-        new PlayCompositeBuild(DEFAULT_PLAY_VERSION)
+        new PlayCompositeBuild(versionNumber)
     }
 
     @Override

@@ -1,19 +1,17 @@
 package com.lightbend.play.application
 
-import com.lightbend.play.AbstractIntegrationTest
-import com.lightbend.play.fixtures.app.PlayApp
+import com.lightbend.play.PlayMultiVersionApplicationIntegrationTest
 import com.lightbend.play.fixtures.archive.ArchiveTestFixture
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
 
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
 import static com.lightbend.play.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME
 
-abstract class PlayDistributionApplicationIntegrationTest extends AbstractIntegrationTest {
+abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersionApplicationIntegrationTest {
 
     private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
     private static final String TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
@@ -24,10 +22,8 @@ abstract class PlayDistributionApplicationIntegrationTest extends AbstractIntegr
     private static final String STAGE_MAIN_DIST_TASK_PATH = ":stageMainDist"
     private static final String MAIN_START_SCRIPTS_TASK_PATH = ":createMainStartScripts"
     private static final String MAIN_DIST_JAR_TASK_PATH = ":createMainDistributionJar"
-    VersionNumber versionNumber = DEFAULT_PLAY_VERSION
 
     def setup() {
-        playApp.writeSources(projectDir)
         settingsFile << """
             rootProject.name = '${playApp.name}'
         """
@@ -113,6 +109,4 @@ abstract class PlayDistributionApplicationIntegrationTest extends AbstractIntegr
     String determineRoutesClassName() {
         return versionNumber >= VersionNumber.parse('2.4.0') ? "router/Routes.class" : "Routes.class"
     }
-
-    abstract PlayApp getPlayApp()
 }

@@ -1,25 +1,21 @@
 package com.lightbend.play.tasks
 
-import com.lightbend.play.AbstractIntegrationTest
+import com.lightbend.play.PlayMultiVersionIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
 import spock.lang.Unroll
 
+import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.fixtures.file.FileFixtures.assertHasNotChangedSince
 import static com.lightbend.play.fixtures.file.FileFixtures.snapshot
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
-import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
-class TwirlCompileIntegrationTest extends AbstractIntegrationTest {
+class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     private static final TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
     private static final SCALA_COMPILE_TASK_NAME = 'compileScala'
     private static final SCALA_COMPILE_TASK_PATH = ":$SCALA_COMPILE_TASK_NAME".toString()
-
-    // TODO: Hard-coded version - can later support multi-version testing
-    VersionNumber versionNumber = DEFAULT_PLAY_VERSION
     File destinationDir
 
     def setup() {
@@ -32,6 +28,7 @@ class TwirlCompileIntegrationTest extends AbstractIntegrationTest {
 
             ${playRepositories()}
         """
+        configurePlayVersionInBuildScript()
     }
 
     @Unroll

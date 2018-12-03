@@ -1,16 +1,14 @@
 package com.lightbend.play.application
 
-import com.lightbend.play.AbstractIntegrationTest
+import com.lightbend.play.PlayMultiVersionIntegrationTest
 import com.lightbend.play.fixtures.app.PlayApp
 import com.lightbend.play.fixtures.app.WithFailingTestsApp
 import com.lightbend.play.fixtures.test.JUnitXmlTestExecutionResult
 import org.gradle.testkit.runner.BuildResult
 
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
+class PlayAppWithFailingTestsIntegrationTest extends PlayMultiVersionIntegrationTest {
 
-class PlayAppWithFailingTestsIntegrationTest extends AbstractIntegrationTest {
-
-    PlayApp playApp = new WithFailingTestsApp(DEFAULT_PLAY_VERSION)
+    PlayApp playApp = new WithFailingTestsApp(versionNumber)
 
     def setup() {
         playApp.writeSources(projectDir)

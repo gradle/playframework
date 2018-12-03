@@ -1,22 +1,18 @@
 package com.lightbend.play.tasks
 
-import com.lightbend.play.AbstractIntegrationTest
+import com.lightbend.play.PlayMultiVersionIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
 
+import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.fixtures.file.FileFixtures.assertContentsHaveChangedSince
 import static com.lightbend.play.fixtures.file.FileFixtures.snapshot
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
-import static com.lightbend.play.fixtures.Repositories.playRepositories
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
-abstract class AbstractRoutesCompileIntegrationTest extends AbstractIntegrationTest {
+abstract class AbstractRoutesCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     protected static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
-
-    // TODO: Hard-coded version - can later support multi-version testing
-    VersionNumber versionNumber = DEFAULT_PLAY_VERSION
     String destinationDirPath = "build/src/play/routes"
     File destinationDir
 
@@ -36,14 +32,9 @@ plugins {
     id 'com.lightbend.play-application'
 }
 
-play {
-    platform {
-        playVersion = '$versionNumber'
-    }
-}
-
 ${playRepositories()}
 """
+        configurePlayVersionInBuildScript()
     }
 
     protected String controllers() {

@@ -5,13 +5,11 @@ import com.lightbend.play.fixtures.app.PlayApp
 import com.lightbend.play.fixtures.app.PlayAppWithDependencies
 import com.lightbend.play.fixtures.test.TestExecutionResult
 
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
-
 class PlayTestAppWithDependenciesIntegrationTest extends PlayTestApplicationIntegrationTest {
 
     @Override
     PlayApp getPlayApp() {
-        new PlayAppWithDependencies(DEFAULT_PLAY_VERSION)
+        new PlayAppWithDependencies(versionNumber)
     }
 
     @Override

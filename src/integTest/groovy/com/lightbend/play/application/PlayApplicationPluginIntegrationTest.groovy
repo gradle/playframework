@@ -1,7 +1,6 @@
 package com.lightbend.play.application
 
-import com.lightbend.play.AbstractIntegrationTest
-import com.lightbend.play.fixtures.app.PlayApp
+import com.lightbend.play.PlayMultiVersionApplicationIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -11,7 +10,7 @@ import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME
 import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME
 
-abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationTest {
+abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionApplicationIntegrationTest {
 
     private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
     private static final String TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
@@ -21,7 +20,6 @@ abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationT
     private static final String ASSEMBLE_TASK_PATH = ":$ASSEMBLE_TASK_NAME".toString()
 
     def setup() {
-        getPlayApp().writeSources(projectDir)
         settingsFile << """
             rootProject.name = '${playApp.name}'
         """
@@ -72,6 +70,4 @@ abstract class PlayApplicationPluginIntegrationTest extends AbstractIntegrationT
                 'public/stylesheets/main.css',
                 'public/javascripts/hello.js')
     }
-
-    abstract PlayApp getPlayApp()
 }

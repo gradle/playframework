@@ -4,7 +4,6 @@ import com.lightbend.play.application.PlayApplicationPluginIntegrationTest
 import com.lightbend.play.fixtures.app.AdvancedPlayApp
 import com.lightbend.play.fixtures.app.PlayApp
 
-import static com.lightbend.play.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
 class PlayBinaryAdvancedAppIntegrationTest extends PlayApplicationPluginIntegrationTest {
@@ -13,7 +12,7 @@ class PlayBinaryAdvancedAppIntegrationTest extends PlayApplicationPluginIntegrat
 
     @Override
     PlayApp getPlayApp() {
-        new AdvancedPlayApp(DEFAULT_PLAY_VERSION)
+        new AdvancedPlayApp(versionNumber)
     }
 
     @Override
