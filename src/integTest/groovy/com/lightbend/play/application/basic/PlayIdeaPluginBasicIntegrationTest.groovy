@@ -21,11 +21,25 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
     }
 
     String[] getSourcePaths() {
-        ["public", "conf", "app", "test", "build/src/routes", "build/src/twirl"]
+        [
+            "public",
+            "conf",
+            "app",
+            "test",
+            "build/src/routes",
+            "build/src/twirl"
+        ]
     }
 
     String[] getBuildTasks() {
-        [ROUTES_COMPILE_TASK_PATH, TWIRL_COMPILE_TASK_PATH, ":ideaProject", ":ideaModule", ":ideaWorkspace", ":idea"]
+        [
+            ROUTES_COMPILE_TASK_PATH,
+            TWIRL_COMPILE_TASK_PATH,
+            ":ideaProject",
+            ":ideaModule",
+            ":ideaWorkspace",
+            ":idea"
+        ]
     }
 
     int getExpectedScalaClasspathSize() {

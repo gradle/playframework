@@ -39,7 +39,6 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
     abstract String[] getSourcePaths()
     abstract int getExpectedScalaClasspathSize()
 
-    @Ignore
     def "IML contains path to Play app sources"() {
         applyIdePlugin()
 

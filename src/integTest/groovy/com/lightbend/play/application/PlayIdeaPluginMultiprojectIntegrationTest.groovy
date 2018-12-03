@@ -24,21 +24,28 @@ class PlayIdeaPluginMultiprojectIntegrationTest extends PlayIdeaPluginIntegratio
     }
 
     String[] getSourcePaths() {
-        ["public", "conf", "app", "build/src/routes"]
+        [
+            "public",
+            "conf",
+            "app",
+            "build/src/routes"
+        ]
     }
 
     String[] getBuildTasks() {
-        [":ideaModule",
-         ":ideaProject",
-         ":ideaWorkspace",
-         ":idea",
-         ":javalibrary:ideaModule",
-         ":javalibrary:idea",
-         ":primary:$ROUTES_COMPILE_TASK_NAME".toString(),
-         ":primary:ideaModule",
-         ":primary:idea",
-         ":submodule:ideaModule",
-         ":submodule:idea"]
+        [
+            ":ideaModule",
+            ":ideaProject",
+            ":ideaWorkspace",
+            ":idea",
+            ":javalibrary:ideaModule",
+            ":javalibrary:idea",
+            ":primary:$ROUTES_COMPILE_TASK_NAME".toString(),
+            ":primary:ideaModule",
+            ":primary:idea",
+            ":submodule:ideaModule",
+            ":submodule:idea"
+        ]
     }
 
     int getExpectedScalaClasspathSize() {

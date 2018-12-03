@@ -23,6 +23,13 @@ abstract class PlayIdePluginIntegrationTest extends AbstractIntegrationTest {
         settingsFile << """
             rootProject.name = '${playApp.name}'
         """
+        buildFile << """
+            play {
+                platform {
+                    playVersion = '${versionNumber.toString()}'
+                }
+            }
+        """
     }
 
     def "generates IDE configuration"() {

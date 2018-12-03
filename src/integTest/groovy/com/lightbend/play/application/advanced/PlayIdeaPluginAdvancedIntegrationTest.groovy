@@ -25,14 +25,30 @@ class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTes
     }
 
     String[] getSourcePaths() {
-        ["public", "conf", "app",
-         "templates", "app/assets",
-         "build/src/twirl", "build/src/coffeeScript", "build/src/javaScript",
-         "build/src/routes"]
+        [
+            "public",
+            "conf",
+            "app",
+            // TODO: It's unclear why those directories should be available as source paths ("templates" is a Twirl directory which we add later, "app/assets" sits below "app" so no need to add explictly)
+            //"templates",
+            //"app/assets",
+            "build/src/twirl",
+            "build/src/coffeeScript",
+            "build/src/javaScript",
+            "build/src/routes"
+        ]
     }
 
     String[] getBuildTasks() {
-        [ROUTES_COMPILE_TASK_PATH, TWIRL_COMPILE_TASK_PATH, COFFEESCRIPT_COMPILE_TASK_PATH, JS_MINIFY_TASK_PATH, ":ideaModule", ":ideaWorkspace", ":idea"]
+        [
+            ROUTES_COMPILE_TASK_PATH,
+            TWIRL_COMPILE_TASK_PATH,
+            COFFEESCRIPT_COMPILE_TASK_PATH,
+            JS_MINIFY_TASK_PATH,
+            ":ideaModule",
+            ":ideaWorkspace",
+            ":idea"
+        ]
     }
 
     int getExpectedScalaClasspathSize() {
