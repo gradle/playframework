@@ -4,11 +4,9 @@ import com.lightbend.play.sourcesets.CoffeeScriptSourceSet;
 import com.lightbend.play.sourcesets.DefaultCoffeeScriptSourceSet;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
-import org.gradle.api.internal.plugins.DslObject;
-import org.gradle.api.internal.tasks.DefaultSourceSet;
-import org.gradle.api.plugins.JavaPluginConvention;
-import org.gradle.api.tasks.SourceSet;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;
+
+import static com.lightbend.play.plugins.PlayPluginHelper.createCustomSourceSet;
 
 /**
  * Plugin for adding coffeescript compilation to a Play application.
@@ -29,7 +27,7 @@ public class PlayCoffeeScriptPlugin implements PlayGeneratedSourcePlugin {
 
     @Override
     public void apply(Project project) {
-        CoffeeScriptSourceSet coffeeScriptSourceSet = createCoffeeScriptSourceSet(project);
+        CoffeeScriptSourceSet coffeeScriptSourceSet = createCustomSourceSet(project, DefaultCoffeeScriptSourceSet.class, "coffeeScript");
 
         project.getTasks().withType(PlayCoffeeScriptCompile.class, coffeeScriptCompile -> {
             coffeeScriptCompile.setRhinoClasspathNotation(getDefaultRhinoDependencyNotation());
@@ -37,15 +35,6 @@ public class PlayCoffeeScriptPlugin implements PlayGeneratedSourcePlugin {
         });
 
         createDefaultCoffeeScriptCompileTask(project, coffeeScriptSourceSet.getCoffeeScript());
-    }
-
-    private CoffeeScriptSourceSet createCoffeeScriptSourceSet(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-
-        CoffeeScriptSourceSet coffeeScriptSourceSet = project.getObjects().newInstance(DefaultCoffeeScriptSourceSet.class, "coffeeScript", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
-        new DslObject(mainSourceSet).getConvention().getPlugins().put("coffeeScript", coffeeScriptSourceSet);
-        return coffeeScriptSourceSet;
     }
 
     private PlayCoffeeScriptCompile createDefaultCoffeeScriptCompileTask(Project project, SourceDirectorySet sourceDirectory) {

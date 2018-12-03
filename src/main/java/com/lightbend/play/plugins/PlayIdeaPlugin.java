@@ -2,7 +2,6 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
-import org.codehaus.groovy.runtime.InvokerHelper;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -12,7 +11,6 @@ import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.plugins.DslObject;
-import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.language.scala.internal.DefaultScalaPlatform;
 import org.gradle.play.tasks.JavaScriptMinify;
@@ -36,6 +34,8 @@ import static com.lightbend.play.extensions.PlayPluginConfigurations.*;
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
 import static com.lightbend.play.plugins.PlayCoffeeScriptPlugin.COFFEESCRIPT_COMPILE_TASK_NAME;
 import static com.lightbend.play.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME;
+import static com.lightbend.play.plugins.PlayPluginHelper.getMainJavaSourceSet;
+import static com.lightbend.play.plugins.PlayPluginHelper.getScalaSourceDirectorySet;
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME;
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
@@ -56,14 +56,14 @@ public class PlayIdeaPlugin implements Plugin<Project> {
         RoutesCompile routesCompileTask = (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
         PlayCoffeeScriptCompile playCoffeeScriptCompileTask = (PlayCoffeeScriptCompile) project.getTasks().getByName(COFFEESCRIPT_COMPILE_TASK_NAME);
         JavaScriptMinify javaScriptMinifyTask = (JavaScriptMinify) project.getTasks().getByName(JS_MINIFY_TASK_NAME);
+        SourceSet mainSourceSet = getMainJavaSourceSet(project);
 
         conventionMapping.map("sourceDirs", (Callable<Set<File>>) () -> {
             // TODO: Assets should probably be a source set too
             Set<File> sourceDirs = new HashSet<>();
             sourceDirs.add(new File(project.getProjectDir(), "public"));
 
-            SourceSet mainSourceSet = getMainSourceSet(project);
-            SourceDirectorySet scalaSourceDirectorySet = ((SourceDirectorySet) InvokerHelper.invokeMethod(mainSourceSet, "getScala", null));
+            SourceDirectorySet scalaSourceDirectorySet = getScalaSourceDirectorySet(project);
             sourceDirs.addAll(scalaSourceDirectorySet.getSrcDirs());
 
             sourceDirs.add(twirlCompileTask.getOutputDirectory());
@@ -77,8 +77,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
             // TODO: This should be modeled as a source set
             return Collections.singleton(new File(project.getProjectDir(), "test"));
         });
-
-        SourceSet mainSourceSet = getMainSourceSet(project);
 
         conventionMapping.map("singleEntryLibraries", (Callable<Map<String, Iterable<File>>>) () -> {
             Map<String, Iterable<File>> libs = new HashMap<>();
@@ -125,10 +123,5 @@ public class PlayIdeaPlugin implements Plugin<Project> {
         scopes.put("plus", plus==null ? Collections.emptyList() : Collections.singletonList(plus));
         scopes.put("minus", Collections.emptyList());
         return Collections.unmodifiableMap(scopes);
-    }
-
-    private static SourceSet getMainSourceSet(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        return javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
     }
 }

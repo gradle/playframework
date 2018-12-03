@@ -2,7 +2,6 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
-import org.codehaus.groovy.runtime.InvokerHelper;
 import org.gradle.api.GradleException;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
@@ -18,7 +17,6 @@ import org.gradle.api.internal.artifacts.ArtifactAttributes;
 import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact;
 import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.plugins.JavaPlugin;
-import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.Jar;
@@ -36,6 +34,8 @@ import org.gradle.util.VersionNumber;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import static com.lightbend.play.plugins.PlayPluginHelper.getMainJavaSourceSet;
+import static com.lightbend.play.plugins.PlayPluginHelper.getScalaSourceDirectorySet;
 import static com.lightbend.play.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME;
 import static com.lightbend.play.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME;
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
@@ -118,11 +118,11 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private void configureJavaAndScalaSourceSet(Project project) {
-        SourceSet mainSourceSet = getMainSourceSet(project);
+        SourceSet mainSourceSet = getMainJavaSourceSet(project);
         SourceDirectorySet mainResourcesDirectorySet = mainSourceSet.getResources();
         mainResourcesDirectorySet.setSrcDirs(Arrays.asList("conf"));
 
-        SourceDirectorySet scalaSourceDirectorySet = ((SourceDirectorySet)InvokerHelper.invokeMethod(mainSourceSet, "getScala", null));
+        SourceDirectorySet scalaSourceDirectorySet = getScalaSourceDirectorySet(project);
         scalaSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
         scalaSourceDirectorySet.include("**/*.scala", "**/*.java");
 
@@ -166,11 +166,6 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     private static RoutesCompile getRoutesCompileTask(Project project) {
         return (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
-    }
-
-    private static SourceSet getMainSourceSet(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        return javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
     }
 
     private void createRunTask(Project project, PlayPluginConfigurations configurations, PlayPlatform playPlatform, Jar mainJarTask, Jar assetsJarTask) {

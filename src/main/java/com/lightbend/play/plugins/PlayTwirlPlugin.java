@@ -5,11 +5,7 @@ import com.lightbend.play.extensions.PlayPluginConfigurations;
 import com.lightbend.play.sourcesets.DefaultTwirlSourceSet;
 import com.lightbend.play.sourcesets.TwirlSourceSet;
 import org.gradle.api.Project;
-import org.gradle.api.internal.plugins.DslObject;
-import org.gradle.api.internal.tasks.DefaultSourceSet;
 import org.gradle.api.plugins.BasePlugin;
-import org.gradle.api.plugins.JavaPluginConvention;
-import org.gradle.api.tasks.SourceSet;
 import org.gradle.language.twirl.TwirlImports;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
@@ -17,6 +13,7 @@ import org.gradle.play.tasks.TwirlCompile;
 
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME;
 import static com.lightbend.play.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
+import static com.lightbend.play.plugins.PlayPluginHelper.createCustomSourceSet;
 
 /**
  * Plugin for compiling Twirl sources in a Play application.
@@ -32,7 +29,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         PlayPlatform playPlatform = ((PlayExtension)project.getExtensions().getByName(PLAY_EXTENSION_NAME)).getPlatform().asPlayPlatform();
         PlayPluginConfigurations configurations = (PlayPluginConfigurations)project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
-        TwirlSourceSet twirlSourceSet = createTwirlSourceSet(project);
+        TwirlSourceSet twirlSourceSet = createCustomSourceSet(project, DefaultTwirlSourceSet.class, "twirl");
         TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet, playPlatform);
 
         project.afterEvaluate(project1 -> {
@@ -42,15 +39,6 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
                 configurations.getPlay().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-java"));
             }
         });
-    }
-
-    private TwirlSourceSet createTwirlSourceSet(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-
-        TwirlSourceSet twirlSourceSet = project.getObjects().newInstance(DefaultTwirlSourceSet.class, "twirl", ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
-        new DslObject(mainSourceSet).getConvention().getPlugins().put("twirl", twirlSourceSet);
-        return twirlSourceSet;
     }
 
     private TwirlCompile createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, PlayPlatform playPlatform) {
