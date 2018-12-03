@@ -24,10 +24,6 @@ abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplic
     private static final SCALA_TEST_COMPILE_TASK_PATH = ":$SCALA_TEST_COMPILE_TASK_NAME".toString()
     private static final TEST_TASK_PATH = ":$TEST_TASK_NAME".toString()
 
-    def setup() {
-        settingsFile << "rootProject.name = 'play-app'"
-    }
-
     def "can run play app tests"() {
         when:
         BuildResult result = build("check")

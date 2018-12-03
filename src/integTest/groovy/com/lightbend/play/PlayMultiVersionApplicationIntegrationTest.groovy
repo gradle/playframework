@@ -7,6 +7,9 @@ abstract class PlayMultiVersionApplicationIntegrationTest extends PlayMultiVersi
     def setup() {
         getPlayApp().writeSources(projectDir)
         configurePlayVersionInBuildScript()
+        settingsFile << """
+            rootProject.name = '${playApp.name}'
+        """
     }
 
     abstract PlayApp getPlayApp()

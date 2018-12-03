@@ -19,12 +19,6 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
     private static final String ASSETS_JAR_TASK_PATH = ":$ASSETS_JAR_TASK_NAME".toString()
     private static final String ASSEMBLE_TASK_PATH = ":$ASSEMBLE_TASK_NAME".toString()
 
-    def setup() {
-        settingsFile << """
-            rootProject.name = '${playApp.name}'
-        """
-    }
-
     def "can build application binaries"() {
         when:
         BuildResult result = build('assemble')

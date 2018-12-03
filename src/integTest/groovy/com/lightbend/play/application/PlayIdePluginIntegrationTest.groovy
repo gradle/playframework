@@ -11,12 +11,6 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
     abstract List<File> getIdeFiles()
     abstract String[] getBuildTasks()
 
-    def setup() {
-        settingsFile << """
-            rootProject.name = '${playApp.name}'
-        """
-    }
-
     def "generates IDE configuration"() {
         applyIdePlugin()
         when:

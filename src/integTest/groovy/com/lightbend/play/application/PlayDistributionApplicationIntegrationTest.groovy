@@ -23,12 +23,6 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
     private static final String MAIN_START_SCRIPTS_TASK_PATH = ":createMainStartScripts"
     private static final String MAIN_DIST_JAR_TASK_PATH = ":createMainDistributionJar"
 
-    def setup() {
-        settingsFile << """
-            rootProject.name = '${playApp.name}'
-        """
-    }
-
     def "can build play app distribution"() {
         when:
         BuildResult result = build("stage")
