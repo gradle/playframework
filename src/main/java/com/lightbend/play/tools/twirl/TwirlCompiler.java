@@ -67,12 +67,7 @@ public class TwirlCompiler implements Compiler<TwirlCompileSpec>, Serializable {
     }
 
     private TwirlTemplateFormat findTemplateFormat(TwirlCompileSpec spec, final File sourceFile) {
-        Spec<TwirlTemplateFormat> hasExtension = new Spec<TwirlTemplateFormat>() {
-            @Override
-            public boolean isSatisfiedBy(TwirlTemplateFormat format) {
-                return FileUtils.hasExtensionIgnoresCase(sourceFile.getName(), "." + format.getExtension());
-            }
-        };
+        Spec<TwirlTemplateFormat> hasExtension = format -> FileUtils.hasExtensionIgnoresCase(sourceFile.getName(), "." + format.getExtension());
 
         TwirlTemplateFormat format = CollectionUtils.findFirst(adapter.getDefaultTemplateFormats(), hasExtension);
         if (format == null) {

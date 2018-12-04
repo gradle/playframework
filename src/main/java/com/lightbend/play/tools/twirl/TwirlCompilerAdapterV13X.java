@@ -6,7 +6,6 @@ import org.gradle.scala.internal.reflect.ScalaReflectionUtil;
 import org.gradle.util.CollectionUtils;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,7 +53,7 @@ class TwirlCompilerAdapterV13X extends TwirlCompilerAdapterV10X {
     }
 
     @Override
-    public Object[] createCompileParameters(ClassLoader cl, File file, File sourceDirectory, File destinationDirectory, TwirlImports defaultPlayImports, TwirlTemplateFormat templateFormat, List<String> additionalImports) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Object[] createCompileParameters(ClassLoader cl, File file, File sourceDirectory, File destinationDirectory, TwirlImports defaultPlayImports, TwirlTemplateFormat templateFormat, List<String> additionalImports) {
         final List<String> defaultImports = new ArrayList<String>(DEFAULT_TEMPLATE_IMPORTS);
         defaultImports.addAll(playTwirlAdapter.getDefaultImports(defaultPlayImports));
         return new Object[]{
