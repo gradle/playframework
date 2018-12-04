@@ -6,6 +6,8 @@ import com.lightbend.play.tools.routes.RoutesCompileSpec;
 import com.lightbend.play.tools.routes.RoutesCompilerFactory;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
+import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
@@ -46,12 +48,14 @@ public class RoutesCompile extends SourceTask {
     private boolean generateReverseRoutes = true;
     private PlayPlatform platform;
     private BaseForkOptions forkOptions;
-    private boolean injectedRoutesGenerator;
+    private final Property<Boolean> injectedRoutesGenerator;
     private FileCollection routesCompilerClasspath;
 
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
+        injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
+        injectedRoutesGenerator.set(false);
     }
 
     /**
@@ -111,7 +115,7 @@ public class RoutesCompile extends SourceTask {
 
     @TaskAction
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory(), getForkOptions(), isJavaProject(), isNamespaceReverseRouter(), isGenerateReverseRoutes(), getInjectedRoutesGenerator(), getAdditionalImports());
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory(), getForkOptions(), isJavaProject(), isNamespaceReverseRouter(), isGenerateReverseRoutes(), getInjectedRoutesGenerator().get(), getAdditionalImports());
 
         workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
@@ -187,7 +191,7 @@ public class RoutesCompile extends SourceTask {
      * true if InjectedRoutesGenerator will be used to generate routes.
      */
     @Input
-    public boolean getInjectedRoutesGenerator() {
+    public Provider<Boolean> getInjectedRoutesGenerator() {
         return injectedRoutesGenerator;
     }
 
@@ -197,7 +201,7 @@ public class RoutesCompile extends SourceTask {
      * @param injectedRoutesGenerator false - use StaticRoutesGenerator
      * true - use InjectedRoutesGenerator
      */
-    public void setInjectedRoutesGenerator(boolean injectedRoutesGenerator) {
-        this.injectedRoutesGenerator = injectedRoutesGenerator;
+    public void setInjectedRoutesGenerator(Provider<Boolean> injectedRoutesGenerator) {
+        this.injectedRoutesGenerator.set(injectedRoutesGenerator);
     }
 }
