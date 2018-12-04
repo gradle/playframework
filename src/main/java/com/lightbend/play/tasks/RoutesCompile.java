@@ -7,6 +7,7 @@ import com.lightbend.play.tools.routes.RoutesCompilerFactory;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
+import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
@@ -25,7 +26,6 @@ import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,11 +43,11 @@ public class RoutesCompile extends SourceTask {
     /**
      * Additional imports used for by generated files.
      */
-    private List<String> additionalImports = new ArrayList<>();
+    private final ListProperty<String> additionalImports;
 
-    private boolean namespaceReverseRouter;
-    private boolean generateReverseRoutes = true;
-    private PlayPlatform platform;
+    private final Property<Boolean> namespaceReverseRouter;
+    private final Property<Boolean> generateReverseRoutes;
+    private final Property<PlayPlatform> platform;
     private BaseForkOptions forkOptions;
     private final Property<Boolean> injectedRoutesGenerator;
     private final ConfigurableFileCollection routesCompilerClasspath;
@@ -55,6 +55,12 @@ public class RoutesCompile extends SourceTask {
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
+        additionalImports = getProject().getObjects().listProperty(String.class).empty();
+        namespaceReverseRouter = getProject().getObjects().property(Boolean.class);
+        namespaceReverseRouter.set(false);
+        generateReverseRoutes = getProject().getObjects().property(Boolean.class);
+        generateReverseRoutes.set(true);
+        platform = getProject().getObjects().property(PlayPlatform.class);
         injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
         injectedRoutesGenerator.set(false);
         routesCompilerClasspath = getProject().getLayout().configurableFiles();
@@ -94,7 +100,7 @@ public class RoutesCompile extends SourceTask {
      * @return The additional imports.
      */
     @Input
-    public List<String> getAdditionalImports() {
+    public Provider<List<String>> getAdditionalImports() {
         return additionalImports;
     }
 
@@ -117,7 +123,7 @@ public class RoutesCompile extends SourceTask {
 
     @TaskAction
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory(), getForkOptions(), isJavaProject(), isNamespaceReverseRouter(), isGenerateReverseRoutes(), getInjectedRoutesGenerator().get(), getAdditionalImports());
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory(), getForkOptions(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get());
 
         workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
@@ -130,7 +136,7 @@ public class RoutesCompile extends SourceTask {
     }
 
     private Compiler<RoutesCompileSpec> getCompiler() {
-        return RoutesCompilerFactory.create(platform);
+        return RoutesCompilerFactory.create(platform.get());
     }
 
     @Internal
@@ -138,8 +144,8 @@ public class RoutesCompile extends SourceTask {
         return false;
     }
 
-    public void setPlatform(PlayPlatform platform) {
-        this.platform = platform;
+    public void setPlatform(Provider<PlayPlatform> platform) {
+        this.platform.set(platform);
     }
 
     /**
@@ -159,30 +165,30 @@ public class RoutesCompile extends SourceTask {
      * Whether the reverse router should be namespaced.
      */
     @Input
-    public boolean isNamespaceReverseRouter() {
+    public Provider<Boolean> getNamespaceReverseRouter() {
         return namespaceReverseRouter;
     }
 
     /**
      * Sets whether or not the reverse router should be namespaced.
      */
-    public void setNamespaceReverseRouter(boolean namespaceReverseRouter) {
-        this.namespaceReverseRouter = namespaceReverseRouter;
+    public void setNamespaceReverseRouter(Provider<Boolean> namespaceReverseRouter) {
+        this.namespaceReverseRouter.set(namespaceReverseRouter);
     }
 
     /**
      * Whether a reverse router should be generated.  Default is true.
      */
     @Input
-    public boolean isGenerateReverseRoutes() {
+    public Provider<Boolean> getGenerateReverseRoutes() {
         return generateReverseRoutes;
     }
 
     /**
      * Sets whether or not a reverse router should be generated.
      */
-    public void setGenerateReverseRoutes(boolean generateReverseRoutes) {
-        this.generateReverseRoutes = generateReverseRoutes;
+    public void setGenerateReverseRoutes(Provider<Boolean> generateReverseRoutes) {
+        this.generateReverseRoutes.set(generateReverseRoutes);
     }
 
     /**

@@ -55,7 +55,7 @@ public class TwirlCompile extends SourceTask {
     private final Property<TwirlImports> defaultImports;
 
     private BaseForkOptions forkOptions;
-    private PlayPlatform platform;
+    private final Property<PlayPlatform> platform;
     private final ListProperty<TwirlTemplateFormat> userTemplateFormats;
     private final ListProperty<String> additionalImports;
     private final ConfigurableFileCollection twirlCompilerClasspath;
@@ -63,6 +63,7 @@ public class TwirlCompile extends SourceTask {
     @Inject
     public TwirlCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
+        platform = getProject().getObjects().property(PlayPlatform.class);
         defaultImports = getProject().getObjects().property(TwirlImports.class);
         userTemplateFormats = getProject().getObjects().listProperty(TwirlTemplateFormat.class).empty();
         additionalImports = getProject().getObjects().listProperty(String.class);
@@ -152,11 +153,11 @@ public class TwirlCompile extends SourceTask {
     }
 
     private Compiler<TwirlCompileSpec> getCompiler() {
-        return TwirlCompilerFactory.create(platform);
+        return TwirlCompilerFactory.create(platform.get());
     }
 
-    public void setPlatform(PlayPlatform platform) {
-        this.platform = platform;
+    public void setPlatform(Provider<PlayPlatform> platform) {
+        this.platform.set(platform);
     }
 
     /**

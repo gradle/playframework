@@ -177,7 +177,7 @@ GET     /newroute                          ${controllers()}.Application.index()
         withRoutesTemplate("org.gradle.test")
         buildFile << """
             $ROUTES_COMPILE_TASK_NAME {
-                namespaceReverseRouter = true
+                namespaceReverseRouter.set(true)
             }
         """
         expect:
@@ -247,7 +247,7 @@ GET     /                          ${controllers()}${packageId}.Application.inde
         and:
         buildFile << """
 $ROUTES_COMPILE_TASK_NAME {
-    additionalImports << "extra.package"
+    additionalImports.add("extra.package")
 }
 """
         expect:
