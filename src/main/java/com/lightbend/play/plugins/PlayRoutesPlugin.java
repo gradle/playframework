@@ -30,13 +30,9 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
         PlayPlatform playPlatform = playExtension.getPlatform().asPlayPlatform();
 
         Configuration routesCompilerConfiguration = createRoutesCompilerConfiguration(project);
+        declareDefaultDependencies(project, routesCompilerConfiguration, playPlatform);
         RoutesSourceSet routesSourceSet = createCustomSourceSet(project, DefaultRoutesSourceSet.class, "routes");
-        RoutesCompile routesCompile = createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), playPlatform, playExtension.getInjectedRoutesGenerator());
-
-        project.afterEvaluate(project1 -> {
-            declareDefaultDependencies(project, routesCompilerConfiguration, playPlatform);
-            configureRoutesCompileConfiguration(routesCompile, routesCompilerConfiguration);
-        });
+        createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), routesCompilerConfiguration, playPlatform, playExtension.getInjectedRoutesGenerator());
     }
 
     private Configuration createRoutesCompilerConfiguration(Project project) {
@@ -54,11 +50,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
         });
     }
 
-    private void configureRoutesCompileConfiguration(RoutesCompile routesCompile, Configuration compilerConfiguration) {
-        routesCompile.setRoutesCompilerClasspath(compilerConfiguration);
-    }
-
-    private RoutesCompile createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, PlayPlatform playPlatform, Provider<Boolean> injectedRoutesGenerator) {
+    private RoutesCompile createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration, PlayPlatform playPlatform, Provider<Boolean> injectedRoutesGenerator) {
         return project.getTasks().create(ROUTES_COMPILE_TASK_NAME, RoutesCompile.class, routesCompile -> {
             routesCompile.setDescription("Generates routes for the '" + sourceDirectory.getDisplayName() + "' source set.");
             routesCompile.setPlatform(playPlatform);
@@ -66,6 +58,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
             routesCompile.setSource(sourceDirectory);
             routesCompile.setOutputDirectory(getOutputDir(project, sourceDirectory));
             routesCompile.setInjectedRoutesGenerator(injectedRoutesGenerator);
+            routesCompile.setRoutesCompilerClasspath(compilerConfiguration);
         });
     }
 }

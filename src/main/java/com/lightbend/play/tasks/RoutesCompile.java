@@ -4,6 +4,7 @@ import com.lightbend.play.tools.Compiler;
 import com.lightbend.play.tools.routes.DefaultRoutesCompileSpec;
 import com.lightbend.play.tools.routes.RoutesCompileSpec;
 import com.lightbend.play.tools.routes.RoutesCompilerFactory;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.provider.Property;
@@ -49,13 +50,14 @@ public class RoutesCompile extends SourceTask {
     private PlayPlatform platform;
     private BaseForkOptions forkOptions;
     private final Property<Boolean> injectedRoutesGenerator;
-    private FileCollection routesCompilerClasspath;
+    private final ConfigurableFileCollection routesCompilerClasspath;
 
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
         injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
         injectedRoutesGenerator.set(false);
+        routesCompilerClasspath = getProject().getLayout().configurableFiles();
     }
 
     /**
@@ -110,7 +112,7 @@ public class RoutesCompile extends SourceTask {
     }
 
     public void setRoutesCompilerClasspath(FileCollection routesCompilerClasspath) {
-        this.routesCompilerClasspath = routesCompilerClasspath;
+        this.routesCompilerClasspath.setFrom(routesCompilerClasspath);
     }
 
     @TaskAction
