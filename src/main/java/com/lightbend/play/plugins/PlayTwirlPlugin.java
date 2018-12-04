@@ -35,14 +35,11 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         PlayPluginConfigurations configurations = (PlayPluginConfigurations)project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
         Configuration twirlCompilerConfiguration = createTwirlCompilerConfiguration(project);
+        declareDefaultDependencies(project, twirlCompilerConfiguration, playPlatform);
         TwirlSourceSet twirlSourceSet = createCustomSourceSet(project, DefaultTwirlSourceSet.class, "twirl");
-        TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet, playPlatform);
+        TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet, twirlCompilerConfiguration, playPlatform);
 
         project.afterEvaluate(project1 -> {
-            declareDefaultDependencies(project, twirlCompilerConfiguration, playPlatform);
-            configureTwirlCompileConfiguration(twirlCompile, twirlCompilerConfiguration);
-            configureTwirlCompileTaskFromSourceSet(twirlCompile, twirlSourceSet);
-
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
                 configurations.getPlay().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-java"));
             }
@@ -67,26 +64,20 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         });
     }
 
-    private TwirlCompile createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, PlayPlatform playPlatform) {
+    private TwirlCompile createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, Configuration compilerConfiguration, PlayPlatform playPlatform) {
         return project.getTasks().create(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
             twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
             twirlCompile.setPlatform(playPlatform);
             twirlCompile.setSource(twirlSourceSet.getTwirl());
             twirlCompile.setOutputDirectory(getOutputDir(project, twirlSourceSet.getTwirl()));
+            twirlCompile.setDefaultImports(twirlSourceSet.getDefaultImports());
+            twirlCompile.setUserTemplateFormats(twirlSourceSet.getUserTemplateFormats());
+            twirlCompile.setAdditionalImports(twirlSourceSet.getAdditionalImports());
+            twirlCompile.setTwirlCompilerClasspath(compilerConfiguration);
         });
     }
 
-    private void configureTwirlCompileTaskFromSourceSet(TwirlCompile twirlCompile, TwirlSourceSet twirlSourceSet) {
-        twirlCompile.setDefaultImports(twirlSourceSet.getDefaultImports());
-        twirlCompile.setUserTemplateFormats(twirlSourceSet.getUserTemplateFormats());
-        twirlCompile.setAdditionalImports(twirlSourceSet.getAdditionalImports());
-    }
-
-    private void configureTwirlCompileConfiguration(TwirlCompile twirlCompile, Configuration twirlCompilerConfiguration) {
-        twirlCompile.setTwirlCompilerClasspath(twirlCompilerConfiguration);
-    }
-
     private boolean hasTwirlSourceSetsWithJavaImports(TwirlCompile twirlCompile) {
-        return twirlCompile.getDefaultImports() == TwirlImports.JAVA;
+        return twirlCompile.getDefaultImports().get() == TwirlImports.JAVA;
     }
 }

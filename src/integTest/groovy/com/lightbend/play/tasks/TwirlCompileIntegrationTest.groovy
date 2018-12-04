@@ -334,11 +334,11 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         buildFile << """
             $TWIRL_COMPILE_TASK_NAME {
                 doFirst {
-                    assert defaultImports == com.lightbend.play.tools.twirl.TwirlImports.SCALA
+                    assert defaultImports.get() == com.lightbend.play.tools.twirl.TwirlImports.SCALA
                     sourceSets {
                         main {
                             twirl {
-                                assert defaultImports == com.lightbend.play.tools.twirl.TwirlImports.SCALA
+                                assert defaultImports.get() == com.lightbend.play.tools.twirl.TwirlImports.SCALA
                             }
                         }
                     }

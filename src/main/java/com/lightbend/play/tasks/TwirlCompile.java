@@ -7,11 +7,15 @@ import com.lightbend.play.tools.twirl.TwirlCompileSpec;
 import com.lightbend.play.tools.twirl.TwirlCompilerFactory;
 import com.lightbend.play.tools.twirl.TwirlImports;
 import com.lightbend.play.tools.twirl.TwirlTemplateFormat;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.FileVisitor;
 import org.gradle.api.internal.file.RelativeFile;
+import org.gradle.api.provider.ListProperty;
+import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Nested;
@@ -48,17 +52,21 @@ public class TwirlCompile extends SourceTask {
     /**
      * The default imports to use when compiling templates
      */
-    private TwirlImports defaultImports;
+    private final Property<TwirlImports> defaultImports;
 
     private BaseForkOptions forkOptions;
     private PlayPlatform platform;
-    private List<TwirlTemplateFormat> userTemplateFormats = new ArrayList<>();
-    private List<String> additionalImports = new ArrayList<>();
-    private FileCollection twirlCompilerClasspath;
+    private final ListProperty<TwirlTemplateFormat> userTemplateFormats;
+    private final ListProperty<String> additionalImports;
+    private final ConfigurableFileCollection twirlCompilerClasspath;
 
     @Inject
     public TwirlCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
+        defaultImports = getProject().getObjects().property(TwirlImports.class);
+        userTemplateFormats = getProject().getObjects().listProperty(TwirlTemplateFormat.class).empty();
+        additionalImports = getProject().getObjects().listProperty(String.class);
+        twirlCompilerClasspath = getProject().getLayout().configurableFiles();
     }
 
     /**
@@ -105,7 +113,7 @@ public class TwirlCompile extends SourceTask {
      * @return The imports that will be used.
      */
     @Nullable @Optional @Input
-    public TwirlImports getDefaultImports() {
+    public Provider<TwirlImports> getDefaultImports() {
         return defaultImports;
     }
 
@@ -113,8 +121,8 @@ public class TwirlCompile extends SourceTask {
      * Sets the default imports to be used when compiling templates.
      * @param defaultImports The imports to be used.
      */
-    public void setDefaultImports(@Nullable TwirlImports defaultImports) {
-        this.defaultImports = defaultImports;
+    public void setDefaultImports(@Nullable Provider<TwirlImports> defaultImports) {
+        this.defaultImports.set(defaultImports);
     }
 
     @Classpath
@@ -124,14 +132,14 @@ public class TwirlCompile extends SourceTask {
     }
 
     public void setTwirlCompilerClasspath(FileCollection twirlCompilerClasspath) {
-        this.twirlCompilerClasspath = twirlCompilerClasspath;
+        this.twirlCompilerClasspath.setFrom(twirlCompilerClasspath);
     }
 
     @TaskAction
     void compile() {
         RelativeFileCollector relativeFileCollector = new RelativeFileCollector();
         getSource().visit(relativeFileCollector);
-        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory(), getForkOptions(), getDefaultImports(), userTemplateFormats, additionalImports);
+        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory(), getForkOptions(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get());
 
         workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
@@ -155,15 +163,15 @@ public class TwirlCompile extends SourceTask {
      * Returns the custom template formats configured for this task.
      */
     @Input
-    public List<TwirlTemplateFormat> getUserTemplateFormats() {
+    public Provider<List<TwirlTemplateFormat>> getUserTemplateFormats() {
         return userTemplateFormats;
     }
 
     /**
      * Sets the custom template formats for this task.
      */
-    public void setUserTemplateFormats(List<TwirlTemplateFormat> userTemplateFormats) {
-        this.userTemplateFormats = userTemplateFormats;
+    public void setUserTemplateFormats(Provider<List<TwirlTemplateFormat>> userTemplateFormats) {
+        this.userTemplateFormats.set(userTemplateFormats);
     }
 
     /**
@@ -181,7 +189,7 @@ public class TwirlCompile extends SourceTask {
      * Returns the list of additional imports to add to the generated Scala code.
      */
     @Input
-    public List<String> getAdditionalImports() {
+    public Provider<List<String>> getAdditionalImports() {
         return additionalImports;
     }
 
@@ -190,8 +198,8 @@ public class TwirlCompile extends SourceTask {
      *
      * @param additionalImports additional imports
      */
-    public void setAdditionalImports(List<String> additionalImports) {
-        this.additionalImports = additionalImports;
+    public void setAdditionalImports(Provider<List<String>> additionalImports) {
+        this.additionalImports.set(additionalImports);
     }
 
     private static class RelativeFileCollector implements FileVisitor {
