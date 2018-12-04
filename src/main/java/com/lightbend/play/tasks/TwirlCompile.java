@@ -7,13 +7,12 @@ import com.lightbend.play.tools.twirl.TwirlCompileSpec;
 import com.lightbend.play.tools.twirl.TwirlCompilerFactory;
 import com.lightbend.play.tools.twirl.TwirlImports;
 import com.lightbend.play.tools.twirl.TwirlTemplateFormat;
-import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.Dependency;
-import org.gradle.api.artifacts.dsl.DependencyHandler;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.FileVisitor;
 import org.gradle.api.internal.file.RelativeFile;
+import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Nested;
 import org.gradle.api.tasks.Optional;
@@ -24,7 +23,6 @@ import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.compile.BaseForkOptions;
 import org.gradle.play.platform.PlayPlatform;
-import org.gradle.util.CollectionUtils;
 import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 
@@ -34,7 +32,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Task for compiling Twirl templates into Scala code.
@@ -57,6 +54,7 @@ public class TwirlCompile extends SourceTask {
     private PlayPlatform platform;
     private List<TwirlTemplateFormat> userTemplateFormats = new ArrayList<>();
     private List<String> additionalImports = new ArrayList<>();
+    private FileCollection twirlCompilerClasspath;
 
     @Inject
     public TwirlCompile(WorkerExecutor workerExecutor) {
@@ -93,11 +91,6 @@ public class TwirlCompile extends SourceTask {
         return outputDirectory;
     }
 
-    @Input
-    public Object getDependencyNotation() {
-        return TwirlCompilerFactory.createAdapter(platform).getDependencyNotation();
-    }
-
     /**
      * Specifies the directory to generate the parser source files into.
      *
@@ -124,18 +117,27 @@ public class TwirlCompile extends SourceTask {
         this.defaultImports = defaultImports;
     }
 
+    @Classpath
+    @PathSensitive(PathSensitivity.RELATIVE)
+    public FileCollection getTwirlCompilerClasspath() {
+        return twirlCompilerClasspath;
+    }
+
+    public void setTwirlCompilerClasspath(FileCollection twirlCompilerClasspath) {
+        this.twirlCompilerClasspath = twirlCompilerClasspath;
+    }
+
     @TaskAction
     void compile() {
         RelativeFileCollector relativeFileCollector = new RelativeFileCollector();
         getSource().visit(relativeFileCollector);
         final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory(), getForkOptions(), getDefaultImports(), userTemplateFormats, additionalImports);
-        final Set<File> twirlClasspath = resolveToolClasspath(TwirlCompilerFactory.createAdapter(platform).getDependencyNotation().toArray()).resolve();
 
         workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
             workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
             workerConfiguration.params(spec, getCompiler());
-            workerConfiguration.classpath(twirlClasspath);
+            workerConfiguration.classpath(twirlCompilerClasspath);
             workerConfiguration.setDisplayName("Generating Scala source from Twirl templates");
         });
         workerExecutor.await();
@@ -143,13 +145,6 @@ public class TwirlCompile extends SourceTask {
 
     private Compiler<TwirlCompileSpec> getCompiler() {
         return TwirlCompilerFactory.create(platform);
-    }
-
-    private Configuration resolveToolClasspath(Object... dependencyNotations) {
-        final DependencyHandler dependencyHandler = getProject().getDependencies();
-        List<Dependency> dependencies = CollectionUtils.collect(dependencyNotations, dependencyNotation -> dependencyHandler.create(dependencyNotation));
-        Dependency[] dependenciesArray = dependencies.toArray(new Dependency[0]);
-        return getProject().getConfigurations().detachedConfiguration(dependenciesArray);
     }
 
     public void setPlatform(PlayPlatform platform) {
