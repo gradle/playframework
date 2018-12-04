@@ -138,6 +138,7 @@ public class TwirlCompile extends SourceTask {
             workerConfiguration.classpath(twirlClasspath);
             workerConfiguration.setDisplayName("Generating Scala source from Twirl templates");
         });
+        workerExecutor.await();
     }
 
     private Compiler<TwirlCompileSpec> getCompiler() {
