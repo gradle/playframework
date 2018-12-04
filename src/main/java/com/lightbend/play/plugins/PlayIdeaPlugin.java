@@ -2,6 +2,7 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.Platform;
 import com.lightbend.play.extensions.PlayExtension;
+import com.lightbend.play.tasks.TwirlCompile;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -16,7 +17,6 @@ import org.gradle.language.scala.internal.DefaultScalaPlatform;
 import org.gradle.play.tasks.JavaScriptMinify;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;
 import org.gradle.play.tasks.RoutesCompile;
-import org.gradle.play.tasks.TwirlCompile;
 import org.gradle.plugins.ide.idea.GenerateIdeaModule;
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel;
 import org.gradle.plugins.ide.idea.model.IdeaModule;

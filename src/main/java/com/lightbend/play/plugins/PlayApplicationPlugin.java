@@ -2,6 +2,7 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
+import com.lightbend.play.tasks.TwirlCompile;
 import org.gradle.api.GradleException;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
@@ -28,7 +29,6 @@ import org.gradle.play.internal.toolchain.PlayToolChainInternal;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.play.tasks.PlayRun;
 import org.gradle.play.tasks.RoutesCompile;
-import org.gradle.play.tasks.TwirlCompile;
 import org.gradle.util.VersionNumber;
 
 import java.util.Arrays;

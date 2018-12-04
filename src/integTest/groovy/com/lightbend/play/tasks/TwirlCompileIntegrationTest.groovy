@@ -4,6 +4,7 @@ import com.lightbend.play.PlayMultiVersionIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
+import spock.lang.Ignore
 import spock.lang.Unroll
 
 import static com.lightbend.play.fixtures.Repositories.playRepositories
@@ -133,6 +134,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         generatedFile.text.contains("import my.pkg.MyClass")
     }
 
+    @Ignore("does not support incrementality anymore")
     def "runs compiler incrementally"() {
         when:
         withTwirlTemplate("input1.scala.html")
@@ -165,6 +167,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         new File(destinationDir,"html/input1.template.scala").isFile()
     }
 
+    @Ignore("does not support incrementality anymore")
     def "removes stale output files in incremental compile"(){
         given:
         withTwirlTemplate("input1.scala.html")
