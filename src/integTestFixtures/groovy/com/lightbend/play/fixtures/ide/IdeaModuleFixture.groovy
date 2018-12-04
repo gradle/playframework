@@ -54,7 +54,6 @@ class IdeaModuleFixture extends IdeProjectFixture {
                 it.url - 'file://$MODULE_DIR$/'
             } as Set
 
-            println "----> " + sourceRoots
             def setDiff = CollectionUtils.diffSetsBy(sourceRoots, CollectionUtils.toSet(paths as List), Transformers.noOpTransformer())
             assert setDiff.leftOnly.empty
             assert setDiff.rightOnly.empty
