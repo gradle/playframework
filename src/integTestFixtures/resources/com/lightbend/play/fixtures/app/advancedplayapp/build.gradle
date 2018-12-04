@@ -7,7 +7,7 @@ plugins {
 sourceSets {
     main {
         twirl {
-            defaultImports = TwirlImports.JAVA
+            defaultImports = com.lightbend.play.tools.twirl.TwirlImports.JAVA
             srcDir "templates"
             include "jva/**/*"
         }

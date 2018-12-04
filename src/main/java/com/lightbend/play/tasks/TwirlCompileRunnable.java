@@ -1,8 +1,8 @@
 package com.lightbend.play.tasks;
 
+import com.lightbend.play.tools.twirl.TwirlCompileSpec;
+import com.lightbend.play.tools.twirl.TwirlCompiler;
 import org.gradle.api.UncheckedIOException;
-import org.gradle.play.internal.twirl.TwirlCompileSpec;
-import org.gradle.play.internal.twirl.TwirlCompiler;
 
 import javax.inject.Inject;
 import java.io.IOException;

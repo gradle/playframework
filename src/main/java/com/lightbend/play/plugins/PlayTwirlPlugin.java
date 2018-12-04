@@ -5,9 +5,9 @@ import com.lightbend.play.extensions.PlayPluginConfigurations;
 import com.lightbend.play.sourcesets.DefaultTwirlSourceSet;
 import com.lightbend.play.sourcesets.TwirlSourceSet;
 import com.lightbend.play.tasks.TwirlCompile;
+import com.lightbend.play.tools.twirl.TwirlImports;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.BasePlugin;
-import org.gradle.language.twirl.TwirlImports;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
 import org.gradle.play.platform.PlayPlatform;
 

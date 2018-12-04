@@ -1,5 +1,11 @@
 package com.lightbend.play.tasks;
 
+import com.lightbend.play.tools.twirl.DefaultTwirlCompileSpec;
+import com.lightbend.play.tools.twirl.DefaultTwirlTemplateFormat;
+import com.lightbend.play.tools.twirl.TwirlCompileSpec;
+import com.lightbend.play.tools.twirl.TwirlCompilerFactory;
+import com.lightbend.play.tools.twirl.TwirlImports;
+import com.lightbend.play.tools.twirl.TwirlTemplateFormat;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
@@ -17,12 +23,6 @@ import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.compile.BaseForkOptions;
 import org.gradle.language.base.internal.compile.Compiler;
-import org.gradle.language.twirl.TwirlImports;
-import org.gradle.language.twirl.TwirlTemplateFormat;
-import org.gradle.language.twirl.internal.DefaultTwirlTemplateFormat;
-import org.gradle.play.internal.twirl.DefaultTwirlCompileSpec;
-import org.gradle.play.internal.twirl.TwirlCompileSpec;
-import org.gradle.play.internal.twirl.TwirlCompilerFactory;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.util.CollectionUtils;
 import org.gradle.workers.IsolationMode;

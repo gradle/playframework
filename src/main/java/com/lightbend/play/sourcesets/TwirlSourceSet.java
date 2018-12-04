@@ -1,9 +1,9 @@
 package com.lightbend.play.sourcesets;
 
+import com.lightbend.play.tools.twirl.TwirlImports;
+import com.lightbend.play.tools.twirl.TwirlTemplateFormat;
 import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
-import org.gradle.language.twirl.TwirlImports;
-import org.gradle.language.twirl.TwirlTemplateFormat;
 
 import java.util.List;
 

@@ -300,7 +300,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
             sourceSets {
                 main {
                     twirl {
-                        defaultImports = TwirlImports.JAVA
+                        defaultImports = com.lightbend.play.tools.twirl.TwirlImports.JAVA
                         srcDirs = ["twirlJava"]
                     }
                 }
@@ -334,11 +334,11 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         buildFile << """
             $TWIRL_COMPILE_TASK_NAME {
                 doFirst {
-                    assert defaultImports == TwirlImports.SCALA
+                    assert defaultImports == com.lightbend.play.tools.twirl.TwirlImports.SCALA
                     sourceSets {
                         main {
                             twirl {
-                                assert defaultImports == TwirlImports.SCALA
+                                assert defaultImports == com.lightbend.play.tools.twirl.TwirlImports.SCALA
                             }
                         }
                     }
