@@ -1,5 +1,6 @@
 package com.lightbend.play.tasks;
 
+import com.lightbend.play.tools.Compiler;
 import com.lightbend.play.tools.twirl.DefaultTwirlCompileSpec;
 import com.lightbend.play.tools.twirl.DefaultTwirlTemplateFormat;
 import com.lightbend.play.tools.twirl.TwirlCompileSpec;
@@ -22,7 +23,6 @@ import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.compile.BaseForkOptions;
-import org.gradle.language.base.internal.compile.Compiler;
 import org.gradle.play.platform.PlayPlatform;
 import org.gradle.util.CollectionUtils;
 import org.gradle.workers.IsolationMode;

@@ -1,11 +1,11 @@
 package com.lightbend.play.tools.twirl;
 
+import com.lightbend.play.tools.Compiler;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.WorkResult;
 import org.gradle.api.tasks.WorkResults;
 import org.gradle.internal.FileUtils;
-import org.gradle.language.base.internal.compile.Compiler;
 import org.gradle.scala.internal.reflect.ScalaMethod;
 import org.gradle.scala.internal.reflect.ScalaOptionInvocationWrapper;
 import org.gradle.util.CollectionUtils;
