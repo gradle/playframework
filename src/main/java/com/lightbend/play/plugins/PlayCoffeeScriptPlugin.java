@@ -40,7 +40,7 @@ public class PlayCoffeeScriptPlugin implements PlayGeneratedSourcePlugin {
     private PlayCoffeeScriptCompile createDefaultCoffeeScriptCompileTask(Project project, SourceDirectorySet sourceDirectory) {
         return project.getTasks().create(COFFEESCRIPT_COMPILE_TASK_NAME, PlayCoffeeScriptCompile.class, coffeeScriptCompile -> {
             coffeeScriptCompile.setDescription("Compiles coffeescript for the '" + sourceDirectory.getDisplayName() + "' source set.");
-            coffeeScriptCompile.setDestinationDir(getOutputDir(project, sourceDirectory));
+            coffeeScriptCompile.setDestinationDir(getOutputDir(project, sourceDirectory).get().getAsFile());
             coffeeScriptCompile.setSource(sourceDirectory);
         });
     }

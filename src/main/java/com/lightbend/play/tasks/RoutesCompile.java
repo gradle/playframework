@@ -6,6 +6,7 @@ import com.lightbend.play.tools.routes.DefaultRoutesCompileSpec;
 import com.lightbend.play.tools.routes.RoutesCompileSpec;
 import com.lightbend.play.tools.routes.RoutesCompilerFactory;
 import org.gradle.api.file.ConfigurableFileCollection;
+import org.gradle.api.file.Directory;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.provider.ListProperty;
@@ -25,7 +26,6 @@ import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.util.List;
 
 /**
@@ -38,7 +38,7 @@ public class RoutesCompile extends SourceTask {
     /**
      * Target directory for the compiled route files.
      */
-    private File outputDirectory;
+    private final Property<Directory> outputDirectory;
 
     /**
      * Additional imports used for by generated files.
@@ -55,6 +55,7 @@ public class RoutesCompile extends SourceTask {
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
+        outputDirectory = getProject().getObjects().directoryProperty();
         additionalImports = getProject().getObjects().listProperty(String.class).empty();
         namespaceReverseRouter = getProject().getObjects().property(Boolean.class);
         namespaceReverseRouter.set(false);
@@ -81,7 +82,7 @@ public class RoutesCompile extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public File getOutputDirectory() {
+    public Provider<Directory> getOutputDirectory() {
         return outputDirectory;
     }
 
@@ -90,8 +91,8 @@ public class RoutesCompile extends SourceTask {
      *
      * @param outputDirectory The output directory. Must not be null.
      */
-    public void setOutputDirectory(File outputDirectory) {
-        this.outputDirectory = outputDirectory;
+    public void setOutputDirectory(Provider<Directory> outputDirectory) {
+        this.outputDirectory.set(outputDirectory);
     }
 
     /**
@@ -123,7 +124,7 @@ public class RoutesCompile extends SourceTask {
 
     @TaskAction
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory(), getForkOptions(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get());
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), getForkOptions(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get());
 
         workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);

@@ -9,6 +9,7 @@ import com.lightbend.play.tools.twirl.TwirlCompilerFactory;
 import com.lightbend.play.tools.twirl.TwirlImports;
 import com.lightbend.play.tools.twirl.TwirlTemplateFormat;
 import org.gradle.api.file.ConfigurableFileCollection;
+import org.gradle.api.file.Directory;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
@@ -32,7 +33,6 @@ import org.gradle.workers.WorkerExecutor;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +47,7 @@ public class TwirlCompile extends SourceTask {
     /**
      * Target directory for the compiled template files.
      */
-    private File outputDirectory;
+    private final Property<Directory> outputDirectory;
 
     /**
      * The default imports to use when compiling templates
@@ -63,6 +63,7 @@ public class TwirlCompile extends SourceTask {
     @Inject
     public TwirlCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
+        outputDirectory = getProject().getObjects().directoryProperty();
         platform = getProject().getObjects().property(PlayPlatform.class);
         defaultImports = getProject().getObjects().property(TwirlImports.class);
         userTemplateFormats = getProject().getObjects().listProperty(TwirlTemplateFormat.class).empty();
@@ -96,7 +97,7 @@ public class TwirlCompile extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public File getOutputDirectory() {
+    public Provider<Directory> getOutputDirectory() {
         return outputDirectory;
     }
 
@@ -105,8 +106,8 @@ public class TwirlCompile extends SourceTask {
      *
      * @param outputDirectory The output directory. Must not be null.
      */
-    public void setOutputDirectory(File outputDirectory) {
-        this.outputDirectory = outputDirectory;
+    public void setOutputDirectory(Provider<Directory> outputDirectory) {
+        this.outputDirectory.set(outputDirectory);
     }
 
     /**
@@ -140,7 +141,7 @@ public class TwirlCompile extends SourceTask {
     void compile() {
         RelativeFileCollector relativeFileCollector = new RelativeFileCollector();
         getSource().visit(relativeFileCollector);
-        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory(), getForkOptions(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get());
+        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory().get().getAsFile(), getForkOptions(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get());
 
         workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);

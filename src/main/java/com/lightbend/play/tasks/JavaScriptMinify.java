@@ -5,6 +5,7 @@ import com.lightbend.play.tools.javascript.JavaScriptCompileSpec;
 import com.lightbend.play.tools.javascript.SimpleStaleClassCleaner;
 import com.lightbend.play.tools.javascript.StaleClassCleaner;
 import org.gradle.api.file.ConfigurableFileCollection;
+import org.gradle.api.file.Directory;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
@@ -12,6 +13,8 @@ import org.gradle.api.file.FileVisitor;
 import org.gradle.api.internal.file.FileOperations;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.internal.project.ProjectInternal;
+import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Nested;
 import org.gradle.api.tasks.OutputDirectory;
@@ -33,7 +36,7 @@ import java.util.List;
  */
 public class JavaScriptMinify extends SourceTask {
     private final WorkerExecutor workerExecutor;
-    private File destinationDir;
+    private final Property<Directory> destinationDir;
     private BaseForkOptions forkOptions;
     private final ConfigurableFileCollection compilerClasspath;
 
@@ -41,6 +44,7 @@ public class JavaScriptMinify extends SourceTask {
     public JavaScriptMinify(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
         this.include("**/*.js");
+        destinationDir = getProject().getObjects().directoryProperty();
         compilerClasspath = getProject().getLayout().configurableFiles();
     }
 
@@ -59,7 +63,7 @@ public class JavaScriptMinify extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public File getDestinationDir() {
+    public Provider<Directory> getDestinationDir() {
         return destinationDir;
     }
 
@@ -68,8 +72,8 @@ public class JavaScriptMinify extends SourceTask {
      *
      * @param destinationDir The output directory.
      */
-    public void setDestinationDir(File destinationDir) {
-        this.destinationDir = destinationDir;
+    public void setDestinationDir(Provider<Directory> destinationDir) {
+        this.destinationDir.set(destinationDir);
     }
 
     /**
@@ -98,13 +102,13 @@ public class JavaScriptMinify extends SourceTask {
     @TaskAction
     void compileJavaScriptSources() {
         StaleClassCleaner cleaner = new SimpleStaleClassCleaner(getOutputs());
-        cleaner.addDirToClean(getDestinationDir());
+        cleaner.addDirToClean(destinationDir.get().getAsFile());
         cleaner.execute();
 
         MinifyFileVisitor visitor = new MinifyFileVisitor();
         getSource().visit(visitor);
 
-        JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, getDestinationDir(), getForkOptions());
+        JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, destinationDir.get().getAsFile(), getForkOptions());
 
         workerExecutor.submit(JavaScriptMinifyRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
@@ -124,12 +128,12 @@ public class JavaScriptMinify extends SourceTask {
 
         @Override
         public void visitDir(FileVisitDetails dirDetails) {
-            new File(destinationDir, dirDetails.getRelativePath().getPathString()).mkdirs();
+            new File(destinationDir.get().getAsFile(), dirDetails.getRelativePath().getPathString()).mkdirs();
         }
 
         @Override
         public void visitFile(final FileVisitDetails fileDetails) {
-            final File outputFileDir = new File(destinationDir, fileDetails.getRelativePath().getParent().getPathString());
+            final File outputFileDir = new File(destinationDir.get().getAsFile(), fileDetails.getRelativePath().getParent().getPathString());
 
             // Copy the raw form
             FileOperations fileOperations = ((ProjectInternal) getProject()).getFileOperations();

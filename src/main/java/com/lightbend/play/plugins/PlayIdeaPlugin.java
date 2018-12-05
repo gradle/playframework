@@ -66,10 +66,10 @@ public class PlayIdeaPlugin implements Plugin<Project> {
             SourceDirectorySet scalaSourceDirectorySet = getScalaSourceDirectorySet(project);
             sourceDirs.addAll(scalaSourceDirectorySet.getSrcDirs());
 
-            sourceDirs.add(twirlCompileTask.getOutputDirectory());
-            sourceDirs.add(routesCompileTask.getOutputDirectory());
+            sourceDirs.add(twirlCompileTask.getOutputDirectory().get().getAsFile());
+            sourceDirs.add(routesCompileTask.getOutputDirectory().get().getAsFile());
             sourceDirs.add(playCoffeeScriptCompileTask.getDestinationDir());
-            sourceDirs.add(javaScriptMinifyTask.getDestinationDir());
+            sourceDirs.add(javaScriptMinifyTask.getDestinationDir().get().getAsFile());
             return Collections.unmodifiableSet(sourceDirs);
         });
 
