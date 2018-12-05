@@ -2,6 +2,7 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
+import com.lightbend.play.tasks.PlayRun;
 import com.lightbend.play.tasks.RoutesCompile;
 import com.lightbend.play.tasks.TwirlCompile;
 import org.gradle.api.GradleException;
@@ -17,7 +18,6 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.artifacts.ArtifactAttributes;
 import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact;
-import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
@@ -26,9 +26,7 @@ import org.gradle.api.tasks.scala.ScalaCompile;
 import org.gradle.play.internal.DefaultPlayPlatform;
 import org.gradle.play.internal.platform.PlayMajorVersion;
 import org.gradle.play.internal.platform.PlayPlatformInternal;
-import org.gradle.play.internal.toolchain.PlayToolChainInternal;
 import org.gradle.play.platform.PlayPlatform;
-import org.gradle.play.tasks.PlayRun;
 import org.gradle.util.VersionNumber;
 
 import java.util.Arrays;
@@ -92,7 +90,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         return playExtension;
     }
 
-    private void failIfInjectedRouterIsUsedWithOldVersion(Boolean injectedRoutesGenerator,PlayPlatform playPlatform) {
+    private void failIfInjectedRouterIsUsedWithOldVersion(Boolean injectedRoutesGenerator, PlayPlatform playPlatform) {
         if (Boolean.TRUE.equals(injectedRoutesGenerator)) {
             VersionNumber minSupportedVersion = VersionNumber.parse("2.4.0");
             VersionNumber playVersion = VersionNumber.parse(playPlatform.getPlayVersion());
@@ -169,14 +167,12 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private void createRunTask(Project project, PlayPluginConfigurations configurations, PlayPlatform playPlatform, Jar mainJarTask, Jar assetsJarTask) {
-        PlayToolChainInternal playToolChain = ((ProjectInternal) project).getServices().get(PlayToolChainInternal.class);
-
         project.getTasks().create(RUN_TASK_NAME, PlayRun.class, playRun -> {
             playRun.setDescription("Runs the Play application for local development.");
             playRun.setGroup(RUN_GROUP);
             playRun.setHttpPort(DEFAULT_HTTP_PORT);
             playRun.getWorkingDir().set(project.getProjectDir());
-            playRun.setPlayToolProvider(playToolChain.select(playPlatform));
+            playRun.setPlatform(project.provider(() -> playPlatform));
             playRun.setApplicationJar(mainJarTask.getArchivePath());
             playRun.setAssetsJar(assetsJarTask.getArchivePath());
             playRun.setAssetsDirs(new HashSet<>(Arrays.asList(project.file("public"))));
