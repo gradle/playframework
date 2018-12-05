@@ -80,6 +80,8 @@ public class TwirlCompile extends SourceTask {
 
     /**
      * fork options for the twirl compiler.
+     *
+     * @return Fork options
      */
     @Nested
     public BaseForkOptions getForkOptions() {
@@ -157,6 +159,8 @@ public class TwirlCompile extends SourceTask {
 
     /**
      * Returns the custom template formats configured for this task.
+     *
+     * @return Custom template formats
      */
     @Input
     public Provider<List<TwirlTemplateFormat>> getUserTemplateFormats() {
@@ -165,6 +169,8 @@ public class TwirlCompile extends SourceTask {
 
     /**
      * Sets the custom template formats for this task.
+     *
+     * @param userTemplateFormats Custom template formats
      */
     public void setUserTemplateFormats(Provider<List<TwirlTemplateFormat>> userTemplateFormats) {
         this.userTemplateFormats.set(userTemplateFormats);
@@ -183,6 +189,8 @@ public class TwirlCompile extends SourceTask {
 
     /**
      * Returns the list of additional imports to add to the generated Scala code.
+     *
+     * @return List of additional imports
      */
     @Input
     public Provider<List<String>> getAdditionalImports() {

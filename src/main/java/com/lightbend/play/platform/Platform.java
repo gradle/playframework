@@ -19,6 +19,7 @@ public interface Platform extends Named, Serializable {
     /**
      * Returns a human consumable name for this platform.
      *
+     * @return Human consumable name
      */
     @Internal
     String getDisplayName();

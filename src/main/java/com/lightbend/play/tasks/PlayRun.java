@@ -60,6 +60,8 @@ public class PlayRun extends ConventionTask {
 
     /**
      * fork options for the running a Play application.
+     *
+     * @return Fork options
      */
     @Nested
     public BaseForkOptions getForkOptions() {
@@ -104,6 +106,8 @@ public class PlayRun extends ConventionTask {
 
     /**
      * The working directory.
+     *
+     * @return The working directory
      */
     @Internal
     public DirectoryProperty getWorkingDir() {
@@ -112,6 +116,8 @@ public class PlayRun extends ConventionTask {
 
     /**
      * The Play application jar to run.
+     *
+     * @return The Play application jar
      */
     @Classpath
     public File getApplicationJar() {
@@ -124,6 +130,8 @@ public class PlayRun extends ConventionTask {
 
     /**
      * The assets jar to run with the Play application.
+     *
+     * @return The assets jar
      */
     @Classpath
     public File getAssetsJar() {
@@ -136,6 +144,8 @@ public class PlayRun extends ConventionTask {
 
     /**
      * The directories of the assets for the Play application (for live reload functionality).
+     *
+     * @return The directories of the assets
      */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
@@ -149,6 +159,8 @@ public class PlayRun extends ConventionTask {
 
     /**
      * The runtime classpath for the Play application.
+     *
+     * @return The runtime classpath
      */
     @Classpath
     public FileCollection getRuntimeClasspath() {
@@ -161,6 +173,8 @@ public class PlayRun extends ConventionTask {
 
     /**
      * The changing classpath for the Play application.
+     *
+     * @return The changing classpath
      */
     @Classpath
     public FileCollection getChangingClasspath() {
