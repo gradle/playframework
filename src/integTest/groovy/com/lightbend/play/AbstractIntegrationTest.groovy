@@ -32,7 +32,7 @@ class AbstractIntegrationTest extends Specification {
         createAndConfigureGradleRunner(arguments).buildAndFail()
     }
 
-    private GradleRunner createAndConfigureGradleRunner(String... arguments) {
+    protected GradleRunner createAndConfigureGradleRunner(String... arguments) {
         GradleRunner.create()
                 .withProjectDir(projectDir)
                 .withArguments(arguments + '-s' as List<String>)
