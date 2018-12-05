@@ -22,7 +22,6 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.artifacts.ArtifactAttributes;
 import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact;
-import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.Jar;
@@ -76,7 +75,6 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private void applyPlugins(Project project) {
-        project.getPluginManager().apply(JavaPlugin.class);
         project.getPluginManager().apply(ScalaPlugin.class);
         project.getPluginManager().apply(PlayTwirlPlugin.class);
         project.getPluginManager().apply(PlayRoutesPlugin.class);
