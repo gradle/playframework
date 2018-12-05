@@ -66,8 +66,8 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         registerOutgoingArtifact(project, assetsJarTask);
 
         project.afterEvaluate(project1 -> {
-            failIfInjectedRouterIsUsedWithOldVersion(playExtension.getInjectedRoutesGenerator().get(), playExtension.getPlatform().asPlayPlatform());
             PlayPlatform playPlatform = playExtension.getPlatform().asPlayPlatform();
+            failIfInjectedRouterIsUsedWithOldVersion(playExtension.getInjectedRoutesGenerator().get(), playPlatform);
             initialiseConfigurations(playPluginConfigurations, playPlatform);
             configureScalaCompileTask(project, playPluginConfigurations);
             createRunTask(project, playPluginConfigurations, playPlatform, mainJarTask, assetsJarTask);
