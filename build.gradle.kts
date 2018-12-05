@@ -109,7 +109,7 @@ gradlePlugin {
         create("playPlugin") {
             id = "com.lightbend.play"
             displayName = "Play Plugin"
-            description = "Play plugin adds support for building, testing and running Play applications with Gradle."
+            description = "Play plugin that supports building, testing and running Play applications with Gradle."
             implementationClass = "com.lightbend.play.plugins.PlayPlugin"
         }
     }
