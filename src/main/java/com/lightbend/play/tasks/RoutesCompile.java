@@ -1,10 +1,8 @@
 package com.lightbend.play.tasks;
 
 import com.lightbend.play.platform.PlayPlatform;
-import com.lightbend.play.tools.Compiler;
 import com.lightbend.play.tools.routes.DefaultRoutesCompileSpec;
 import com.lightbend.play.tools.routes.RoutesCompileSpec;
-import com.lightbend.play.tools.routes.RoutesCompilerFactory;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
 import org.gradle.api.file.FileCollection;
@@ -129,15 +127,11 @@ public class RoutesCompile extends SourceTask {
         workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
             workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-            workerConfiguration.params(spec, getCompiler());
+            workerConfiguration.params(spec, platform.get());
             workerConfiguration.classpath(routesCompilerClasspath);
             workerConfiguration.setDisplayName("Generating Scala source from routes templates");
         });
         workerExecutor.await();
-    }
-
-    private Compiler<RoutesCompileSpec> getCompiler() {
-        return RoutesCompilerFactory.create(platform.get());
     }
 
     @Internal

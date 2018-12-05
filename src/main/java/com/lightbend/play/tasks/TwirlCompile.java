@@ -1,11 +1,9 @@
 package com.lightbend.play.tasks;
 
 import com.lightbend.play.platform.PlayPlatform;
-import com.lightbend.play.tools.Compiler;
 import com.lightbend.play.tools.twirl.DefaultTwirlCompileSpec;
 import com.lightbend.play.tools.twirl.DefaultTwirlTemplateFormat;
 import com.lightbend.play.tools.twirl.TwirlCompileSpec;
-import com.lightbend.play.tools.twirl.TwirlCompilerFactory;
 import com.lightbend.play.tools.twirl.TwirlImports;
 import com.lightbend.play.tools.twirl.TwirlTemplateFormat;
 import org.gradle.api.file.ConfigurableFileCollection;
@@ -146,15 +144,11 @@ public class TwirlCompile extends SourceTask {
         workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
             workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-            workerConfiguration.params(spec, getCompiler());
+            workerConfiguration.params(spec, platform.get());
             workerConfiguration.classpath(twirlCompilerClasspath);
             workerConfiguration.setDisplayName("Generating Scala source from Twirl templates");
         });
         workerExecutor.await();
-    }
-
-    private Compiler<TwirlCompileSpec> getCompiler() {
-        return TwirlCompilerFactory.create(platform.get());
     }
 
     public void setPlatform(Provider<PlayPlatform> platform) {
