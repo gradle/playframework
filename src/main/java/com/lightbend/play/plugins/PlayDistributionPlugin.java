@@ -19,6 +19,7 @@ import org.gradle.api.distribution.plugins.DistributionPlugin;
 import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.FileCopyDetails;
 import org.gradle.api.tasks.Sync;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.application.CreateStartScripts;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.bundling.Tar;
@@ -47,8 +48,8 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         project.getPluginManager().apply(PlayApplicationPlugin.class);
         project.getPluginManager().apply(DistributionPlugin.class);
 
-        Task stageLifecycleTask = createStageLifecycleTask(project);
-        Task distLifecycleTask = createDistLifecycleTasks(project);
+        TaskProvider<Task> stageLifecycleTask = createStageLifecycleTask(project);
+        TaskProvider<Task> distLifecycleTask = createDistLifecycleTasks(project);
 
         DistributionContainer distributionContainer = (DistributionContainer) project.getExtensions().getByName("distributions");
 
@@ -58,15 +59,15 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         });
     }
 
-    private Task createStageLifecycleTask(Project project) {
-        return project.getTasks().create(STAGE_LIFECYCLE_TASK_NAME, task -> {
+    private TaskProvider<Task> createStageLifecycleTask(Project project) {
+        return project.getTasks().register(STAGE_LIFECYCLE_TASK_NAME, task -> {
             task.setDescription("Stages all Play distributions.");
             task.setGroup(DISTRIBUTION_GROUP);
         });
     }
 
-    private Task createDistLifecycleTasks(Project project) {
-        return project.getTasks().create(DIST_LIFECYCLE_TASK_NAME, task -> {
+    private TaskProvider<Task> createDistLifecycleTasks(Project project) {
+        return project.getTasks().register(DIST_LIFECYCLE_TASK_NAME, task -> {
             task.setDescription("Assembles all Play distributions.");
             task.setGroup(DISTRIBUTION_GROUP);
         });
@@ -75,30 +76,30 @@ public class PlayDistributionPlugin implements Plugin<Project> {
     private void createDistributionContentTasks(Project project, Distribution distribution) {
         PlayPluginConfigurations configurations = (PlayPluginConfigurations) project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
         PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME);
-        Jar mainJarTask = (Jar) project.getTasks().getByName(JAR_TASK_NAME);
-        Jar assetsJarTask = (Jar) project.getTasks().getByName(ASSETS_JAR_TASK_NAME);
+        TaskProvider<Jar> mainJarTask = project.getTasks().named(JAR_TASK_NAME, Jar.class);
+        TaskProvider<Jar> assetsJarTask = project.getTasks().named(ASSETS_JAR_TASK_NAME, Jar.class);
 
         final File distJarDir = new File(project.getBuildDir(), "distributionJars/" + distribution.getName());
         final String capitalizedDistName = capitalizeDistributionName(distribution.getName());
         final String jarTaskName = "create" + capitalizedDistName + "DistributionJar";
 
-        Jar distributionJarTask = project.getTasks().create(jarTaskName, Jar.class, jar -> {
+        TaskProvider<Jar> distributionJarTask = project.getTasks().register(jarTaskName, Jar.class, jar -> {
             jar.setDescription("Assembles an application jar suitable for deployment.");
             jar.dependsOn(mainJarTask, assetsJarTask);
-            jar.from(project.zipTree(mainJarTask.getArchivePath()));
+            jar.from(project.zipTree(mainJarTask.get().getArchivePath()));
             jar.setDestinationDir(distJarDir);
-            jar.setBaseName(mainJarTask.getBaseName());
+            jar.setBaseName(mainJarTask.get().getBaseName());
 
             Map<String, Object> classpath = new HashMap<>();
-            classpath.put("Class-Path", new PlayManifestClasspath(configurations.getPlayRun(), assetsJarTask.getArchivePath()));
+            classpath.put("Class-Path", new PlayManifestClasspath(configurations.getPlayRun(), assetsJarTask.get().getArchivePath()));
             jar.getManifest().attributes(classpath);
         });
 
         final File scriptsDir = new File(project.getBuildDir(), "scripts");
         String createStartScriptsTaskName = "create" + capitalizedDistName + "StartScripts";
-        CreateStartScripts createStartScriptsTask = project.getTasks().create(createStartScriptsTaskName, CreateStartScripts.class, createStartScripts -> {
+        TaskProvider<CreateStartScripts> createStartScriptsTask = project.getTasks().register(createStartScriptsTaskName, CreateStartScripts.class, createStartScripts -> {
             createStartScripts.setDescription("Creates OS specific scripts to run the distribution.");
-            createStartScripts.setClasspath(distributionJarTask.getOutputs().getFiles());
+            createStartScripts.setClasspath(distributionJarTask.get().getOutputs().getFiles());
             createStartScripts.setMainClassName(getMainClass(playExtension.getPlatform().asPlayPlatform()));
             createStartScripts.setApplicationName(distribution.getName());
             createStartScripts.setOutputDir(scriptsDir);
@@ -107,7 +108,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         CopySpec distSpec = distribution.getContents();
         distSpec.into("lib", copySpec -> {
             copySpec.from(distributionJarTask);
-            copySpec.from(assetsJarTask.getArchivePath());
+            copySpec.from(assetsJarTask.get().getArchivePath());
             copySpec.from(configurations.getPlayRun().getAllArtifacts());
             copySpec.eachFile(new PrefixArtifactFileNames(configurations.getPlayRun()));
         });
@@ -135,23 +136,23 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         }
     }
 
-    private void createDistributionZipTasks(Project project, Distribution distribution, Task stageLifecycleTask, Task distLifecycleTask) {
+    private void createDistributionZipTasks(Project project, Distribution distribution, TaskProvider<Task> stageLifecycleTask, TaskProvider<Task> distLifecycleTask) {
         final String capitalizedDistName = capitalizeDistributionName(distribution.getName());
         final String stageTaskName = "stage" + capitalizedDistName + "Dist";
         final File stageDir = new File(project.getBuildDir(), "stage");
         final String baseName = (distribution.getBaseName() != null && "".equals(distribution.getBaseName())) ? distribution.getBaseName() : distribution.getName();
 
-        Sync stageSyncTask = project.getTasks().create(stageTaskName, Sync.class, sync -> {
+        TaskProvider<Sync> stageSyncTask = project.getTasks().register(stageTaskName, Sync.class, sync -> {
             sync.setDescription("Copies the '" + distribution.getName() + "' distribution to a staging directory.");
             sync.setDestinationDir(stageDir);
 
             sync.into(baseName, copySpec -> copySpec.with(distribution.getContents()));
         });
 
-        stageLifecycleTask.dependsOn(stageSyncTask);
+        stageLifecycleTask.configure(task -> task.dependsOn(stageSyncTask));
 
         final String distributionZipTaskName = "create" + capitalizedDistName + "ZipDist";
-        Zip distZipTask = project.getTasks().create(distributionZipTaskName, Zip.class, zip -> {
+        TaskProvider<Zip> distZipTask = project.getTasks().register(distributionZipTaskName, Zip.class, zip -> {
             zip.setDescription("Packages the '" + distribution.getName() + "' distribution as a zip file.");
             zip.setBaseName(baseName);
             zip.setDestinationDir(new File(project.getBuildDir(), "distributions"));
@@ -159,15 +160,17 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         });
 
         final String distributionTarTaskName = "create" + capitalizedDistName + "TarDist";
-        Tar distTarTask = project.getTasks().create(distributionTarTaskName, Tar.class, tar -> {
+        TaskProvider<Tar> distTarTask = project.getTasks().register(distributionTarTaskName, Tar.class, tar -> {
             tar.setDescription("Packages the '" + distribution.getName() + "' distribution as a tar file.");
             tar.setBaseName(baseName);
             tar.setDestinationDir(new File(project.getBuildDir(), "distributions"));
             tar.from(stageSyncTask);
         });
 
-        distLifecycleTask.dependsOn(distZipTask);
-        distLifecycleTask.dependsOn(distTarTask);
+        distLifecycleTask.configure(task -> {
+            task.dependsOn(distZipTask);
+            task.dependsOn(distTarTask);
+        });
     }
 
     private String capitalizeDistributionName(String distributionName) {

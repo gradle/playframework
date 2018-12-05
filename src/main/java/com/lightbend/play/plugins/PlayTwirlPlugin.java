@@ -10,6 +10,7 @@ import com.lightbend.play.tools.twirl.TwirlCompilerFactory;
 import com.lightbend.play.tools.twirl.TwirlImports;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.tasks.TaskProvider;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         Configuration twirlCompilerConfiguration = createTwirlCompilerConfiguration(project);
         declareDefaultDependencies(project, twirlCompilerConfiguration, playExtension);
         TwirlSourceSet twirlSourceSet = createCustomSourceSet(project, DefaultTwirlSourceSet.class, "twirl");
-        TwirlCompile twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet, twirlCompilerConfiguration, playExtension);
+        TaskProvider<TwirlCompile> twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet, twirlCompilerConfiguration, playExtension);
 
         project.afterEvaluate(project1 -> {
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
@@ -60,8 +61,8 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         });
     }
 
-    private TwirlCompile createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, Configuration compilerConfiguration, PlayExtension playExtension) {
-        return project.getTasks().create(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
+    private TaskProvider<TwirlCompile> createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, Configuration compilerConfiguration, PlayExtension playExtension) {
+        return project.getTasks().register(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
             twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
             twirlCompile.setPlatform(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
             twirlCompile.setSource(twirlSourceSet.getTwirl());
@@ -73,7 +74,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         });
     }
 
-    private boolean hasTwirlSourceSetsWithJavaImports(TwirlCompile twirlCompile) {
-        return twirlCompile.getDefaultImports().get() == TwirlImports.JAVA;
+    private boolean hasTwirlSourceSetsWithJavaImports(TaskProvider<TwirlCompile> twirlCompile) {
+        return twirlCompile.get().getDefaultImports().get() == TwirlImports.JAVA;
     }
 }

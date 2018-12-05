@@ -13,7 +13,6 @@ import org.gradle.api.GradleException;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationPublications;
 import org.gradle.api.artifacts.PublishArtifact;
@@ -21,9 +20,10 @@ import org.gradle.api.artifacts.type.ArtifactTypeDefinition;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.artifacts.ArtifactAttributes;
-import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact;
+import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.scala.ScalaCompile;
 import org.gradle.util.VersionNumber;
@@ -60,10 +60,10 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         applyPlugins(project);
 
         configureJavaAndScalaSourceSet(project);
-        Jar mainJarTask = (Jar) project.getTasks().getByName(JAR_TASK_NAME);
-        Jar assetsJarTask = createAssetsJarTask(project);
+        TaskProvider<Jar> mainJarTask = project.getTasks().named(JAR_TASK_NAME, Jar.class);
+        TaskProvider<Jar> assetsJarTask = createAssetsJarTask(project);
         registerOutgoingArtifact(project, assetsJarTask);
-        PlayRun playRun = createRunTask(project, playExtension, mainJarTask, assetsJarTask);
+        TaskProvider<PlayRun> playRun = createRunTask(project, playExtension, mainJarTask, assetsJarTask);
 
         project.afterEvaluate(project1 -> {
             PlayPlatform playPlatform = playExtension.getPlatform().asPlayPlatform();
@@ -123,64 +123,66 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         scalaSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
         scalaSourceDirectorySet.include("**/*.scala", "**/*.java");
 
-        scalaSourceDirectorySet.srcDir(getTwirlCompileTask(project).getOutputDirectory());
-        scalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).getOutputDirectory());
+        scalaSourceDirectorySet.srcDir(getTwirlCompileTask(project).get().getOutputDirectory());
+        scalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).get().getOutputDirectory());
     }
 
-    private Jar createAssetsJarTask(Project project) {
-        Jar assetsJarTask = project.getTasks().create(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
+    private TaskProvider<Jar> createAssetsJarTask(Project project) {
+        TaskProvider<Jar> assetsJarTask = project.getTasks().register(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the assets jar for the application.");
             jar.setClassifier("assets");
             jar.from(project.file("public"), copySpec -> copySpec.into("public"));
         });
 
-        Task assembleTask = project.getTasks().getByName(ASSEMBLE_TASK_NAME);
-        assembleTask.dependsOn(assetsJarTask);
+        project.getTasks().named(ASSEMBLE_TASK_NAME, assembleTask -> assembleTask.dependsOn(assetsJarTask));
 
         return assetsJarTask;
     }
 
-    private void registerOutgoingArtifact(Project project, Jar assetsJarTask) {
+    private void registerOutgoingArtifact(Project project, TaskProvider<Jar> assetsJarTask) {
         Configuration runtimeElementsConfiguration = project.getConfigurations().getByName(RUNTIME_ELEMENTS_CONFIGURATION_NAME);
-        PublishArtifact jarArtifact = new ArchivePublishArtifact(assetsJarTask);
+        PublishArtifact jarArtifact = new LazyPublishArtifact(assetsJarTask);
         ConfigurationPublications publications = runtimeElementsConfiguration.getOutgoing();
         publications.getArtifacts().add(jarArtifact);
         publications.getAttributes().attribute(ArtifactAttributes.ARTIFACT_FORMAT, ArtifactTypeDefinition.JAR_TYPE);
     }
 
     private void configureScalaCompileTask(Project project, PlayPluginConfigurations configurations) {
-        ScalaCompile scalaCompile = (ScalaCompile) project.getTasks().getByName("compileScala");
-        FileCollection playArtifacts = configurations.getPlay().getAllArtifacts();
-        scalaCompile.setClasspath(playArtifacts);
-        scalaCompile.getOptions().setAnnotationProcessorPath(playArtifacts);
-        scalaCompile.dependsOn(getTwirlCompileTask(project));
-        scalaCompile.dependsOn(getRoutesCompileTask(project));
+        project.getTasks().named("compileScala", ScalaCompile.class, scalaCompile -> {
+            FileCollection playArtifacts = configurations.getPlay().getAllArtifacts();
+            scalaCompile.setClasspath(playArtifacts);
+            scalaCompile.getOptions().setAnnotationProcessorPath(playArtifacts);
+            scalaCompile.dependsOn(getTwirlCompileTask(project));
+            scalaCompile.dependsOn(getRoutesCompileTask(project));
+        });
     }
 
-    private static TwirlCompile getTwirlCompileTask(Project project) {
-        return (TwirlCompile) project.getTasks().getByName(TWIRL_COMPILE_TASK_NAME);
+    private static TaskProvider<TwirlCompile> getTwirlCompileTask(Project project) {
+        return project.getTasks().named(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class);
     }
 
-    private static RoutesCompile getRoutesCompileTask(Project project) {
-        return (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
+    private static TaskProvider<RoutesCompile> getRoutesCompileTask(Project project) {
+        return project.getTasks().named(ROUTES_COMPILE_TASK_NAME, RoutesCompile.class);
     }
 
-    private PlayRun createRunTask(Project project, PlayExtension playExtension, Jar mainJarTask, Jar assetsJarTask) {
-        return project.getTasks().create(RUN_TASK_NAME, PlayRun.class, playRun -> {
+    private TaskProvider<PlayRun> createRunTask(Project project, PlayExtension playExtension, TaskProvider<Jar> mainJarTask, TaskProvider<Jar> assetsJarTask) {
+        return project.getTasks().register(RUN_TASK_NAME, PlayRun.class, playRun -> {
             playRun.setDescription("Runs the Play application for local development.");
             playRun.setGroup(RUN_GROUP);
             playRun.setHttpPort(DEFAULT_HTTP_PORT);
             playRun.getWorkingDir().set(project.getProjectDir());
             playRun.setPlatform(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
-            playRun.setApplicationJar(mainJarTask.getArchivePath());
-            playRun.setAssetsJar(assetsJarTask.getArchivePath());
+            playRun.setApplicationJar(mainJarTask.get().getArchivePath());
+            playRun.setAssetsJar(assetsJarTask.get().getArchivePath());
             playRun.setAssetsDirs(new HashSet<>(Arrays.asList(project.file("public"))));
-            playRun.dependsOn(project.getTasks().getByName(BUILD_TASK_NAME));
+            playRun.dependsOn(project.getTasks().named(BUILD_TASK_NAME));
         });
     }
 
-    private void configureRunTask(PlayRun playRun, PlayPluginConfigurations configurations) {
-        playRun.setRuntimeClasspath(configurations.getPlayRun().getNonChangingArtifacts());
-        playRun.setChangingClasspath(configurations.getPlayRun().getChangingArtifacts());
+    private void configureRunTask(TaskProvider<PlayRun> playRun, PlayPluginConfigurations configurations) {
+        playRun.configure(task -> {
+            task.setRuntimeClasspath(configurations.getPlayRun().getNonChangingArtifacts());
+            task.setChangingClasspath(configurations.getPlayRun().getChangingArtifacts());
+        });
     }
 }

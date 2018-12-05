@@ -15,6 +15,7 @@ import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.language.scala.internal.DefaultScalaPlatform;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;
 import org.gradle.plugins.ide.idea.GenerateIdeaModule;
@@ -44,57 +45,59 @@ public class PlayIdeaPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        GenerateIdeaModule ideaModuleTask = (GenerateIdeaModule) project.getTasks().getByName("ideaModule");
-        IdeaModule module = ideaModuleTask.getModule();
+        project.getTasks().named("ideaModule", GenerateIdeaModule.class, ideaModuleTask -> {
+            IdeaModule module = ideaModuleTask.getModule();
 
-        ConfigurationContainer configurations = project.getConfigurations();
-        module.setScopes(buildScopes(configurations));
-        ConventionMapping conventionMapping = conventionMappingFor(module);
+            ConfigurationContainer configurations = project.getConfigurations();
+            module.setScopes(buildScopes(configurations));
+            ConventionMapping conventionMapping = conventionMappingFor(module);
 
-        Task classesTask = project.getTasks().getByName(CLASSES_TASK_NAME);
-        TwirlCompile twirlCompileTask = (TwirlCompile) project.getTasks().getByName(TWIRL_COMPILE_TASK_NAME);
-        RoutesCompile routesCompileTask = (RoutesCompile) project.getTasks().getByName(ROUTES_COMPILE_TASK_NAME);
-        PlayCoffeeScriptCompile playCoffeeScriptCompileTask = (PlayCoffeeScriptCompile) project.getTasks().getByName(COFFEESCRIPT_COMPILE_TASK_NAME);
-        JavaScriptMinify javaScriptMinifyTask = (JavaScriptMinify) project.getTasks().getByName(JS_MINIFY_TASK_NAME);
-        SourceSet mainSourceSet = getMainJavaSourceSet(project);
+            TaskProvider<Task> classesTask = project.getTasks().named(CLASSES_TASK_NAME);
+            TaskProvider<TwirlCompile> twirlCompileTask = project.getTasks().named(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class);
+            TaskProvider<RoutesCompile> routesCompileTask = project.getTasks().named(ROUTES_COMPILE_TASK_NAME, RoutesCompile.class);
+            TaskProvider<PlayCoffeeScriptCompile> playCoffeeScriptCompileTask = project.getTasks().named(COFFEESCRIPT_COMPILE_TASK_NAME, PlayCoffeeScriptCompile.class);
+            TaskProvider<JavaScriptMinify> javaScriptMinifyTask = project.getTasks().named(JS_MINIFY_TASK_NAME, JavaScriptMinify.class);
+            SourceSet mainSourceSet = getMainJavaSourceSet(project);
 
-        conventionMapping.map("sourceDirs", (Callable<Set<File>>) () -> {
-            // TODO: Assets should probably be a source set too
-            Set<File> sourceDirs = new HashSet<>();
-            sourceDirs.add(new File(project.getProjectDir(), "public"));
+            conventionMapping.map("sourceDirs", (Callable<Set<File>>) () -> {
+                // TODO: Assets should probably be a source set too
+                Set<File> sourceDirs = new HashSet<>();
+                sourceDirs.add(new File(project.getProjectDir(), "public"));
 
-            SourceDirectorySet scalaSourceDirectorySet = getScalaSourceDirectorySet(project);
-            sourceDirs.addAll(scalaSourceDirectorySet.getSrcDirs());
+                SourceDirectorySet scalaSourceDirectorySet = getScalaSourceDirectorySet(project);
+                sourceDirs.addAll(scalaSourceDirectorySet.getSrcDirs());
 
-            sourceDirs.add(twirlCompileTask.getOutputDirectory().get().getAsFile());
-            sourceDirs.add(routesCompileTask.getOutputDirectory().get().getAsFile());
-            sourceDirs.add(playCoffeeScriptCompileTask.getDestinationDir());
-            sourceDirs.add(javaScriptMinifyTask.getDestinationDir().get().getAsFile());
-            return Collections.unmodifiableSet(sourceDirs);
+                sourceDirs.add(twirlCompileTask.get().getOutputDirectory().get().getAsFile());
+                sourceDirs.add(routesCompileTask.get().getOutputDirectory().get().getAsFile());
+                sourceDirs.add(playCoffeeScriptCompileTask.get().getDestinationDir());
+                sourceDirs.add(javaScriptMinifyTask.get().getDestinationDir().get().getAsFile());
+                return Collections.unmodifiableSet(sourceDirs);
+            });
+
+            conventionMapping.map("testSourceDirs", (Callable<Set<File>>) () -> {
+                // TODO: This should be modeled as a source set
+                return Collections.singleton(new File(project.getProjectDir(), "test"));
+            });
+
+            conventionMapping.map("singleEntryLibraries", (Callable<Map<String, Iterable<File>>>) () -> {
+                Map<String, Iterable<File>> libs = new HashMap<>();
+                libs.put("COMPILE", mainSourceSet.getOutput().getClassesDirs());
+                libs.put("RUNTIME", Collections.singleton(mainSourceSet.getOutput().getResourcesDir()));
+                // TODO: This should be modeled as a source set
+                libs.put("TEST", Collections.singleton(new File(project.getBuildDir(), "testClasses")));
+                return Collections.unmodifiableMap(libs);
+            });
+
+            PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME);
+            module.setScalaPlatform(new DefaultScalaPlatform(playExtension.getPlatform().getScalaVersion().get()));
+
+            conventionMapping.map("targetBytecodeVersion", (Callable<JavaVersion>) () -> getTargetJavaVersion(playExtension.getPlatform()));
+            conventionMapping.map("languageLevel", (Callable<IdeaLanguageLevel>) () -> new IdeaLanguageLevel(getTargetJavaVersion(playExtension.getPlatform())));
+
+            ideaModuleTask.dependsOn(classesTask);
+            ideaModuleTask.dependsOn(playCoffeeScriptCompileTask);
+            ideaModuleTask.dependsOn(javaScriptMinifyTask);
         });
-
-        conventionMapping.map("testSourceDirs", (Callable<Set<File>>) () -> {
-            // TODO: This should be modeled as a source set
-            return Collections.singleton(new File(project.getProjectDir(), "test"));
-        });
-
-        conventionMapping.map("singleEntryLibraries", (Callable<Map<String, Iterable<File>>>) () -> {
-            Map<String, Iterable<File>> libs = new HashMap<>();
-            libs.put("COMPILE", mainSourceSet.getOutput().getClassesDirs());
-            libs.put("RUNTIME", Collections.singleton(mainSourceSet.getOutput().getResourcesDir()));
-            // TODO: This should be modeled as a source set
-            libs.put("TEST", Collections.singleton(new File(project.getBuildDir(), "testClasses")));
-            return Collections.unmodifiableMap(libs);
-        });
-
-        PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME);
-        module.setScalaPlatform(new DefaultScalaPlatform(playExtension.getPlatform().getScalaVersion().get()));
-
-        conventionMapping.map("targetBytecodeVersion", (Callable<JavaVersion>) () -> getTargetJavaVersion(playExtension.getPlatform()));
-        conventionMapping.map("languageLevel", (Callable<IdeaLanguageLevel>) () -> new IdeaLanguageLevel(getTargetJavaVersion(playExtension.getPlatform())));
-        ideaModuleTask.dependsOn(classesTask);
-        ideaModuleTask.dependsOn(playCoffeeScriptCompileTask);
-        ideaModuleTask.dependsOn(javaScriptMinifyTask);
     }
 
     private ConventionMapping conventionMappingFor(IdeaModule module) {
