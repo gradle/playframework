@@ -1,5 +1,6 @@
 package com.lightbend.play.tasks;
 
+import com.lightbend.play.platform.PlayPlatform;
 import com.lightbend.play.tools.Compiler;
 import com.lightbend.play.tools.routes.DefaultRoutesCompileSpec;
 import com.lightbend.play.tools.routes.RoutesCompileSpec;
@@ -20,7 +21,6 @@ import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.compile.BaseForkOptions;
-import org.gradle.play.platform.PlayPlatform;
 import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 

@@ -2,6 +2,8 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
+import com.lightbend.play.platform.PlayMajorVersion;
+import com.lightbend.play.platform.PlayPlatform;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -21,8 +23,6 @@ import org.gradle.api.tasks.application.CreateStartScripts;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.bundling.Tar;
 import org.gradle.api.tasks.bundling.Zip;
-import org.gradle.play.internal.platform.PlayMajorVersion;
-import org.gradle.play.platform.PlayPlatform;
 
 import java.io.File;
 import java.util.Collections;

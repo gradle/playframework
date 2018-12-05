@@ -1,8 +1,8 @@
 package com.lightbend.play.tools.run;
 
+import com.lightbend.play.platform.PlayMajorVersion;
+import com.lightbend.play.platform.PlayPlatform;
 import org.gradle.internal.fingerprint.classpath.ClasspathFingerprinter;
-import org.gradle.play.internal.platform.PlayMajorVersion;
-import org.gradle.play.platform.PlayPlatform;
 import org.gradle.process.internal.worker.WorkerProcessFactory;
 
 public class PlayApplicationRunnerFactory {

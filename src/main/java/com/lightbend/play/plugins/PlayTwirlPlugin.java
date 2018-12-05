@@ -2,6 +2,7 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
+import com.lightbend.play.platform.PlayPlatformInternal;
 import com.lightbend.play.sourcesets.DefaultTwirlSourceSet;
 import com.lightbend.play.sourcesets.TwirlSourceSet;
 import com.lightbend.play.tasks.TwirlCompile;
@@ -9,7 +10,6 @@ import com.lightbend.play.tools.twirl.TwirlCompilerFactory;
 import com.lightbend.play.tools.twirl.TwirlImports;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.play.internal.platform.PlayPlatformInternal;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.lightbend.play.tools.routes;
 
+import com.lightbend.play.platform.PlayMajorVersion;
+import com.lightbend.play.platform.PlayPlatform;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
-import org.gradle.play.internal.platform.PlayMajorVersion;
-import org.gradle.play.platform.PlayPlatform;
 import org.gradle.util.VersionNumber;
 
 public class RoutesCompilerFactory {

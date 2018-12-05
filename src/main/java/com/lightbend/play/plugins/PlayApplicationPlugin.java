@@ -2,6 +2,10 @@ package com.lightbend.play.plugins;
 
 import com.lightbend.play.extensions.PlayExtension;
 import com.lightbend.play.extensions.PlayPluginConfigurations;
+import com.lightbend.play.platform.DefaultPlayPlatform;
+import com.lightbend.play.platform.PlayMajorVersion;
+import com.lightbend.play.platform.PlayPlatform;
+import com.lightbend.play.platform.PlayPlatformInternal;
 import com.lightbend.play.tasks.PlayRun;
 import com.lightbend.play.tasks.RoutesCompile;
 import com.lightbend.play.tasks.TwirlCompile;
@@ -23,10 +27,6 @@ import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.scala.ScalaCompile;
-import org.gradle.play.internal.DefaultPlayPlatform;
-import org.gradle.play.internal.platform.PlayMajorVersion;
-import org.gradle.play.internal.platform.PlayPlatformInternal;
-import org.gradle.play.platform.PlayPlatform;
 import org.gradle.util.VersionNumber;
 
 import java.util.Arrays;

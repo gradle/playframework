@@ -1,7 +1,7 @@
 package com.lightbend.play.tools.twirl;
 
-import org.gradle.play.internal.platform.PlayMajorVersion;
-import org.gradle.play.platform.PlayPlatform;
+import com.lightbend.play.platform.PlayMajorVersion;
+import com.lightbend.play.platform.PlayPlatform;
 
 public class TwirlCompilerFactory {
 

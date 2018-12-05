@@ -1,14 +1,14 @@
 package com.lightbend.play.extensions;
 
+import com.lightbend.play.platform.DefaultJavaPlatform;
+import com.lightbend.play.platform.DefaultPlayPlatform;
+import com.lightbend.play.platform.DefaultScalaPlatform;
+import com.lightbend.play.platform.JavaPlatform;
+import com.lightbend.play.platform.PlayPlatform;
+import com.lightbend.play.platform.ScalaPlatform;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
-import org.gradle.jvm.platform.JavaPlatform;
-import org.gradle.jvm.platform.internal.DefaultJavaPlatform;
-import org.gradle.language.scala.ScalaPlatform;
-import org.gradle.language.scala.internal.DefaultScalaPlatform;
-import org.gradle.play.internal.DefaultPlayPlatform;
-import org.gradle.play.platform.PlayPlatform;
 
 import javax.inject.Inject;
 

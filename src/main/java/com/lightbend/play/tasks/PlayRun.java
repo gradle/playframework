@@ -1,5 +1,6 @@
 package com.lightbend.play.tasks;
 
+import com.lightbend.play.platform.PlayPlatform;
 import com.lightbend.play.tools.run.DefaultPlayRunSpec;
 import com.lightbend.play.tools.run.PlayApplicationDeploymentHandle;
 import com.lightbend.play.tools.run.PlayApplicationRunner;
@@ -20,7 +21,6 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.compile.BaseForkOptions;
 import org.gradle.deployment.internal.DeploymentRegistry;
 import org.gradle.internal.fingerprint.classpath.ClasspathFingerprinter;
-import org.gradle.play.platform.PlayPlatform;
 import org.gradle.process.internal.worker.WorkerProcessFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
