@@ -2,6 +2,7 @@ plugins {
     groovy
     `java-gradle-plugin`
     `build-scan`
+    id("com.gradle.plugin-publish") version "0.10.0"
     id("com.lightbend.play.test-setup")
     id("com.lightbend.play.integration-test-fixtures")
     id("com.lightbend.play.integration-test")
@@ -94,5 +95,22 @@ buildScan {
     if (!System.getenv("CI").isNullOrEmpty()) {
         publishAlways()
         tag("CI")
+    }
+}
+
+pluginBundle {
+    website = "https://www.playframework.com/"
+    vcsUrl = "https://github.com/gradle/play"
+    tags = listOf("playframework", "web", "java", "scala")
+}
+
+gradlePlugin {
+    plugins {
+        create("playPlugin") {
+            id = "com.lightbend.play"
+            displayName = "Play Plugin"
+            description = "Play plugin adds support for building, testing and running Play applications with Gradle."
+            implementationClass = "com.lightbend.play.plugins.PlayPlugin"
+        }
     }
 }
