@@ -1,11 +1,11 @@
 package com.playframework.gradle.extensions;
 
 import org.gradle.api.InvalidUserDataException;
-import org.gradle.util.CollectionUtils;
 import org.gradle.util.VersionNumber;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum PlayMajorVersion {
     PLAY_2_3_X("2.3.x", "2.11", "2.10"),
@@ -52,6 +52,6 @@ public enum PlayMajorVersion {
 
     private static InvalidUserDataException invalidVersion(String playVersion) {
         return new InvalidUserDataException(String.format("Not a supported Play version: %s. This plugin is compatible with: [%s].",
-                playVersion, CollectionUtils.join(", ", values())));
+                playVersion, Arrays.stream(values()).map(Object::toString).collect(Collectors.joining(", "))));
     }
 }
