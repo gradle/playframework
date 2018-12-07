@@ -1,7 +1,7 @@
 package com.playframework.gradle.tools.twirl;
 
 import com.playframework.gradle.extensions.PlayPlatform;
-import com.playframework.gradle.extensions.PlayMajorVersion;
+import com.playframework.gradle.extensions.internal.PlayMajorVersion;
 
 public class TwirlCompilerFactory {
 

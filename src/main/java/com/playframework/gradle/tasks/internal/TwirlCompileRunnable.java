@@ -1,4 +1,4 @@
-package com.playframework.gradle.tasks;
+package com.playframework.gradle.tasks.internal;
 
 import com.playframework.gradle.tools.Compiler;
 import com.playframework.gradle.tools.twirl.TwirlCompileSpec;

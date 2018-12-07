@@ -2,7 +2,7 @@ package com.playframework.gradle.plugins;
 
 import com.playframework.gradle.extensions.PlayExtension;
 import com.playframework.gradle.extensions.PlayPluginConfigurations;
-import com.playframework.gradle.sourcesets.DefaultTwirlSourceSet;
+import com.playframework.gradle.sourcesets.internal.DefaultTwirlSourceSet;
 import com.playframework.gradle.sourcesets.TwirlSourceSet;
 import com.playframework.gradle.tasks.TwirlCompile;
 import com.playframework.gradle.tools.twirl.TwirlCompilerFactory;

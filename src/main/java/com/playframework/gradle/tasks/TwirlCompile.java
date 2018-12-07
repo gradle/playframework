@@ -1,6 +1,7 @@
 package com.playframework.gradle.tasks;
 
 import com.playframework.gradle.extensions.PlayPlatform;
+import com.playframework.gradle.tasks.internal.TwirlCompileRunnable;
 import com.playframework.gradle.tools.Compiler;
 import com.playframework.gradle.tools.twirl.DefaultTwirlCompileSpec;
 import com.playframework.gradle.tools.twirl.TwirlCompileSpec;

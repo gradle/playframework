@@ -1,7 +1,7 @@
 package com.playframework.gradle.plugins;
 
 import com.playframework.gradle.sourcesets.CoffeeScriptSourceSet;
-import com.playframework.gradle.sourcesets.DefaultCoffeeScriptSourceSet;
+import com.playframework.gradle.sourcesets.internal.DefaultCoffeeScriptSourceSet;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.play.tasks.PlayCoffeeScriptCompile;

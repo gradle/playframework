@@ -3,7 +3,7 @@ package com.playframework.gradle.plugins;
 import com.playframework.gradle.extensions.PlayExtension;
 import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.extensions.PlayPluginConfigurations;
-import com.playframework.gradle.extensions.PlayMajorVersion;
+import com.playframework.gradle.extensions.internal.PlayMajorVersion;
 import com.playframework.gradle.tasks.PlayRun;
 import com.playframework.gradle.tasks.RoutesCompile;
 import com.playframework.gradle.tasks.TwirlCompile;

@@ -1,5 +1,6 @@
-package com.playframework.gradle.extensions;
+package com.playframework.gradle.extensions.internal;
 
+import com.playframework.gradle.extensions.PlayPlatform;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.util.VersionNumber;
 

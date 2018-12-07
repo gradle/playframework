@@ -1,5 +1,6 @@
-package com.playframework.gradle.sourcesets;
+package com.playframework.gradle.sourcesets.internal;
 
+import com.playframework.gradle.sourcesets.JavaScriptSourceSet;
 import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.model.ObjectFactory;

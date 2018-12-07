@@ -1,5 +1,6 @@
 package com.playframework.gradle.tasks;
 
+import com.playframework.gradle.tasks.internal.JavaScriptMinifyRunnable;
 import com.playframework.gradle.tools.javascript.DefaultJavaScriptCompileSpec;
 import com.playframework.gradle.tools.javascript.JavaScriptCompileSpec;
 import com.playframework.gradle.tools.javascript.SimpleStaleClassCleaner;

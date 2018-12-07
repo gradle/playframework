@@ -1,6 +1,7 @@
 package com.playframework.gradle.tasks;
 
 import com.playframework.gradle.extensions.PlayPlatform;
+import com.playframework.gradle.tasks.internal.RoutesCompileRunnable;
 import com.playframework.gradle.tools.Compiler;
 import com.playframework.gradle.tools.routes.DefaultRoutesCompileSpec;
 import com.playframework.gradle.tools.routes.RoutesCompileSpec;

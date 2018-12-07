@@ -1,7 +1,7 @@
 package com.playframework.gradle.tools.routes;
 
 import com.playframework.gradle.extensions.PlayPlatform;
-import com.playframework.gradle.extensions.PlayMajorVersion;
+import com.playframework.gradle.extensions.internal.PlayMajorVersion;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.util.VersionNumber;

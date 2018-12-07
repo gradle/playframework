@@ -1,5 +1,6 @@
-package com.playframework.gradle.sourcesets;
+package com.playframework.gradle.sourcesets.internal;
 
+import com.playframework.gradle.sourcesets.TwirlSourceSet;
 import com.playframework.gradle.tools.twirl.DefaultTwirlTemplateFormat;
 import com.playframework.gradle.tools.twirl.TwirlImports;
 import com.playframework.gradle.tools.twirl.TwirlTemplateFormat;

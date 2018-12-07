@@ -1,7 +1,7 @@
 package com.playframework.gradle.plugins;
 
 import com.playframework.gradle.extensions.PlayExtension;
-import com.playframework.gradle.sourcesets.DefaultRoutesSourceSet;
+import com.playframework.gradle.sourcesets.internal.DefaultRoutesSourceSet;
 import com.playframework.gradle.sourcesets.RoutesSourceSet;
 import com.playframework.gradle.tasks.RoutesCompile;
 import com.playframework.gradle.tools.routes.RoutesCompilerFactory;
