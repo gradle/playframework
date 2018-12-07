@@ -3,12 +3,12 @@ plugins {
     `java-gradle-plugin`
     `build-scan`
     id("com.gradle.plugin-publish") version "0.10.0"
-    id("com.lightbend.play.test-setup")
-    id("com.lightbend.play.integration-test-fixtures")
-    id("com.lightbend.play.integration-test")
+    id("com.playframework.gradle.test-setup")
+    id("com.playframework.gradle.integration-test-fixtures")
+    id("com.playframework.gradle.integration-test")
 }
 
-group = "com.lightbend"
+group = "com.playframework"
 version = "0.1"
 
 repositories {
@@ -34,56 +34,56 @@ gradlePlugin {
 
     plugins {
         register("play-twirl-plugin") {
-            id = "com.lightbend.play-twirl"
-            implementationClass = "com.lightbend.play.plugins.PlayTwirlPlugin"
+            id = "com.playframework.play-twirl"
+            implementationClass = "com.playframework.gradle.plugins.PlayTwirlPlugin"
         }
     }
     plugins {
         register("play-routes-plugin") {
-            id = "com.lightbend.play-routes"
-            implementationClass = "com.lightbend.play.plugins.PlayRoutesPlugin"
+            id = "com.playframework.play-routes"
+            implementationClass = "com.playframework.gradle.plugins.PlayRoutesPlugin"
         }
     }
     plugins {
         register("play-application-plugin") {
-            id = "com.lightbend.play-application"
-            implementationClass = "com.lightbend.play.plugins.PlayApplicationPlugin"
+            id = "com.playframework.play-application"
+            implementationClass = "com.playframework.gradle.plugins.PlayApplicationPlugin"
         }
     }
     plugins {
         register("play-javascript-plugin") {
-            id = "com.lightbend.play-javascript"
-            implementationClass = "com.lightbend.play.plugins.PlayJavaScriptPlugin"
+            id = "com.playframework.play-javascript"
+            implementationClass = "com.playframework.gradle.plugins.PlayJavaScriptPlugin"
         }
     }
     plugins {
         register("play-coffeescript-plugin") {
-            id = "com.lightbend.play-coffeescript"
-            implementationClass = "com.lightbend.play.plugins.PlayCoffeeScriptPlugin"
+            id = "com.playframework.play-coffeescript"
+            implementationClass = "com.playframework.gradle.plugins.PlayCoffeeScriptPlugin"
         }
     }
     plugins {
         register("play-test-plugin") {
-            id = "com.lightbend.play-test"
-            implementationClass = "com.lightbend.play.plugins.PlayTestPlugin"
+            id = "com.playframework.play-test"
+            implementationClass = "com.playframework.gradle.plugins.PlayTestPlugin"
         }
     }
     plugins {
         register("play-distribution-plugin") {
-            id = "com.lightbend.play-distribution"
-            implementationClass = "com.lightbend.play.plugins.PlayDistributionPlugin"
+            id = "com.playframework.play-distribution"
+            implementationClass = "com.playframework.gradle.plugins.PlayDistributionPlugin"
         }
     }
     plugins {
         register("play-ide-plugin") {
-            id = "com.lightbend.play-ide"
-            implementationClass = "com.lightbend.play.plugins.PlayIdePlugin"
+            id = "com.playframework.play-ide"
+            implementationClass = "com.playframework.gradle.plugins.PlayIdePlugin"
         }
     }
     plugins {
         register("play-plugin") {
-            id = "com.lightbend.play"
-            implementationClass = "com.lightbend.play.plugins.PlayPlugin"
+            id = "com.playframework.play"
+            implementationClass = "com.playframework.gradle.plugins.PlayPlugin"
         }
     }
 }
@@ -107,10 +107,10 @@ pluginBundle {
 gradlePlugin {
     plugins {
         create("playPlugin") {
-            id = "com.lightbend.play"
+            id = "com.playframework.play"
             displayName = "Play Plugin"
             description = "Play plugin that supports building, testing and running Play applications with Gradle."
-            implementationClass = "com.lightbend.play.plugins.PlayPlugin"
+            implementationClass = "com.playframework.gradle.plugins.PlayPlugin"
         }
     }
 }

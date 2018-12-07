@@ -17,20 +17,20 @@ kotlinDslPluginOptions {
 gradlePlugin {
     plugins {
         register("integration-test-setup-plugin") {
-            id = "com.lightbend.play.test-setup"
-            implementationClass = "com.lightbend.play.TestSetupPlugin"
+            id = "com.playframework.gradle.test-setup"
+            implementationClass = "com.playframework.gradle.TestSetupPlugin"
         }
     }
     plugins {
         register("integration-test-fixtures-plugin") {
-            id = "com.lightbend.play.integration-test-fixtures"
-            implementationClass = "com.lightbend.play.IntegrationTestFixturesPlugin"
+            id = "com.playframework.gradle.integration-test-fixtures"
+            implementationClass = "com.playframework.gradle.IntegrationTestFixturesPlugin"
         }
     }
     plugins {
         register("integration-test-plugin") {
-            id = "com.lightbend.play.integration-test"
-            implementationClass = "com.lightbend.play.IntegrationTestPlugin"
+            id = "com.playframework.gradle.integration-test"
+            implementationClass = "com.playframework.gradle.IntegrationTestPlugin"
         }
     }
 }
