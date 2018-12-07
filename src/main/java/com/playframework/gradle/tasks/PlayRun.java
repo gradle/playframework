@@ -10,8 +10,8 @@ import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionTask;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.Nested;
@@ -185,8 +185,9 @@ public class PlayRun extends ConventionTask {
         this.changingClasspath = changingClasspath;
     }
 
-    public void setPlatform(Provider<PlayPlatform> platform) {
-        this.platform.set(platform);
+    @Input
+    public Property<PlayPlatform> getPlatform() {
+        return platform;
     }
 
     @Inject

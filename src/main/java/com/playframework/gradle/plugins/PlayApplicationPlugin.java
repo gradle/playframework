@@ -169,7 +169,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             playRun.setGroup(RUN_GROUP);
             playRun.setHttpPort(DEFAULT_HTTP_PORT);
             playRun.getWorkingDir().set(project.getProjectDir());
-            playRun.setPlatform(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
+            playRun.getPlatform().set(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
             playRun.setApplicationJar(mainJarTask.get().getArchivePath());
             playRun.setAssetsJar(assetsJarTask.get().getArchivePath());
             playRun.setAssetsDirs(new HashSet<>(Arrays.asList(project.file("public"))));
