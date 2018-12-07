@@ -32,9 +32,7 @@ class PlayBinaryAdvancedAppIntegrationTest extends PlayApplicationPluginIntegrat
 
         jar("build/libs/${playApp.name}-assets.jar").containsDescendants(
                 "public/javascripts/sample.js",
-                "public/javascripts/sample.min.js",
-                "public/javascripts/test.js",
-                "public/javascripts/test.min.js"
+                "public/javascripts/sample.min.js"
         )
     }
 

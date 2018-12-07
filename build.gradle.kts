@@ -61,13 +61,6 @@ gradlePlugin {
             implementationClass = "com.playframework.gradle.plugins.PlayJavaScriptPlugin"
         }
 
-        register("play-coffeescript-plugin") {
-            id = "com.playframework.play-coffeescript"
-            displayName = "Play CoffeeScript Plugin"
-            description = "Plugin for adding coffeescript compilation to a Play application."
-            implementationClass = "com.playframework.gradle.plugins.PlayCoffeeScriptPlugin"
-        }
-
         register("play-test-plugin") {
             id = "com.playframework.play-test"
             displayName = "Play Test Plugin"

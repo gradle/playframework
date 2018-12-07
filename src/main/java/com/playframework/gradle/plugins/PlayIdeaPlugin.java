@@ -1,7 +1,7 @@
 package com.playframework.gradle.plugins;
 
-import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.extensions.PlayExtension;
+import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.tasks.JavaScriptMinify;
 import com.playframework.gradle.tasks.RoutesCompile;
 import com.playframework.gradle.tasks.TwirlCompile;
@@ -17,7 +17,6 @@ import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.language.scala.internal.DefaultScalaPlatform;
-import org.gradle.play.tasks.PlayCoffeeScriptCompile;
 import org.gradle.plugins.ide.idea.GenerateIdeaModule;
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel;
 import org.gradle.plugins.ide.idea.model.IdeaModule;
@@ -52,7 +51,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
             TaskProvider<Task> classesTask = project.getTasks().named(CLASSES_TASK_NAME);
             TaskProvider<TwirlCompile> twirlCompileTask = project.getTasks().named(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class);
             TaskProvider<RoutesCompile> routesCompileTask = project.getTasks().named(PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME, RoutesCompile.class);
-            TaskProvider<PlayCoffeeScriptCompile> playCoffeeScriptCompileTask = project.getTasks().named(PlayCoffeeScriptPlugin.COFFEESCRIPT_COMPILE_TASK_NAME, PlayCoffeeScriptCompile.class);
             TaskProvider<JavaScriptMinify> javaScriptMinifyTask = project.getTasks().named(PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME, JavaScriptMinify.class);
             SourceSet mainSourceSet = getMainJavaSourceSet(project);
 
@@ -66,7 +64,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
 
                 sourceDirs.add(twirlCompileTask.get().getOutputDirectory().get().getAsFile());
                 sourceDirs.add(routesCompileTask.get().getOutputDirectory().get().getAsFile());
-                sourceDirs.add(playCoffeeScriptCompileTask.get().getDestinationDir());
                 sourceDirs.add(javaScriptMinifyTask.get().getDestinationDir().get().getAsFile());
                 return Collections.unmodifiableSet(sourceDirs);
             });
@@ -92,7 +89,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
             conventionMapping.map("languageLevel", (Callable<IdeaLanguageLevel>) () -> new IdeaLanguageLevel(getTargetJavaVersion(playExtension.getPlatform())));
 
             ideaModuleTask.dependsOn(classesTask);
-            ideaModuleTask.dependsOn(playCoffeeScriptCompileTask);
             ideaModuleTask.dependsOn(javaScriptMinifyTask);
         });
     }
