@@ -43,7 +43,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
     private void declareDefaultDependencies(Project project, Configuration configuration, PlayExtension playExtension) {
         configuration.defaultDependencies(dependencies -> {
-            String dependencyNotation = RoutesCompilerFactory.createAdapter(playExtension.getPlatform().asPlayPlatform()).getDependencyNotation();
+            String dependencyNotation = RoutesCompilerFactory.createAdapter(playExtension.getPlatform()).getDependencyNotation();
             dependencies.add(project.getDependencies().create(dependencyNotation));
         });
     }
@@ -51,7 +51,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
     private void createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration, PlayExtension playExtension, Provider<Boolean> injectedRoutesGenerator) {
         project.getTasks().register(ROUTES_COMPILE_TASK_NAME, RoutesCompile.class, routesCompile -> {
             routesCompile.setDescription("Generates routes for the '" + sourceDirectory.getDisplayName() + "' source set.");
-            routesCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
+            routesCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
             routesCompile.getAdditionalImports().set(new ArrayList<>());
             routesCompile.setSource(sourceDirectory);
             routesCompile.getOutputDirectory().set(getOutputDir(project, sourceDirectory));

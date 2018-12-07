@@ -1,4 +1,4 @@
-package com.playframework.gradle.platform;
+package com.playframework.gradle.extensions;
 
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.util.CollectionUtils;
@@ -21,11 +21,11 @@ public enum PlayMajorVersion {
         this.compatibleScalaVersions = Arrays.asList(compatibleScalaVersions);
     }
 
-    public void validateCompatible(ScalaPlatform scalaPlatform) {
-        if (!compatibleScalaVersions.contains(scalaPlatform.getScalaCompatibilityVersion())) {
+    public void validateCompatible(String scalaCompatibilityVersion) {
+        if (!compatibleScalaVersions.contains(scalaCompatibilityVersion)) {
             throw new InvalidUserDataException(
                     String.format("Play versions %s are not compatible with Scala platform %s. Compatible Scala platforms are %s.",
-                            name, scalaPlatform.getScalaCompatibilityVersion(), compatibleScalaVersions));
+                            name, scalaCompatibilityVersion, compatibleScalaVersions));
         }
     }
 
@@ -34,7 +34,7 @@ public enum PlayMajorVersion {
     }
 
     public static PlayMajorVersion forPlatform(PlayPlatform targetPlatform) {
-        String playVersion = targetPlatform.getPlayVersion();
+        String playVersion = targetPlatform.getPlayVersion().get();
         return forPlayVersion(playVersion);
     }
 

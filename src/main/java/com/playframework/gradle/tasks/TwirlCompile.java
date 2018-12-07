@@ -1,8 +1,10 @@
 package com.playframework.gradle.tasks;
 
-import com.playframework.gradle.platform.PlayPlatform;
+import com.playframework.gradle.extensions.PlayPlatform;
+import com.playframework.gradle.tools.Compiler;
 import com.playframework.gradle.tools.twirl.DefaultTwirlCompileSpec;
 import com.playframework.gradle.tools.twirl.TwirlCompileSpec;
+import com.playframework.gradle.tools.twirl.TwirlCompilerFactory;
 import com.playframework.gradle.tools.twirl.TwirlImports;
 import com.playframework.gradle.tools.twirl.TwirlTemplateFormat;
 import org.gradle.api.file.ConfigurableFileCollection;
@@ -15,6 +17,7 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.PathSensitive;
@@ -105,14 +108,18 @@ public class TwirlCompile extends SourceTask {
         workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
             workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-            workerConfiguration.params(spec, platform.get());
+            workerConfiguration.params(spec, getCompiler());
             workerConfiguration.classpath(twirlCompilerClasspath);
             workerConfiguration.setDisplayName("Generating Scala source from Twirl templates");
         });
         workerExecutor.await();
     }
 
-    @Input
+    private Compiler<TwirlCompileSpec> getCompiler() {
+        return TwirlCompilerFactory.create(platform.get());
+    }
+
+    @Internal
     public Property<PlayPlatform> getPlatform() {
         return platform;
     }

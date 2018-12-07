@@ -1,7 +1,7 @@
 package com.playframework.gradle.tools.routes;
 
-import com.playframework.gradle.platform.PlayMajorVersion;
-import com.playframework.gradle.platform.PlayPlatform;
+import com.playframework.gradle.extensions.PlayPlatform;
+import com.playframework.gradle.extensions.PlayMajorVersion;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.util.VersionNumber;
@@ -14,8 +14,8 @@ public class RoutesCompilerFactory {
     }
 
     public static VersionedRoutesCompilerAdapter createAdapter(PlayPlatform playPlatform) {
-        String playVersion = playPlatform.getPlayVersion();
-        String scalaVersion = playPlatform.getScalaPlatform().getScalaCompatibilityVersion();
+        String playVersion = playPlatform.getPlayVersion().get();
+        String scalaVersion = playPlatform.getScalaCompatibilityVersion().get();
         switch (PlayMajorVersion.forPlatform(playPlatform)) {
             case PLAY_2_3_X:
                 return new RoutesCompilerAdapterV23X(playVersion);

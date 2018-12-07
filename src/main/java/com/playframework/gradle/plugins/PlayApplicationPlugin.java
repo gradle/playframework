@@ -1,11 +1,9 @@
 package com.playframework.gradle.plugins;
 
 import com.playframework.gradle.extensions.PlayExtension;
+import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.extensions.PlayPluginConfigurations;
-import com.playframework.gradle.platform.DefaultPlayPlatform;
-import com.playframework.gradle.platform.PlayMajorVersion;
-import com.playframework.gradle.platform.PlayPlatform;
-import com.playframework.gradle.platform.PlayPlatformInternal;
+import com.playframework.gradle.extensions.PlayMajorVersion;
 import com.playframework.gradle.tasks.PlayRun;
 import com.playframework.gradle.tasks.RoutesCompile;
 import com.playframework.gradle.tasks.TwirlCompile;
@@ -64,7 +62,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         TaskProvider<PlayRun> playRun = createRunTask(project, playExtension, mainJarTask, assetsJarTask);
 
         project.afterEvaluate(project1 -> {
-            PlayPlatform playPlatform = playExtension.getPlatform().asPlayPlatform();
+            PlayPlatform playPlatform = playExtension.getPlatform();
             failIfInjectedRouterIsUsedWithOldVersion(playExtension.getInjectedRoutesGenerator().get(), playPlatform);
             initialiseConfigurations(playPluginConfigurations, playPlatform);
             configureScalaCompileTask(project, playPluginConfigurations);
@@ -80,7 +78,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     private PlayExtension createPlayExtension(Project project) {
         PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project.getObjects());
-        playExtension.getPlatform().getPlayVersion().set(DefaultPlayPlatform.DEFAULT_PLAY_VERSION);
+        playExtension.getPlatform().getPlayVersion().set("2.6.15");
         playExtension.getPlatform().getScalaVersion().set("2.11");
         playExtension.getPlatform().getJavaVersion().set(JavaVersion.current());
         playExtension.getInjectedRoutesGenerator().set(false);
@@ -90,7 +88,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     private void failIfInjectedRouterIsUsedWithOldVersion(Boolean injectedRoutesGenerator, PlayPlatform playPlatform) {
         if (Boolean.TRUE.equals(injectedRoutesGenerator)) {
             VersionNumber minSupportedVersion = VersionNumber.parse("2.4.0");
-            VersionNumber playVersion = VersionNumber.parse(playPlatform.getPlayVersion());
+            VersionNumber playVersion = VersionNumber.parse(playPlatform.getPlayVersion().get());
             if (playVersion.compareTo(minSupportedVersion) < 0) {
                 throw new GradleException("Injected routers are only supported in Play 2.4 or newer.");
             }
@@ -98,9 +96,9 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private void initialiseConfigurations(PlayPluginConfigurations configurations, PlayPlatform playPlatform) {
-        configurations.getPlayPlatform().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play"));
-        configurations.getPlayTest().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-test"));
-        configurations.getPlayRun().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-docs"));
+        configurations.getPlayPlatform().addDependency(playPlatform.getDependencyNotation("play").get());
+        configurations.getPlayTest().addDependency(playPlatform.getDependencyNotation("play-test").get());
+        configurations.getPlayRun().addDependency(playPlatform.getDependencyNotation("play-docs").get());
 
         PlayMajorVersion playMajorVersion = PlayMajorVersion.forPlatform(playPlatform);
         if (playMajorVersion == PlayMajorVersion.PLAY_2_6_X) {
@@ -108,7 +106,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             // including Scala based projects. Still, users can exclude the dependency if they
             // want/need. Maybe in the future we can enable users to have some flag to specify
             // if the project is Java or Scala based.
-            configurations.getPlayPlatform().addDependency(((PlayPlatformInternal) playPlatform).getDependencyNotation("play-java-forms"));
+            configurations.getPlayPlatform().addDependency(playPlatform.getDependencyNotation("play-java-forms").get());
         }
     }
 
@@ -169,7 +167,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             playRun.setGroup(RUN_GROUP);
             playRun.setHttpPort(DEFAULT_HTTP_PORT);
             playRun.getWorkingDir().set(project.getProjectDir());
-            playRun.getPlatform().set(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
+            playRun.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
             playRun.setApplicationJar(mainJarTask.get().getArchivePath());
             playRun.setAssetsJar(assetsJarTask.get().getArchivePath());
             playRun.setAssetsDirs(new HashSet<>(Arrays.asList(project.file("public"))));

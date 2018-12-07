@@ -1,8 +1,10 @@
 package com.playframework.gradle.tasks;
 
-import com.playframework.gradle.platform.PlayPlatform;
+import com.playframework.gradle.extensions.PlayPlatform;
+import com.playframework.gradle.tools.Compiler;
 import com.playframework.gradle.tools.routes.DefaultRoutesCompileSpec;
 import com.playframework.gradle.tools.routes.RoutesCompileSpec;
+import com.playframework.gradle.tools.routes.RoutesCompilerFactory;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
 import org.gradle.api.file.FileTree;
@@ -101,11 +103,15 @@ public class RoutesCompile extends SourceTask {
         workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
             workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-            workerConfiguration.params(spec, platform.get());
+            workerConfiguration.params(spec, getCompiler());
             workerConfiguration.classpath(routesCompilerClasspath);
             workerConfiguration.setDisplayName("Generating Scala source from routes templates");
         });
         workerExecutor.await();
+    }
+
+    private Compiler<RoutesCompileSpec> getCompiler() {
+        return RoutesCompilerFactory.create(getPlatform().get());
     }
 
     @Internal
@@ -113,7 +119,7 @@ public class RoutesCompile extends SourceTask {
         return false;
     }
 
-    @Input
+    @Internal
     public Property<PlayPlatform> getPlatform() {
         return platform;
     }

@@ -1,6 +1,6 @@
 package com.playframework.gradle.plugins;
 
-import com.playframework.gradle.extensions.Platform;
+import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.extensions.PlayExtension;
 import com.playframework.gradle.tasks.JavaScriptMinify;
 import com.playframework.gradle.tasks.RoutesCompile;
@@ -101,7 +101,7 @@ public class PlayIdeaPlugin implements Plugin<Project> {
         return new DslObject(module).getConventionMapping();
     }
 
-    private JavaVersion getTargetJavaVersion(Platform Platform) {
+    private JavaVersion getTargetJavaVersion(PlayPlatform Platform) {
         return Platform.getJavaVersion().get();
     }
 

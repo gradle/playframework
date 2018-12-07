@@ -1,9 +1,7 @@
 package com.playframework.gradle.tasks;
 
-import com.playframework.gradle.platform.PlayPlatform;
 import com.playframework.gradle.tools.Compiler;
 import com.playframework.gradle.tools.routes.RoutesCompileSpec;
-import com.playframework.gradle.tools.routes.RoutesCompilerFactory;
 import org.gradle.api.UncheckedIOException;
 
 import javax.inject.Inject;
@@ -14,19 +12,19 @@ import java.nio.file.Path;
 public class RoutesCompileRunnable implements Runnable {
 
     private final RoutesCompileSpec routesCompileSpec;
-    private final PlayPlatform playPlatform;
+    private final Compiler<RoutesCompileSpec> compiler;
 
     @Inject
-    public RoutesCompileRunnable(RoutesCompileSpec routesCompileSpec, PlayPlatform playPlatform) {
+    public RoutesCompileRunnable(RoutesCompileSpec routesCompileSpec, Compiler<RoutesCompileSpec> compiler) {
         this.routesCompileSpec = routesCompileSpec;
-        this.playPlatform = playPlatform;
+        this.compiler = compiler;
     }
 
     @Override
     public void run() {
         Path destinationPath = routesCompileSpec.getDestinationDir().toPath();
         deleteOutputs(destinationPath);
-        getCompiler().execute(routesCompileSpec);
+        compiler.execute(routesCompileSpec);
     }
 
     private void deleteOutputs(Path pathToBeDeleted) {
@@ -35,9 +33,5 @@ public class RoutesCompileRunnable implements Runnable {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    private Compiler<RoutesCompileSpec> getCompiler() {
-        return RoutesCompilerFactory.create(playPlatform);
     }
 }

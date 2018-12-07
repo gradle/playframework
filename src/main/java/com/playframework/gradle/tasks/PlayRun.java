@@ -1,6 +1,6 @@
 package com.playframework.gradle.tasks;
 
-import com.playframework.gradle.platform.PlayPlatform;
+import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.tools.run.DefaultPlayRunSpec;
 import com.playframework.gradle.tools.run.PlayApplicationDeploymentHandle;
 import com.playframework.gradle.tools.run.PlayApplicationRunner;

@@ -1,9 +1,9 @@
 package com.playframework.gradle.plugins;
 
 import com.playframework.gradle.extensions.PlayExtension;
+import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.extensions.PlayPluginConfigurations;
-import com.playframework.gradle.platform.PlayMajorVersion;
-import com.playframework.gradle.platform.PlayPlatform;
+import com.playframework.gradle.extensions.PlayMajorVersion;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -100,7 +100,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         TaskProvider<CreateStartScripts> createStartScriptsTask = project.getTasks().register(createStartScriptsTaskName, CreateStartScripts.class, createStartScripts -> {
             createStartScripts.setDescription("Creates OS specific scripts to run the distribution.");
             createStartScripts.setClasspath(distributionJarTask.get().getOutputs().getFiles());
-            createStartScripts.setMainClassName(getMainClass(playExtension.getPlatform().asPlayPlatform()));
+            createStartScripts.setMainClassName(getMainClass(playExtension.getPlatform()));
             createStartScripts.setApplicationName(distribution.getName());
             createStartScripts.setOutputDir(scriptsDir);
         });
@@ -123,7 +123,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
     }
 
     private String getMainClass(PlayPlatform playPlatform) {
-        String playVersion = playPlatform.getPlayVersion();
+        String playVersion = playPlatform.getPlayVersion().get();
         switch (PlayMajorVersion.forPlatform(playPlatform)) {
             case PLAY_2_3_X:
                 return "play.core.server.NettyServer";

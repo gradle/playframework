@@ -2,7 +2,6 @@ package com.playframework.gradle.plugins;
 
 import com.playframework.gradle.extensions.PlayExtension;
 import com.playframework.gradle.extensions.PlayPluginConfigurations;
-import com.playframework.gradle.platform.PlayPlatformInternal;
 import com.playframework.gradle.sourcesets.DefaultTwirlSourceSet;
 import com.playframework.gradle.sourcesets.TwirlSourceSet;
 import com.playframework.gradle.tasks.TwirlCompile;
@@ -38,7 +37,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
 
         project.afterEvaluate(project1 -> {
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
-                configurations.getPlay().addDependency(((PlayPlatformInternal) playExtension.getPlatform().asPlayPlatform()).getDependencyNotation("play-java"));
+                configurations.getPlay().addDependency(playExtension.getPlatform().getDependencyNotation("play-java").get());
             }
         });
     }
@@ -53,7 +52,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
 
     private void declareDefaultDependencies(Project project, Configuration configuration, PlayExtension playExtension) {
         configuration.defaultDependencies(dependencies -> {
-            List<String> dependencyNotations = TwirlCompilerFactory.createAdapter(playExtension.getPlatform().asPlayPlatform()).getDependencyNotation();
+            List<String> dependencyNotations = TwirlCompilerFactory.createAdapter(playExtension.getPlatform()).getDependencyNotation();
 
             for (String dependencyNotation : dependencyNotations) {
                 dependencies.add(project.getDependencies().create(dependencyNotation));
@@ -64,7 +63,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
     private TaskProvider<TwirlCompile> createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, Configuration compilerConfiguration, PlayExtension playExtension) {
         return project.getTasks().register(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
             twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
-            twirlCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
+            twirlCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
             twirlCompile.setSource(twirlSourceSet.getTwirl());
             twirlCompile.getOutputDirectory().set(getOutputDir(project, twirlSourceSet.getTwirl()));
             twirlCompile.getDefaultImports().set(twirlSourceSet.getDefaultImports());

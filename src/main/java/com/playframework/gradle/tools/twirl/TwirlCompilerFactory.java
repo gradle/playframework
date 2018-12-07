@@ -1,7 +1,7 @@
 package com.playframework.gradle.tools.twirl;
 
-import com.playframework.gradle.platform.PlayMajorVersion;
-import com.playframework.gradle.platform.PlayPlatform;
+import com.playframework.gradle.extensions.PlayPlatform;
+import com.playframework.gradle.extensions.PlayMajorVersion;
 
 public class TwirlCompilerFactory {
 
@@ -10,8 +10,8 @@ public class TwirlCompilerFactory {
     }
 
     public static VersionedTwirlCompilerAdapter createAdapter(PlayPlatform playPlatform) {
-        String playVersion = playPlatform.getPlayVersion();
-        String scalaCompatibilityVersion = playPlatform.getScalaPlatform().getScalaCompatibilityVersion();
+        String playVersion = playPlatform.getPlayVersion().get();
+        String scalaCompatibilityVersion = playPlatform.getScalaCompatibilityVersion().get();
         VersionedPlayTwirlAdapter playTwirlAdapter = createPlayTwirlAdapter(playPlatform);
         switch (PlayMajorVersion.forPlatform(playPlatform)) {
             case PLAY_2_3_X:
@@ -27,7 +27,7 @@ public class TwirlCompilerFactory {
     }
 
     public static VersionedPlayTwirlAdapter createPlayTwirlAdapter(PlayPlatform playPlatform) {
-        String playVersion = playPlatform.getPlayVersion();
+        String playVersion = playPlatform.getPlayVersion().get();
         switch (PlayMajorVersion.forPlatform(playPlatform)) {
             case PLAY_2_3_X:
             case PLAY_2_4_X:

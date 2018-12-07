@@ -6,19 +6,19 @@ import org.gradle.api.provider.Property;
 
 public class PlayExtension {
 
-    private final Platform platform;
+    private final PlayPlatform platform;
     private final Property<Boolean> injectedRoutesGenerator;
 
     public PlayExtension(ObjectFactory objectFactory) {
-        platform = objectFactory.newInstance(Platform.class, objectFactory);
+        platform = objectFactory.newInstance(PlayPlatform.class, objectFactory);
         injectedRoutesGenerator = objectFactory.property(Boolean.class);
     }
 
-    public void platform(Action<? super Platform> action) {
+    public void platform(Action<? super PlayPlatform> action) {
         action.execute(platform);
     }
 
-    public Platform getPlatform() {
+    public PlayPlatform getPlatform() {
         return platform;
     }
 
