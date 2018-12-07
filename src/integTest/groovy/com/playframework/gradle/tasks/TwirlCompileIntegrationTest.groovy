@@ -300,7 +300,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
             sourceSets {
                 main {
                     twirl {
-                        defaultImports = com.playframework.gradle.tools.twirl.TwirlImports.JAVA
+                        defaultImports = com.playframework.gradle.sourcesets.TwirlImports.JAVA
                         srcDirs = ["twirlJava"]
                     }
                 }
@@ -334,11 +334,11 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         buildFile << """
             $TWIRL_COMPILE_TASK_NAME {
                 doFirst {
-                    assert defaultImports.get() == com.playframework.gradle.tools.twirl.TwirlImports.SCALA
+                    assert defaultImports.get() == com.playframework.gradle.sourcesets.TwirlImports.SCALA
                     sourceSets {
                         main {
                             twirl {
-                                assert defaultImports.get() == com.playframework.gradle.tools.twirl.TwirlImports.SCALA
+                                assert defaultImports.get() == com.playframework.gradle.sourcesets.TwirlImports.SCALA
                             }
                         }
                     }

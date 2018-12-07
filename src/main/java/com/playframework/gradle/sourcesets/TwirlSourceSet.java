@@ -1,7 +1,5 @@
 package com.playframework.gradle.sourcesets;
 
-import com.playframework.gradle.tools.twirl.TwirlImports;
-import com.playframework.gradle.tools.twirl.TwirlTemplateFormat;
 import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.provider.ListProperty;

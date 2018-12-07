@@ -1,4 +1,4 @@
-package com.playframework.gradle.tools.twirl;
+package com.playframework.gradle.sourcesets;
 
 import java.util.Collection;
 

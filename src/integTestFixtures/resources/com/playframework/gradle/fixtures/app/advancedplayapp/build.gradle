@@ -7,7 +7,7 @@ plugins {
 sourceSets {
     main {
         twirl {
-            defaultImports = com.playframework.gradle.tools.twirl.TwirlImports.JAVA
+            defaultImports = com.playframework.gradle.sourcesets.TwirlImports.JAVA
             srcDir "templates"
             include "jva/**/*"
         }

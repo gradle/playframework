@@ -1,5 +1,7 @@
 package com.playframework.gradle.tools.twirl;
 
+import com.playframework.gradle.sourcesets.TwirlImports;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

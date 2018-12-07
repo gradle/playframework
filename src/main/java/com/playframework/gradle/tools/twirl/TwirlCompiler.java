@@ -1,5 +1,6 @@
 package com.playframework.gradle.tools.twirl;
 
+import com.playframework.gradle.sourcesets.TwirlTemplateFormat;
 import com.playframework.gradle.tools.Compiler;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.specs.Spec;

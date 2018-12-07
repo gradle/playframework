@@ -1,4 +1,6 @@
-package com.playframework.gradle.tools.twirl;
+package com.playframework.gradle.sourcesets.internal;
+
+import com.playframework.gradle.sourcesets.TwirlTemplateFormat;
 
 import java.io.Serializable;
 import java.util.Collection;

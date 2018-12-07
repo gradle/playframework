@@ -6,7 +6,7 @@ import com.playframework.gradle.sourcesets.internal.DefaultTwirlSourceSet;
 import com.playframework.gradle.sourcesets.TwirlSourceSet;
 import com.playframework.gradle.tasks.TwirlCompile;
 import com.playframework.gradle.tools.twirl.TwirlCompilerFactory;
-import com.playframework.gradle.tools.twirl.TwirlImports;
+import com.playframework.gradle.sourcesets.TwirlImports;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.TaskProvider;
