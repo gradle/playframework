@@ -2,10 +2,10 @@ package com.playframework.gradle.tasks;
 
 import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.tasks.internal.TwirlCompileRunnable;
-import com.playframework.gradle.tools.Compiler;
-import com.playframework.gradle.tools.twirl.DefaultTwirlCompileSpec;
-import com.playframework.gradle.tools.twirl.TwirlCompileSpec;
-import com.playframework.gradle.tools.twirl.TwirlCompilerFactory;
+import com.playframework.gradle.tools.internal.Compiler;
+import com.playframework.gradle.tools.internal.twirl.DefaultTwirlCompileSpec;
+import com.playframework.gradle.tools.internal.twirl.TwirlCompileSpec;
+import com.playframework.gradle.tools.internal.twirl.TwirlCompilerFactory;
 import com.playframework.gradle.sourcesets.TwirlImports;
 import com.playframework.gradle.sourcesets.TwirlTemplateFormat;
 import org.gradle.api.file.ConfigurableFileCollection;

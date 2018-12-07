@@ -1,11 +1,11 @@
 package com.playframework.gradle.tasks;
 
 import com.playframework.gradle.extensions.PlayPlatform;
-import com.playframework.gradle.tools.run.DefaultPlayRunSpec;
-import com.playframework.gradle.tools.run.PlayApplicationDeploymentHandle;
-import com.playframework.gradle.tools.run.PlayApplicationRunner;
-import com.playframework.gradle.tools.run.PlayApplicationRunnerFactory;
-import com.playframework.gradle.tools.run.PlayRunSpec;
+import com.playframework.gradle.tools.internal.run.DefaultPlayRunSpec;
+import com.playframework.gradle.tools.internal.run.PlayApplicationDeploymentHandle;
+import com.playframework.gradle.tools.internal.run.PlayApplicationRunner;
+import com.playframework.gradle.tools.internal.run.PlayApplicationRunnerFactory;
+import com.playframework.gradle.tools.internal.run.PlayRunSpec;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionTask;

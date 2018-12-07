@@ -1,7 +1,7 @@
 package com.playframework.gradle.tasks.internal;
 
-import com.playframework.gradle.tools.Compiler;
-import com.playframework.gradle.tools.twirl.TwirlCompileSpec;
+import com.playframework.gradle.tools.internal.Compiler;
+import com.playframework.gradle.tools.internal.twirl.TwirlCompileSpec;
 import org.gradle.api.UncheckedIOException;
 
 import javax.inject.Inject;

@@ -2,10 +2,10 @@ package com.playframework.gradle.tasks;
 
 import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.tasks.internal.RoutesCompileRunnable;
-import com.playframework.gradle.tools.Compiler;
-import com.playframework.gradle.tools.routes.DefaultRoutesCompileSpec;
-import com.playframework.gradle.tools.routes.RoutesCompileSpec;
-import com.playframework.gradle.tools.routes.RoutesCompilerFactory;
+import com.playframework.gradle.tools.internal.Compiler;
+import com.playframework.gradle.tools.internal.routes.DefaultRoutesCompileSpec;
+import com.playframework.gradle.tools.internal.routes.RoutesCompileSpec;
+import com.playframework.gradle.tools.internal.routes.RoutesCompilerFactory;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
 import org.gradle.api.file.FileTree;

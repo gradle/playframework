@@ -3,7 +3,7 @@ package com.playframework.gradle.plugins;
 import com.playframework.gradle.sourcesets.internal.DefaultJavaScriptSourceSet;
 import com.playframework.gradle.sourcesets.JavaScriptSourceSet;
 import com.playframework.gradle.tasks.JavaScriptMinify;
-import com.playframework.gradle.tools.javascript.GoogleClosureCompiler;
+import com.playframework.gradle.tools.internal.javascript.GoogleClosureCompiler;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.SourceDirectorySet;

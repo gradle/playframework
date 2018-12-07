@@ -1,7 +1,7 @@
 package com.playframework.gradle.tasks.internal;
 
-import com.playframework.gradle.tools.javascript.GoogleClosureCompiler;
-import com.playframework.gradle.tools.javascript.JavaScriptCompileSpec;
+import com.playframework.gradle.tools.internal.javascript.GoogleClosureCompiler;
+import com.playframework.gradle.tools.internal.javascript.JavaScriptCompileSpec;
 
 import javax.inject.Inject;
 

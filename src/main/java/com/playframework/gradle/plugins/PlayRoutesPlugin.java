@@ -4,7 +4,7 @@ import com.playframework.gradle.extensions.PlayExtension;
 import com.playframework.gradle.sourcesets.internal.DefaultRoutesSourceSet;
 import com.playframework.gradle.sourcesets.RoutesSourceSet;
 import com.playframework.gradle.tasks.RoutesCompile;
-import com.playframework.gradle.tools.routes.RoutesCompilerFactory;
+import com.playframework.gradle.tools.internal.routes.RoutesCompilerFactory;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.SourceDirectorySet;
