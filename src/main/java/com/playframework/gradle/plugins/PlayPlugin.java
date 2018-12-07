@@ -28,9 +28,7 @@ public class PlayPlugin implements Plugin<Project> {
     private static void configureJavaScriptTasks(Project project) {
         TaskProvider<JavaScriptMinify> javaScriptMinifyTask = project.getTasks().named(PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME, JavaScriptMinify.class);
 
-        project.getTasks().named(ASSEMBLE_TASK_NAME, task -> {
-            task.dependsOn(javaScriptMinifyTask);
-        });
+        project.getTasks().named(ASSEMBLE_TASK_NAME, task -> task.dependsOn(javaScriptMinifyTask));
 
         project.getTasks().named(ASSETS_JAR_TASK_NAME, Jar.class, task -> {
             task.dependsOn(javaScriptMinifyTask);
