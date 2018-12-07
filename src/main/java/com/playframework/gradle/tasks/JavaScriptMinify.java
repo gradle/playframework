@@ -6,7 +6,6 @@ import com.playframework.gradle.tools.javascript.SimpleStaleClassCleaner;
 import com.playframework.gradle.tools.javascript.StaleClassCleaner;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
-import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.FileVisitor;
@@ -14,7 +13,6 @@ import org.gradle.api.internal.file.FileOperations;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.PathSensitive;
@@ -60,27 +58,14 @@ public class JavaScriptMinify extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public Provider<Directory> getDestinationDir() {
+    public Property<Directory> getDestinationDir() {
         return destinationDir;
-    }
-
-    /**
-     * Sets the output directory where processed JavaScript should be written.
-     *
-     * @param destinationDir The output directory.
-     */
-    public void setDestinationDir(Provider<Directory> destinationDir) {
-        this.destinationDir.set(destinationDir);
     }
 
     @Classpath
     @PathSensitive(PathSensitivity.RELATIVE)
-    public FileCollection getCompilerClasspath() {
+    public ConfigurableFileCollection getCompilerClasspath() {
         return compilerClasspath;
-    }
-
-    public void setCompilerClasspath(FileCollection compilerClasspath) {
-        this.compilerClasspath.setFrom(compilerClasspath);
     }
 
     @TaskAction

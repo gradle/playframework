@@ -2,20 +2,17 @@ package com.playframework.gradle.tasks;
 
 import com.playframework.gradle.platform.PlayPlatform;
 import com.playframework.gradle.tools.twirl.DefaultTwirlCompileSpec;
-import com.playframework.gradle.tools.twirl.DefaultTwirlTemplateFormat;
 import com.playframework.gradle.tools.twirl.TwirlCompileSpec;
 import com.playframework.gradle.tools.twirl.TwirlImports;
 import com.playframework.gradle.tools.twirl.TwirlTemplateFormat;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
-import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.FileVisitor;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
@@ -30,7 +27,6 @@ import org.gradle.workers.WorkerExecutor;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,17 +77,8 @@ public class TwirlCompile extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public Provider<Directory> getOutputDirectory() {
+    public Property<Directory> getOutputDirectory() {
         return outputDirectory;
-    }
-
-    /**
-     * Specifies the directory to generate the parser source files into.
-     *
-     * @param outputDirectory The output directory. Must not be null.
-     */
-    public void setOutputDirectory(Provider<Directory> outputDirectory) {
-        this.outputDirectory.set(outputDirectory);
     }
 
     /**
@@ -99,26 +86,14 @@ public class TwirlCompile extends SourceTask {
      * @return The imports that will be used.
      */
     @Nullable @Optional @Input
-    public Provider<TwirlImports> getDefaultImports() {
+    public Property<TwirlImports> getDefaultImports() {
         return defaultImports;
-    }
-
-    /**
-     * Sets the default imports to be used when compiling templates.
-     * @param defaultImports The imports to be used.
-     */
-    public void setDefaultImports(@Nullable Provider<TwirlImports> defaultImports) {
-        this.defaultImports.set(defaultImports);
     }
 
     @Classpath
     @PathSensitive(PathSensitivity.RELATIVE)
-    public FileCollection getTwirlCompilerClasspath() {
+    public ConfigurableFileCollection getTwirlCompilerClasspath() {
         return twirlCompilerClasspath;
-    }
-
-    public void setTwirlCompilerClasspath(FileCollection twirlCompilerClasspath) {
-        this.twirlCompilerClasspath.setFrom(twirlCompilerClasspath);
     }
 
     @TaskAction
@@ -137,8 +112,9 @@ public class TwirlCompile extends SourceTask {
         workerExecutor.await();
     }
 
-    public void setPlatform(Provider<PlayPlatform> platform) {
-        this.platform.set(platform);
+    @Input
+    public Property<PlayPlatform> getPlatform() {
+        return platform;
     }
 
     /**
@@ -147,28 +123,8 @@ public class TwirlCompile extends SourceTask {
      * @return Custom template formats
      */
     @Input
-    public Provider<List<TwirlTemplateFormat>> getUserTemplateFormats() {
+    public ListProperty<TwirlTemplateFormat> getUserTemplateFormats() {
         return userTemplateFormats;
-    }
-
-    /**
-     * Sets the custom template formats for this task.
-     *
-     * @param userTemplateFormats Custom template formats
-     */
-    public void setUserTemplateFormats(Provider<List<TwirlTemplateFormat>> userTemplateFormats) {
-        this.userTemplateFormats.set(userTemplateFormats);
-    }
-
-    /**
-     * Adds a custom template format.
-     *
-     * @param extension file extension this template applies to (e.g., {@code html}).
-     * @param templateType fully-qualified type for this template format.
-     * @param imports additional imports to add for the custom template format.
-     */
-    public void addUserTemplateFormat(final String extension, String templateType, String... imports) {
-        userTemplateFormats.add(new DefaultTwirlTemplateFormat(extension, templateType, Arrays.asList(imports)));
     }
 
     /**
@@ -177,17 +133,8 @@ public class TwirlCompile extends SourceTask {
      * @return List of additional imports
      */
     @Input
-    public Provider<List<String>> getAdditionalImports() {
+    public ListProperty<String> getAdditionalImports() {
         return additionalImports;
-    }
-
-    /**
-     * Sets the additional imports to add to all generated Scala code.
-     *
-     * @param additionalImports additional imports
-     */
-    public void setAdditionalImports(Provider<List<String>> additionalImports) {
-        this.additionalImports.set(additionalImports);
     }
 
     private static class RelativeFileCollector implements FileVisitor {

@@ -41,9 +41,9 @@ public class PlayJavaScriptPlugin implements PlayGeneratedSourcePlugin {
     private void createDefaultJavaScriptMinifyTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration) {
         project.getTasks().register(JS_MINIFY_TASK_NAME, JavaScriptMinify.class, javaScriptMinify -> {
             javaScriptMinify.setDescription("Minifies javascript for the " + sourceDirectory.getDisplayName() + ".");
-            javaScriptMinify.setDestinationDir(getOutputDir(project, sourceDirectory));
+            javaScriptMinify.getDestinationDir().set(getOutputDir(project, sourceDirectory));
             javaScriptMinify.setSource(sourceDirectory);
-            javaScriptMinify.setCompilerClasspath(compilerConfiguration);
+            javaScriptMinify.getCompilerClasspath().setFrom(compilerConfiguration);
             javaScriptMinify.dependsOn(sourceDirectory);
         });
     }

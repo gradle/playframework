@@ -76,7 +76,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
             sourceSets {
                 main {
                     twirl {
-                        addUserTemplateFormat("unused", "views.formats.unused.UnusedFormat")
+                        userTemplateFormats.add(newUserTemplateFormat("unused", "views.formats.unused.UnusedFormat"))
                     }
                 }
             }
@@ -228,7 +228,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
             sourceSets {
                 main {
                     twirl {
-                        addUserTemplateFormat($template)
+                        userTemplateFormats.add(newUserTemplateFormat($template))
                     }
                 }
             }
@@ -352,7 +352,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
             sourceSets {
                 main {
                     twirl {
-                        addUserTemplateFormat("csv", "views.formats.csv.CsvFormat", "views.formats.csv._")
+                        userTemplateFormats.add(newUserTemplateFormat("csv", "views.formats.csv.CsvFormat", "views.formats.csv._"))
                     }
                 }
             }

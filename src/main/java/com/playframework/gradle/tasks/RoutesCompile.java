@@ -5,11 +5,9 @@ import com.playframework.gradle.tools.routes.DefaultRoutesCompileSpec;
 import com.playframework.gradle.tools.routes.RoutesCompileSpec;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
-import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
@@ -22,7 +20,6 @@ import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
-import java.util.List;
 
 /**
  * Task for compiling routes templates into Scala code.
@@ -77,17 +74,8 @@ public class RoutesCompile extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public Provider<Directory> getOutputDirectory() {
+    public Property<Directory> getOutputDirectory() {
         return outputDirectory;
-    }
-
-    /**
-     * Specifies the directory to generate the parser source files into.
-     *
-     * @param outputDirectory The output directory. Must not be null.
-     */
-    public void setOutputDirectory(Provider<Directory> outputDirectory) {
-        this.outputDirectory.set(outputDirectory);
     }
 
     /**
@@ -96,27 +84,14 @@ public class RoutesCompile extends SourceTask {
      * @return The additional imports.
      */
     @Input
-    public Provider<List<String>> getAdditionalImports() {
+    public ListProperty<String> getAdditionalImports() {
         return additionalImports;
-    }
-
-    /**
-     * Specifies the additional imports of the Play Routes compiler.
-     *
-     * @param additionalImports The additional imports
-     */
-    public void setAdditionalImports(List<String> additionalImports) {
-        this.additionalImports.addAll(additionalImports);
     }
 
     @Classpath
     @PathSensitive(PathSensitivity.RELATIVE)
-    public FileCollection getRoutesCompilerClasspath() {
+    public ConfigurableFileCollection getRoutesCompilerClasspath() {
         return routesCompilerClasspath;
-    }
-
-    public void setRoutesCompilerClasspath(FileCollection routesCompilerClasspath) {
-        this.routesCompilerClasspath.setFrom(routesCompilerClasspath);
     }
 
     @TaskAction
@@ -138,8 +113,9 @@ public class RoutesCompile extends SourceTask {
         return false;
     }
 
-    public void setPlatform(Provider<PlayPlatform> platform) {
-        this.platform.set(platform);
+    @Input
+    public Property<PlayPlatform> getPlatform() {
+        return platform;
     }
 
     /**
@@ -148,17 +124,8 @@ public class RoutesCompile extends SourceTask {
      * @return Whether the reverse router should be namespaced
      */
     @Input
-    public Provider<Boolean> getNamespaceReverseRouter() {
+    public Property<Boolean> getNamespaceReverseRouter() {
         return namespaceReverseRouter;
-    }
-
-    /**
-     * Sets whether or not the reverse router should be namespaced.
-     *
-     * @param namespaceReverseRouter Whether the reverse router should be namespaced
-     */
-    public void setNamespaceReverseRouter(Provider<Boolean> namespaceReverseRouter) {
-        this.namespaceReverseRouter.set(namespaceReverseRouter);
     }
 
     /**
@@ -167,17 +134,8 @@ public class RoutesCompile extends SourceTask {
      * @return Whether a reverse router should be generated
      */
     @Input
-    public Provider<Boolean> getGenerateReverseRoutes() {
+    public Property<Boolean> getGenerateReverseRoutes() {
         return generateReverseRoutes;
-    }
-
-    /**
-     * Sets whether or not a reverse router should be generated.
-     *
-     * @param generateReverseRoutes Whether a reverse router should be generated
-     */
-    public void setGenerateReverseRoutes(Provider<Boolean> generateReverseRoutes) {
-        this.generateReverseRoutes.set(generateReverseRoutes);
     }
 
     /**
@@ -188,17 +146,7 @@ public class RoutesCompile extends SourceTask {
      * true if InjectedRoutesGenerator will be used to generate routes.
      */
     @Input
-    public Provider<Boolean> getInjectedRoutesGenerator() {
+    public Property<Boolean> getInjectedRoutesGenerator() {
         return injectedRoutesGenerator;
-    }
-
-    /**
-     * Configure if the injected routes generator should be used to generate routes.
-     *
-     * @param injectedRoutesGenerator false - use StaticRoutesGenerator
-     * true - use InjectedRoutesGenerator
-     */
-    public void setInjectedRoutesGenerator(Provider<Boolean> injectedRoutesGenerator) {
-        this.injectedRoutesGenerator.set(injectedRoutesGenerator);
     }
 }

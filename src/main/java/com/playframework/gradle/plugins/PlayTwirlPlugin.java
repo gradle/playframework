@@ -64,13 +64,13 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
     private TaskProvider<TwirlCompile> createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, Configuration compilerConfiguration, PlayExtension playExtension) {
         return project.getTasks().register(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
             twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
-            twirlCompile.setPlatform(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
+            twirlCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform().asPlayPlatform()));
             twirlCompile.setSource(twirlSourceSet.getTwirl());
-            twirlCompile.setOutputDirectory(getOutputDir(project, twirlSourceSet.getTwirl()));
-            twirlCompile.setDefaultImports(twirlSourceSet.getDefaultImports());
-            twirlCompile.setUserTemplateFormats(twirlSourceSet.getUserTemplateFormats());
-            twirlCompile.setAdditionalImports(twirlSourceSet.getAdditionalImports());
-            twirlCompile.setTwirlCompilerClasspath(compilerConfiguration);
+            twirlCompile.getOutputDirectory().set(getOutputDir(project, twirlSourceSet.getTwirl()));
+            twirlCompile.getDefaultImports().set(twirlSourceSet.getDefaultImports());
+            twirlCompile.getUserTemplateFormats().set(twirlSourceSet.getUserTemplateFormats());
+            twirlCompile.getAdditionalImports().set(twirlSourceSet.getAdditionalImports());
+            twirlCompile.getTwirlCompilerClasspath().setFrom(compilerConfiguration);
         });
     }
 
