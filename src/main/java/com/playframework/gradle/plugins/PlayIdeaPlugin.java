@@ -3,8 +3,6 @@ package com.playframework.gradle.plugins;
 import com.playframework.gradle.extensions.PlayExtension;
 import com.playframework.gradle.extensions.PlayPlatform;
 import com.playframework.gradle.tasks.JavaScriptMinify;
-import com.playframework.gradle.tasks.RoutesCompile;
-import com.playframework.gradle.tasks.TwirlCompile;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -34,7 +32,6 @@ import static com.playframework.gradle.extensions.PlayPluginConfigurations.*;
 import static com.playframework.gradle.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
 import static com.playframework.gradle.plugins.PlayPluginHelper.getMainJavaSourceSet;
 import static com.playframework.gradle.plugins.PlayPluginHelper.getScalaSourceDirectorySet;
-import static com.playframework.gradle.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
 
 public class PlayIdeaPlugin implements Plugin<Project> {
@@ -49,8 +46,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
             ConventionMapping conventionMapping = conventionMappingFor(module);
 
             TaskProvider<Task> classesTask = project.getTasks().named(CLASSES_TASK_NAME);
-            TaskProvider<TwirlCompile> twirlCompileTask = project.getTasks().named(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class);
-            TaskProvider<RoutesCompile> routesCompileTask = project.getTasks().named(PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME, RoutesCompile.class);
             TaskProvider<JavaScriptMinify> javaScriptMinifyTask = project.getTasks().named(PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME, JavaScriptMinify.class);
             SourceSet mainSourceSet = getMainJavaSourceSet(project);
 
@@ -61,9 +56,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
 
                 SourceDirectorySet scalaSourceDirectorySet = getScalaSourceDirectorySet(project);
                 sourceDirs.addAll(scalaSourceDirectorySet.getSrcDirs());
-
-                sourceDirs.add(twirlCompileTask.get().getOutputDirectory().get().getAsFile());
-                sourceDirs.add(routesCompileTask.get().getOutputDirectory().get().getAsFile());
                 sourceDirs.add(javaScriptMinifyTask.get().getDestinationDir().get().getAsFile());
                 return Collections.unmodifiableSet(sourceDirs);
             });
