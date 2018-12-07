@@ -121,8 +121,8 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         scalaSourceDirectorySet.setSrcDirs(Arrays.asList("app"));
         scalaSourceDirectorySet.include("**/*.scala", "**/*.java");
 
-        scalaSourceDirectorySet.srcDir(getTwirlCompileTask(project).get().getOutputDirectory());
-        scalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).get().getOutputDirectory());
+        scalaSourceDirectorySet.srcDir(getTwirlCompileTask(project).flatMap(task -> task.getOutputDirectory()));
+        scalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).flatMap(task -> task.getOutputDirectory()));
     }
 
     private TaskProvider<Jar> createAssetsJarTask(Project project) {
