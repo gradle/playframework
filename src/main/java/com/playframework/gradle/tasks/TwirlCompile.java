@@ -18,14 +18,12 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.Nested;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.compile.BaseForkOptions;
 import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 
@@ -52,7 +50,6 @@ public class TwirlCompile extends SourceTask {
      */
     private final Property<TwirlImports> defaultImports;
 
-    private BaseForkOptions forkOptions;
     private final Property<PlayPlatform> platform;
     private final ListProperty<TwirlTemplateFormat> userTemplateFormats;
     private final ListProperty<String> additionalImports;
@@ -76,19 +73,6 @@ public class TwirlCompile extends SourceTask {
     @PathSensitive(PathSensitivity.RELATIVE)
     public FileTree getSource() {
         return super.getSource();
-    }
-
-    /**
-     * fork options for the twirl compiler.
-     *
-     * @return Fork options
-     */
-    @Nested
-    public BaseForkOptions getForkOptions() {
-        if (forkOptions == null) {
-            forkOptions = new BaseForkOptions();
-        }
-        return forkOptions;
     }
 
     /**
@@ -141,7 +125,7 @@ public class TwirlCompile extends SourceTask {
     void compile() {
         RelativeFileCollector relativeFileCollector = new RelativeFileCollector();
         getSource().visit(relativeFileCollector);
-        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory().get().getAsFile(), getForkOptions(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get());
+        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory().get().getAsFile(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get());
 
         workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);

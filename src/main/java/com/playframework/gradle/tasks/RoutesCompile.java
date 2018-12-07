@@ -13,13 +13,11 @@ import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
-import org.gradle.api.tasks.Nested;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.compile.BaseForkOptions;
 import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 
@@ -46,7 +44,6 @@ public class RoutesCompile extends SourceTask {
     private final Property<Boolean> namespaceReverseRouter;
     private final Property<Boolean> generateReverseRoutes;
     private final Property<PlayPlatform> platform;
-    private BaseForkOptions forkOptions;
     private final Property<Boolean> injectedRoutesGenerator;
     private final ConfigurableFileCollection routesCompilerClasspath;
 
@@ -124,7 +121,7 @@ public class RoutesCompile extends SourceTask {
 
     @TaskAction
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), getForkOptions(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get());
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get());
 
         workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
@@ -143,19 +140,6 @@ public class RoutesCompile extends SourceTask {
 
     public void setPlatform(Provider<PlayPlatform> platform) {
         this.platform.set(platform);
-    }
-
-    /**
-     * The fork options to be applied to the Routes compiler.
-     *
-     * @return The fork options for the Routes compiler.
-     */
-    @Nested
-    public BaseForkOptions getForkOptions() {
-        if (forkOptions == null) {
-            forkOptions = new BaseForkOptions();
-        }
-        return forkOptions;
     }
 
     /**

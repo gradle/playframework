@@ -16,13 +16,11 @@ import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
-import org.gradle.api.tasks.Nested;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.compile.BaseForkOptions;
 import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 
@@ -37,7 +35,6 @@ import java.util.List;
 public class JavaScriptMinify extends SourceTask {
     private final WorkerExecutor workerExecutor;
     private final Property<Directory> destinationDir;
-    private BaseForkOptions forkOptions;
     private final ConfigurableFileCollection compilerClasspath;
 
     @Inject
@@ -76,19 +73,6 @@ public class JavaScriptMinify extends SourceTask {
         this.destinationDir.set(destinationDir);
     }
 
-    /**
-     * The fork options to be applied to the JavaScript compiler.
-     *
-     * @return The fork options for the JavaScript compiler.
-     */
-    @Nested
-    public BaseForkOptions getForkOptions() {
-        if (forkOptions == null) {
-            forkOptions = new BaseForkOptions();
-        }
-        return forkOptions;
-    }
-
     @Classpath
     @PathSensitive(PathSensitivity.RELATIVE)
     public FileCollection getCompilerClasspath() {
@@ -108,7 +92,7 @@ public class JavaScriptMinify extends SourceTask {
         MinifyFileVisitor visitor = new MinifyFileVisitor();
         getSource().visit(visitor);
 
-        JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, destinationDir.get().getAsFile(), getForkOptions());
+        JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, destinationDir.get().getAsFile());
 
         workerExecutor.submit(JavaScriptMinifyRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);

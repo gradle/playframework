@@ -1,24 +1,20 @@
 package com.playframework.gradle.tools.routes;
 
-import org.gradle.api.tasks.compile.BaseForkOptions;
-
 import java.io.File;
 import java.util.Collection;
 
 public class DefaultRoutesCompileSpec implements RoutesCompileSpec {
     private final Iterable<File> sourceFiles;
     private final File outputDirectory;
-    private final BaseForkOptions forkOptions;
     private final boolean javaProject;
     private final boolean namespaceReverseRouter;
     private final boolean generateReverseRoutes;
     private final boolean injectedRoutesGenerator;
     private final Collection<String> additionalImports;
 
-    public DefaultRoutesCompileSpec(Iterable<File> sourceFiles, File outputDirectory, BaseForkOptions forkOptions, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports) {
+    public DefaultRoutesCompileSpec(Iterable<File> sourceFiles, File outputDirectory, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports) {
         this.sourceFiles = sourceFiles;
         this.outputDirectory = outputDirectory;
-        this.forkOptions = forkOptions;
         this.javaProject = javaProject;
         this.namespaceReverseRouter = namespaceReverseRouter;
         this.generateReverseRoutes = generateReverseRoutes;
@@ -34,11 +30,6 @@ public class DefaultRoutesCompileSpec implements RoutesCompileSpec {
     @Override
     public File getDestinationDir() {
         return outputDirectory;
-    }
-
-    @Override
-    public BaseForkOptions getForkOptions() {
-        return forkOptions;
     }
 
     @Override
