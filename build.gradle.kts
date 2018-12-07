@@ -35,54 +35,64 @@ gradlePlugin {
     plugins {
         register("play-twirl-plugin") {
             id = "com.playframework.play-twirl"
+            displayName = "Play Twirl Plugin"
+            description = "Plugin for compiling Twirl sources in a Play application."
             implementationClass = "com.playframework.gradle.plugins.PlayTwirlPlugin"
         }
-    }
-    plugins {
+
         register("play-routes-plugin") {
             id = "com.playframework.play-routes"
+            displayName = "Play Routes Plugin"
+            description = "Plugin for compiling Play routes sources in a Play application."
             implementationClass = "com.playframework.gradle.plugins.PlayRoutesPlugin"
         }
-    }
-    plugins {
+
         register("play-application-plugin") {
             id = "com.playframework.play-application"
+            displayName = "Play Application Plugin"
+            description = "Plugin for building a Play application."
             implementationClass = "com.playframework.gradle.plugins.PlayApplicationPlugin"
         }
-    }
-    plugins {
+
         register("play-javascript-plugin") {
             id = "com.playframework.play-javascript"
+            displayName = "Play JavaScript Plugin"
+            description = "Plugin for adding JavaScript processing to a Play application."
             implementationClass = "com.playframework.gradle.plugins.PlayJavaScriptPlugin"
         }
-    }
-    plugins {
+
         register("play-coffeescript-plugin") {
             id = "com.playframework.play-coffeescript"
+            displayName = "Play CoffeeScript Plugin"
+            description = "Plugin for adding coffeescript compilation to a Play application."
             implementationClass = "com.playframework.gradle.plugins.PlayCoffeeScriptPlugin"
         }
-    }
-    plugins {
+
         register("play-test-plugin") {
             id = "com.playframework.play-test"
+            displayName = "Play Test Plugin"
+            description = "Plugin for executing tests for Play applications."
             implementationClass = "com.playframework.gradle.plugins.PlayTestPlugin"
         }
-    }
-    plugins {
+
         register("play-distribution-plugin") {
             id = "com.playframework.play-distribution"
+            displayName = "Play Distribution Plugin"
+            description = "Plugin for generating distributions for Play applications."
             implementationClass = "com.playframework.gradle.plugins.PlayDistributionPlugin"
         }
-    }
-    plugins {
+
         register("play-ide-plugin") {
             id = "com.playframework.play-ide"
+            displayName = "Play IDE Plugin"
+            description = "Plugin for generating IDE project files for Play applications."
             implementationClass = "com.playframework.gradle.plugins.PlayIdePlugin"
         }
-    }
-    plugins {
+
         register("play-plugin") {
             id = "com.playframework.play"
+            displayName = "Play Plugin"
+            description = "Plugin that supports building, testing and running Play applications with Gradle."
             implementationClass = "com.playframework.gradle.plugins.PlayPlugin"
         }
     }
@@ -102,15 +112,4 @@ pluginBundle {
     website = "https://www.playframework.com/"
     vcsUrl = "https://github.com/gradle/play"
     tags = listOf("playframework", "web", "java", "scala")
-}
-
-gradlePlugin {
-    plugins {
-        create("playPlugin") {
-            id = "com.playframework.play"
-            displayName = "Play Plugin"
-            description = "Play plugin that supports building, testing and running Play applications with Gradle."
-            implementationClass = "com.playframework.gradle.plugins.PlayPlugin"
-        }
-    }
 }
