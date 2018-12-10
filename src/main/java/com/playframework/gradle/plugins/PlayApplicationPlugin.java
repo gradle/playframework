@@ -29,6 +29,8 @@ import org.gradle.util.VersionNumber;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import static com.playframework.gradle.extensions.PlayPlatform.DEFAULT_PLAY_VERSION;
+import static com.playframework.gradle.extensions.PlayPlatform.DEFAULT_SCALA_VERSION;
 import static com.playframework.gradle.plugins.PlayPluginHelper.getMainJavaSourceSet;
 import static com.playframework.gradle.plugins.PlayPluginHelper.getScalaSourceDirectorySet;
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
@@ -78,8 +80,8 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     private PlayExtension createPlayExtension(Project project) {
         PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project.getObjects());
-        playExtension.getPlatform().getPlayVersion().set("2.6.15");
-        playExtension.getPlatform().getScalaVersion().set("2.11");
+        playExtension.getPlatform().getPlayVersion().set(DEFAULT_PLAY_VERSION);
+        playExtension.getPlatform().getScalaVersion().set(DEFAULT_SCALA_VERSION);
         playExtension.getPlatform().getJavaVersion().set(JavaVersion.current());
         playExtension.getInjectedRoutesGenerator().set(false);
         return playExtension;

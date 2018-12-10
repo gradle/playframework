@@ -10,6 +10,8 @@ import javax.inject.Inject;
 
 public class PlayPlatform {
 
+    public static final String DEFAULT_PLAY_VERSION = "2.6.15";
+    public static final String DEFAULT_SCALA_VERSION = "2.12";
     private final Property<String> playVersion;
     private final Property<String> scalaVersion;
     private final Property<JavaVersion> javaVersion;
