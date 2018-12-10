@@ -38,3 +38,7 @@ Importing the project into IntelliJ is straight forward. From the menu select _F
 
 The markup language for the user guide of this plugin is AsciiDoc. Documentation sources sit in the directory `src/docs`. To generate the HTML version of the plugin user guide, run the task `asciidoctor`. The generated HTML will be available in the directory `build/asciidoc/html5`.
 
+=== Publishing documentation to GitHub Pages
+
+Documentation (user guide & Javadocs) is hosted on https://pages.github.com/[GitHub Pages]. To publish the documentation to GitHub Pages, execute the task `gitPublishPush`. Make sure to provide the required GitHub token by passing the system property `-Dorg.ajoberstar.grgit.auth.username=$GH_TOKEN`.
+

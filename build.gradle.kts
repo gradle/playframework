@@ -7,6 +7,7 @@ plugins {
     id("com.playframework.gradle.integration-test-fixtures")
     id("com.playframework.gradle.integration-test")
     id("com.playframework.gradle.user-guide")
+    id("com.playframework.gradle.github-pages")
 }
 
 group = "com.playframework"
