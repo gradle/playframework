@@ -30,8 +30,8 @@ import java.util.concurrent.Callable;
 
 import static com.playframework.gradle.extensions.PlayPluginConfigurations.*;
 import static com.playframework.gradle.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
-import static com.playframework.gradle.plugins.PlayPluginHelper.getMainJavaSourceSet;
-import static com.playframework.gradle.plugins.PlayPluginHelper.getScalaSourceDirectorySet;
+import static com.playframework.gradle.plugins.internal.PlayPluginHelper.getMainJavaSourceSet;
+import static com.playframework.gradle.plugins.internal.PlayPluginHelper.getScalaSourceDirectorySet;
 import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
 
 public class PlayIdeaPlugin implements Plugin<Project> {

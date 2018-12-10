@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.playframework.gradle.plugins.PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME;
 import static com.playframework.gradle.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
-import static com.playframework.gradle.plugins.PlayPluginHelper.createCustomSourceSet;
+import static com.playframework.gradle.plugins.internal.PlayPluginHelper.createCustomSourceSet;
 
 /**
  * Plugin for compiling Twirl sources in a Play application.

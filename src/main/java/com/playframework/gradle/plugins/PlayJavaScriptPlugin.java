@@ -8,7 +8,7 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.SourceDirectorySet;
 
-import static com.playframework.gradle.plugins.PlayPluginHelper.createCustomSourceSet;
+import static com.playframework.gradle.plugins.internal.PlayPluginHelper.createCustomSourceSet;
 
 /**
  * Plugin for adding javascript processing to a Play application.

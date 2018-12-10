@@ -31,8 +31,8 @@ import java.util.HashSet;
 
 import static com.playframework.gradle.extensions.PlayPlatform.DEFAULT_PLAY_VERSION;
 import static com.playframework.gradle.extensions.PlayPlatform.DEFAULT_SCALA_VERSION;
-import static com.playframework.gradle.plugins.PlayPluginHelper.getMainJavaSourceSet;
-import static com.playframework.gradle.plugins.PlayPluginHelper.getScalaSourceDirectorySet;
+import static com.playframework.gradle.plugins.internal.PlayPluginHelper.getMainJavaSourceSet;
+import static com.playframework.gradle.plugins.internal.PlayPluginHelper.getScalaSourceDirectorySet;
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaBasePlugin.BUILD_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME;
