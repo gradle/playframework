@@ -1,0 +1,26 @@
+plugins {
+    id 'com.playframework.play'
+}
+
+repositories {
+    jcenter()
+    maven {
+        name "lightbend-maven-release"
+        url "https://repo.lightbend.com/lightbend/maven-releases"
+    }
+    ivy {
+        name "lightbend-ivy-release"
+        url "https://repo.lightbend.com/lightbend/ivy-releases"
+        layout "ivy"
+    }
+}
+
+// tag::play-extension[]
+play {
+    platform {
+        playVersion = '2.6.14'
+        scalaVersion = '2.11'
+        javaVersion = JavaVersion.VERSION_1_9
+    }
+}
+// end::play-extension[]

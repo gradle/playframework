@@ -1,0 +1,11 @@
+== Typical usage patterns
+
+include::21-add-dependencies.adoc[]
+
+include::22-run-application.adoc[]
+
+include::23-package-distribution.adoc[]
+
+include::24-multi-project.adoc[]
+
+include::25-ide.adoc[]

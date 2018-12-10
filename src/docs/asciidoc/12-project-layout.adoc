@@ -1,0 +1,19 @@
+=== Project layout
+
+The Play plugin follows the typical Play application layout. You can configure source sets to include additional directories or change the defaults.
+
+----
+├── app                 → Application source code.
+│   ├── assets          → Assets that require compilation.
+│   │   └── javascripts → JavaScript source code to be minified.
+│   ├── controllers     → Application controller source code.
+│   ├── models          → Application business source code.
+│   └── views           → Application UI templates.
+├── build.gradle        → Your project's build script.
+├── conf                → Main application configuration file and routes files.
+├── public              → Public assets.
+│   ├── images          → Application image files.
+│   ├── javascripts     → Typically JavaScript source code.
+│   └── stylesheets     → Typically CSS source code.
+└── test                → Test source code.
+----

@@ -1,0 +1,36 @@
+=== Source sets
+
+One type of element that describes the application are the source sets that define where the application controller, route, template and model class source files should be found. These source sets are logical groupings of files of a particular type and a default source set for each type is created when the Play plugin is applied.
+
+.Default Play source sets
+[%header%autowidth,compact]
+|===
+| Source Set | Type | Directory | Filters
+
+| java
+| {uri-gradle-dsl-reference}/org.gradle.api.tasks.SourceSet.html[SourceSet]
+| app
+| \**/*.java
+
+| scala
+| {uri-gradle-dsl-reference}/org.gradle.api.tasks.SourceSet.html[SourceSet]
+| app
+| \**/*.scala
+
+| routes
+| link:{uri-ghpages}/com.playframework.gradle.sourcesets.RoutesSourceSet.html[RoutesSourceSet]
+| conf
+| routes, *.routes
+
+| twirl
+| link:{uri-ghpages}/com.playframework.gradle.sourcesets.TwirlSourceSet.html[TwirlSourceSet]
+| app
+| \**/*.scala.*
+
+| javaScript
+| link:{uri-ghpages}/com.playframework.gradle.sourcesets.JavaScriptSourceSet.html[JavaScriptSourceSet]
+| app/assets
+| \**/*.js
+|===
+
+These <<adding-source-directories,source sets can be configured>>.

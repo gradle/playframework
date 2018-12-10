@@ -1,0 +1,13 @@
+[[adding-source-directories]]
+=== Adding source directories
+
+You can add extra source directories to the default source sets provided by this plugin. Gradle will automatically add them to the appropriate compile tasks. You can further configure the default source sets to do things like add new directories, add filters, etc.
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/source-sets/groovy/build.gradle[tag=add-source-directories]
+----
+
+
+

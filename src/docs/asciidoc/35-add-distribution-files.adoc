@@ -1,0 +1,10 @@
+[[adding-distribution-files]]
+=== Adding additional files to the distribution
+
+You can add additional files to the distribution package using the link:{uri-gradle-dsl-reference}/org.gradle.api.distribution.Distribution.html[Distribution] API.
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/distribution/groovy/build.gradle[tag=add-files]
+----

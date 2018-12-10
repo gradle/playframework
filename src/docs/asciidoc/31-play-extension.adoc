@@ -1,0 +1,10 @@
+[[targeting-play-version]]
+=== Targeting a Play version
+
+A Play application can be configured to target a certain version of Play. You can configure the Play, Scala and Java version individually with the help of the {uri-ghpages}/com.playframework.gradle.extensions.PlayPlatform.html[PlayPlatform] which is exposed by the method {uri-ghpages}/com.playframework.gradle.extensions.PlayExtension.html#platform(org.gradle.api.Action)[PlayExtension.platform(org.gradle.api.Action)].
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/play-platform/groovy/build.gradle[tag=play-extension]
+----

@@ -1,0 +1,11 @@
+== Plugin conventions
+
+include::11-play-framework.adoc[]
+
+include::12-project-layout.adoc[]
+
+include::13-tasks.adoc[]
+
+include::14-source-sets.adoc[]
+
+include::15-dependency-configurations.adoc[]

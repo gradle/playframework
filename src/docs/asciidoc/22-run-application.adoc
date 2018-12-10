@@ -1,0 +1,9 @@
+=== Running an application
+
+The `runPlay` task starts the Play application under development. During development it is beneficial to execute this task as a {uri-gradle-userguide}/command_line_interface.html#sec:continuous_build[continuous build]. Continuous build is a generic feature that supports automatically re-running a build when inputs change. The `runPlay` task is “continuous build aware” in that it behaves differently when run as part of a continuous build.
+
+When not run as part of a continuous build, the `runPlay` task will _block_ the build. That is, the task will not complete as long as the application is running. When running as part of a continuous build, the task will start the application if not running and otherwise propagate any changes to the code of the application to the running instance. This is useful for quickly iterating on your Play application with an edit-&gt;rebuild-&gt;refresh cycle. Changes to your application will not take affect until the end of the overall build.
+
+To enable continuous build, run Gradle with `-t runPlay` or `--continuous runPlay`.
+
+Users of Play used to such a workflow with Play's default build system should note that compile errors are handled differently. If a build failure occurs during a continuous build, the Play application will not be reloaded. Instead, you will be presented with an exception message. The exception message will only contain the overall cause of the build failure. More detailed information will only be available from the console.

@@ -1,0 +1,10 @@
+[[adding-dependencies]]
+=== Adding dependencies
+
+Your Play application might need additional dependencies. The Play plugin exposes custom configurations for adding dependencies.
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/dependencies/groovy/build.gradle[tag=play-dependencies]
+----

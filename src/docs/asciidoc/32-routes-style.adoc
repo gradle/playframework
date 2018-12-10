@@ -1,0 +1,14 @@
+=== Configuring routes style
+
+If your Play application's router uses dependency injection to access your controllers, you'll need to configure your application to _not_ use the default static router. Under the covers, the Play plugin is using the `InjectedRoutesGenerator` instead of the default `StaticRoutesGenerator` to generate the router classes.
+
+[NOTE]
+====
+The injected router is only supported in Play Framework 2.4 or better.
+====
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/injected-routes/groovy/build.gradle[tag=play-extension]
+----

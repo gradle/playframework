@@ -1,0 +1,9 @@
+=== Configuring compiler options
+
+If your Play application requires additional Scala compiler flags, you can add these arguments directly to the Scala compiler task.
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/scala-compiler/groovy/build.gradle[tag=additional-params]
+----

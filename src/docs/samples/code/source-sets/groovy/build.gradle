@@ -1,0 +1,31 @@
+plugins {
+    id 'com.playframework.play'
+}
+
+repositories {
+    jcenter()
+    maven {
+        name "lightbend-maven-release"
+        url "https://repo.lightbend.com/lightbend/maven-releases"
+    }
+    ivy {
+        name "lightbend-ivy-release"
+        url "https://repo.lightbend.com/lightbend/ivy-releases"
+        layout "ivy"
+    }
+}
+
+// tag::add-source-directories[]
+sourceSets {
+    main {
+        java {
+            srcDir 'additional/java'
+        }
+
+        javaScript {
+            srcDir 'additional/javascript'
+            exclude '**/old_*.js'
+        }
+    }
+}
+// end::add-source-directories[]

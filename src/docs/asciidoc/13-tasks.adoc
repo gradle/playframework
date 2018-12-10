@@ -1,0 +1,73 @@
+=== Tasks
+
+The Play plugin hooks into the normal Gradle lifecycle tasks such as `assemble`, `check` and `build`, but it also adds several additional tasks which form the lifecycle of a Play project:
+
+==== Lifecycle tasks
+
+`dist` — {uri-gradle-dsl-reference}/org.gradle.api.Task.html[Task]::
+_Depends on_: `createMainZipDist`, `createMainTarDist`
++
+Assembles the Play distribution.
+
+`stage` — {uri-gradle-dsl-reference}/org.gradle.api.Task.html[Task]::
+_Depends on_: `stageMainDist`
++
+Stages the Play distribution.
+
+==== Running and testing tasks
+
+The plugin also provides tasks for running, testing and packaging your Play application.
+
+`runPlay` — {uri-ghpages}/com.playframework.gradle.tasks.PlayRun.html[PlayRun]::
+_Depends on_: `build` to build Play application.
++
+Runs the Play application for local development. See how this works with continuous build.
+
+`test` — {uri-gradle-dsl-reference}/org.gradle.api.tasks.testing.Test.html[Test]::
+_Depends on_: `testClasses` to compile Play sources.
++
+Runs JUnit/TestNG tests for the Play application.
+
+==== Distribution tasks
+
+`createMainStartScripts` — link:{uri-gradle-dsl-reference}/org.gradle.api.tasks.application.CreateStartScripts.html[CreateStartScripts]::
++
+Generates scripts to run the Play application distribution.
+
+`stageMainDist` — link:{uri-gradle-dsl-reference}/org.gradle.api.tasks.Copy.html[Copy]::
+_Depends on_: `assemble`, `createMainStartScripts`
++
+Copies all jar files, dependencies and scripts into a staging directory.
+
+`createMainZipDist` — link:{uri-gradle-dsl-reference}/org.gradle.api.tasks.bundling.Zip.html[Zip]::
++
+Bundles the Play application as a standalone distribution packaged as a zip.
+
+`createMainTarDist` — link:{uri-gradle-dsl-reference}/org.gradle.api.tasks.bundling.Tar.html[Tar]::
++
+Bundles the Play application as a standalone distribution packaged as a tar.
+
+==== Source set tasks
+
+For the different types of sources in a Play application, the plugin adds the following compilation tasks.
+
+`compileScala` — link:{uri-gradle-dsl-reference}/org.gradle.api.tasks.scala.ScalaCompile.htmll[ScalaCompile]::
+_Depends on_: Scala and Java
++
+Compiles all Scala and Java sources defined by the Play application.
+
+`compilePlayTwirlTemplates` — link:{uri-ghpages}/com.playframework.gradle.tasks.TwirlCompile.html[TwirlCompile]::
+_Depends on_: Twirl templates
++
+Compiles Twirl templates with the Twirl compiler. Gradle supports all of the built-in Twirl template formats (HTML, XML, TXT and JavaScript). Twirl templates need to match the pattern `\*.scala.*`.
+
+`compilePlayRoutes` — link:{uri-ghpages}/com.playframework.gradle.tasks.RoutesCompile.html[RoutesCompile]::
+_Depends on_: Play Route files
++
+Compiles routes files into Scala sources.
+
+`minifyPlayJavaScript` — link:{uri-ghpages}/com.playframework.gradle.tasks.JavaScriptMinify.html[JavaScriptMinify]::
+_Depends on_: JavaScript files
++
+Minifies JavaScript files with the Google Closure compiler.
+

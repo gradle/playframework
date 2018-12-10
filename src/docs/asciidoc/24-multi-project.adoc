@@ -1,0 +1,9 @@
+=== Modeling multi-project applications
+
+Play applications can be built in multi-project builds as well. Simply apply the `com.playframework.play` plugin in the appropriate subprojects and create any project dependencies on the `play` configuration.
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/multi-project/groovy/build.gradle[tag=play-multiproject-dependencies]
+----

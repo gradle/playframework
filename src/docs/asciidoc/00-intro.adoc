@@ -1,0 +1,38 @@
+== Introduction
+
+https://www.playframework.com/[Play] is a modern web application framework. The Play plugin adds support for building, testing and running Play applications with Gradle.
+
+[NOTE]
+====
+This plugin is different from the {uri-gradle-userguide}/play_plugin.html[Play plugin] shipped with the Gradle distribution. It's developed and shipped independently from the Gradle core functionality and does not use the software model. See the <<migrating-from-standard-play-plugin,migration section>> for guidance on moving your project to this plugin.
+====
+
+=== Requirements
+
+The Play plugin defines the following requirements for a consuming build.
+
+* The build has to be run with Java 8 or higher.
+* The build has to use Gradle 5.0 or higher.
+
+=== Limitations
+
+The Play plugin currently has a few limitations.
+
+* The plugin does not yet support aggregate reverse routes introduced in Play 2.4.x.
+* A given project may only define a single Play application. This means that a single project cannot build more than one Play application. However, a multi-project build can have many projects that each define their own Play application.
+* Support for generating IDE configurations for Play applications is limited to {uri-gradle-userguide}/idea_plugin.html[IDEA].
+
+=== Applying the plugin
+
+To use the Play plugin, include the following in your build script to apply the `com.playframework.play` plugin. Currently, the plugin is only available on the Gradle plugin portal.
+
+[IMPORTANT]
+====
+Defining the Lightbend repositories is necessary.
+====
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/apply-plugin/groovy/build.gradle[]
+----

@@ -1,0 +1,6 @@
+== Change Log
+
+[discrete]
+=== v0.1 (TBA)
+
+* Initial version of plugin.

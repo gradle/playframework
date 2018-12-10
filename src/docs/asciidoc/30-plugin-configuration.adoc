@@ -1,0 +1,11 @@
+== Plugin configuration
+
+include::31-play-extension.adoc[]
+
+include::32-routes-style.adoc[]
+
+include::33-add-source-directories.adoc[]
+
+include::34-compiler-options.adoc[]
+
+include::35-add-distribution-files.adoc[]
