@@ -34,3 +34,7 @@ gradlew.bat build
 
 Importing the project into IntelliJ is straight forward. From the menu select _File > Open... > Open as Project_ and point it to the `build.gradle.kts` file. In the following pop-up window, ensure that the default Gradle Wrapper is selected and "Create separate module per source set" is checked.
 
+=== Generating documentation
+
+The markup language for the user guide of this plugin is AsciiDoc. Documentation sources sit in the directory `src/docs`. To generate the HTML version of the plugin user guide, run the task `asciidoctor`. The generated HTML will be available in the directory `build/asciidoc/html5`.
+
