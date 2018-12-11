@@ -15,13 +15,17 @@ repositories {
     }
 }
 
+dependencies {
+    play 'commons-lang:commons-lang:2.6'
+    playTest "com.google.guava:guava:17.0"
+}
+
 // tag::add-source-directories[]
 sourceSets {
     main {
         java {
             srcDir 'additional/java'
         }
-
         javaScript {
             srcDir 'additional/javascript'
             exclude '**/old_*.js'
@@ -29,3 +33,17 @@ sourceSets {
     }
 }
 // end::add-source-directories[]
+
+sourceSets {
+    main {
+        java {
+            srcDir 'extra/java'
+        }
+        twirl {
+            srcDir 'extra/twirl'
+        }
+        routes {
+            srcDir 'extra/routes'
+        }
+    }
+}

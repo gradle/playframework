@@ -12,13 +12,14 @@ class DocumentationTestPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         val sourceSets = the<SourceSetContainer>()
         val testRuntimeClasspath by configurations
+        val integTestFixturesRuntimeClasspath by configurations
 
         val docTestSourceSet = sourceSets.create("docTest") {
             withConvention(GroovySourceSet::class) {
                 groovy.srcDir("src/docTest/groovy")
             }
             resources.srcDir("src/docTest/resources")
-            compileClasspath += sourceSets["main"]!!.output + configurations["runtimeClasspath"] + testRuntimeClasspath
+            compileClasspath += sourceSets["main"]!!.output + sourceSets["integTestFixtures"]!!.output + configurations["runtimeClasspath"] + testRuntimeClasspath + integTestFixturesRuntimeClasspath
             runtimeClasspath += output + compileClasspath
         }
 

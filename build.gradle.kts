@@ -38,7 +38,7 @@ java {
 }
 
 gradlePlugin {
-    testSourceSets(sourceSets["integTest"], sourceSets["docTest"])
+    testSourceSets(sourceSets["integTestFixtures"], sourceSets["integTest"], sourceSets["docTest"])
 
     plugins {
         register("play-twirl-plugin") {
