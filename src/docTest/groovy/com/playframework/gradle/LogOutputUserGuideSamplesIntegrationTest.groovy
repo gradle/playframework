@@ -6,5 +6,5 @@ import org.junit.runner.RunWith
 
 @RunWith(GradlePluginSamplesRunner)
 @SamplesRoot("src/docs/samples")
-class PlayPluginSamplesTest {
+class LogOutputUserGuideSamplesIntegrationTest {
 }
