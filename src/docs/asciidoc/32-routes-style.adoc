@@ -10,5 +10,5 @@ The injected router is only supported in Play Framework 2.4 or better.
 [source,groovy]
 .build.gradle
 ----
-include::{samplesCodeDir}/injected-routes/groovy/build.gradle[tag=play-extension]
+include::{samplesCodeDir}/play-2.4/groovy/build.gradle[tag=injected-routes-compiler]
 ----

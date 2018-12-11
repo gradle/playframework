@@ -28,6 +28,8 @@ play {
     }
 }
 
+// tag::injected-routes-compiler[]
 play {
     injectedRoutesGenerator = true
 }
+// end::injected-routes-compiler[]
