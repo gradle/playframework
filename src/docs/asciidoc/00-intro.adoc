@@ -34,5 +34,5 @@ Defining the Lightbend repositories is necessary.
 [source,groovy]
 .build.gradle
 ----
-include::{samplesCodeDir}/apply-plugin/groovy/build.gradle[]
+include::{samplesCodeDir}/basic/groovy/build.gradle[tag=use-plugin]
 ----
