@@ -5,5 +5,5 @@ If your Play application requires additional Scala compiler flags, you can add t
 [source,groovy]
 .build.gradle
 ----
-include::{samplesCodeDir}/scala-compiler/groovy/build.gradle[tag=additional-params]
+include::{samplesCodeDir}/configure-compiler/groovy/build.gradle[tag=additional-params]
 ----

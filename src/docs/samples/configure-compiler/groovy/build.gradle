@@ -1,0 +1,28 @@
+plugins {
+    id 'com.playframework.play'
+}
+
+repositories {
+    jcenter()
+    maven {
+        name "lightbend-maven-release"
+        url "https://repo.lightbend.com/lightbend/maven-releases"
+    }
+    ivy {
+        name "lightbend-ivy-release"
+        url "https://repo.lightbend.com/lightbend/ivy-releases"
+        layout "ivy"
+    }
+}
+
+dependencies {
+    play 'commons-lang:commons-lang:2.6'
+    playTest "com.google.guava:guava:17.0"
+    playTest "org.scalatestplus.play:scalatestplus-play_2.12:3.1.2"
+}
+
+// tag::additional-params[]
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = ["-feature", "-language:implicitConversions"]
+}
+// end::additional-params[]

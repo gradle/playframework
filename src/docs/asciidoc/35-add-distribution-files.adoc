@@ -6,5 +6,5 @@ You can add additional files to the distribution package using the link:{uri-gra
 [source,groovy]
 .build.gradle
 ----
-include::{samplesCodeDir}/distribution/groovy/build.gradle[tag=add-files]
+include::{samplesCodeDir}/custom-distribution/groovy/build.gradle[tag=add-files]
 ----
