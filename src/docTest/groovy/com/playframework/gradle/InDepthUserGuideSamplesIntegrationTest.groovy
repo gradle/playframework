@@ -30,6 +30,16 @@ class InDepthUserGuideSamplesIntegrationTest extends Specification {
         new File(sample.dir, "build/libs/basic.jar").isFile()
     }
 
+    // TODO: To compile/run the tests in this sample additional dependencies need to be added in the build script
+    @UsesSample("advanced/groovy")
+    def "advanced sample is buildable"() {
+        when:
+        build("assemble")
+
+        then:
+        new File(sample.dir, "build/libs/advanced.jar").isFile()
+    }
+
     @UsesSample("multi-project/groovy")
     def "multi-project sample is buildable"() {
         when:
