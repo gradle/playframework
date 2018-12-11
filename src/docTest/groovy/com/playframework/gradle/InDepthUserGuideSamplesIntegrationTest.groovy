@@ -20,7 +20,7 @@ class InDepthUserGuideSamplesIntegrationTest extends Specification {
     @Rule
     Sample sample = Sample.from("src/docs/samples")
 
-    // TODO: To run the tests additional dependencies need to be added in the build script
+    // TODO: To compile/run the tests in this sample additional dependencies need to be added in the build script
     @UsesSample("basic/groovy")
     def "basic sample is buildable"() {
         when:
