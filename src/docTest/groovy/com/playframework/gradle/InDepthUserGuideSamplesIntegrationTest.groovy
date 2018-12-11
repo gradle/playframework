@@ -27,7 +27,18 @@ class InDepthUserGuideSamplesIntegrationTest extends Specification {
         build("assemble")
 
         then:
-        new File(sample.dir, "build/libs/basic.jar").exists()
+        new File(sample.dir, "build/libs/basic.jar").isFile()
+    }
+
+    @UsesSample("multi-project/groovy")
+    def "multi-project sample is buildable"() {
+        when:
+        build("assemble")
+
+        then:
+        new File(sample.dir, "modules/admin/build/libs/admin.jar").isFile()
+        new File(sample.dir, "modules/user/build/libs/user.jar").isFile()
+        new File(sample.dir, "modules/util/build/libs/util.jar").isFile()
     }
 
     @Ignore
