@@ -46,7 +46,7 @@ class UserGuidePlugin : Plugin<Project> {
                     "idprefix" to "",
                     "docinfo1" to "true",
                     "sectanchors" to "true",
-                    "samplesCodeDir" to file("src/docs/samples/code")
+                    "samplesCodeDir" to file("src/docs/samples")
                 )
             )
         }
