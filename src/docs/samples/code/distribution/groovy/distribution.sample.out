@@ -1,0 +1,6 @@
+> Task :createMainDistributionJar
+> Task :createMainStartScripts
+> Task :stageMainDist
+> Task :createMainTarDist
+> Task :createMainZipDist
+> Task :dist

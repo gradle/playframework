@@ -1,0 +1,4 @@
+> Task :compileJava NO-SOURCE
+> Task :compilePlayRoutes NO-SOURCE
+> Task :compilePlayTwirlTemplates NO-SOURCE
+> Task :compileScala NO-SOURCE

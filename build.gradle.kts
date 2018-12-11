@@ -8,6 +8,7 @@ plugins {
     id("com.playframework.gradle.integration-test")
     id("com.playframework.gradle.user-guide")
     id("com.playframework.gradle.github-pages")
+    id("com.playframework.gradle.documentation-test")
 }
 
 group = "com.playframework"
@@ -15,6 +16,9 @@ version = "0.1"
 
 repositories {
     jcenter()
+    maven {
+        url = uri("https://repo.gradle.org/gradle/libs")
+    }
 }
 
 dependencies {
@@ -24,6 +28,8 @@ dependencies {
     integTestFixturesImplementation("com.google.guava:guava:23.0")
     integTestFixturesImplementation("org.hamcrest:hamcrest-library:1.3")
     integTestFixturesImplementation("org.apache.ant:ant:1.9.3")
+    docTestImplementation("org.gradle:sample-check:0.7.0")
+    docTestRuntimeOnly("org.slf4j:slf4j-simple:1.7.16")
 }
 
 java {
@@ -32,7 +38,7 @@ java {
 }
 
 gradlePlugin {
-    testSourceSets(sourceSets["integTest"])
+    testSourceSets(sourceSets["integTest"], sourceSets["docTest"])
 
     plugins {
         register("play-twirl-plugin") {

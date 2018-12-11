@@ -42,5 +42,10 @@ gradlePlugin {
             id = "com.playframework.gradle.github-pages"
             implementationClass = "com.playframework.gradle.GitHubPagesPlugin"
         }
+
+        register("documentation-test-plugin") {
+            id = "com.playframework.gradle.documentation-test"
+            implementationClass = "com.playframework.gradle.DocumentationTestPlugin"
+        }
     }
 }
