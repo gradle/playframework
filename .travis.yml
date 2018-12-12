@@ -4,8 +4,13 @@ install: true
 jdk:
   - oraclejdk8
 
+matrix:
+  include:
+    - env: GRADLE_TASK=integrationTest
+    - env: GRADLE_TASK=docTest
+
 script:
-  - ./gradlew build -s
+  - ./gradlew $GRADLE_TASK -s
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
