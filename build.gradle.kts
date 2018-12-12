@@ -110,7 +110,7 @@ buildScan {
 }
 
 pluginBundle {
-    website = "https://www.playframework.com/"
+    website = "https://gradle.github.io/play/"
     vcsUrl = "https://github.com/gradle/play"
     tags = listOf("playframework", "web", "java", "scala")
 }
