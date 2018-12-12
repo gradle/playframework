@@ -8,6 +8,6 @@ class PlayBinaryAppWithDependenciesIntegrationTest extends PlayApplicationPlugin
 
     @Override
     PlayApp getPlayApp() {
-        new PlayAppWithDependencies(versionNumber)
+        new PlayAppWithDependencies(playVersion)
     }
 }

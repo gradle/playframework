@@ -7,7 +7,7 @@ class PlayCompositeBuildIntegrationTest extends PlayApplicationPluginIntegration
 
     @Override
     PlayApp getPlayApp() {
-        new PlayCompositeBuild(versionNumber)
+        new PlayCompositeBuild(playVersion)
     }
 
     @Override

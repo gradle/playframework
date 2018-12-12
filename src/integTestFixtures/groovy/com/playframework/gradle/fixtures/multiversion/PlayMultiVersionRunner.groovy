@@ -1,12 +1,10 @@
 package com.playframework.gradle.fixtures.multiversion
 
-import com.playframework.gradle.fixtures.PlayCoverage
-import org.gradle.util.VersionNumber
-
 import java.lang.annotation.Annotation
 
 class PlayMultiVersionRunner extends AbstractMultiTestRunner {
 
+    public static final String ALL_COVERAGE_SYS_PROP = 'play.inttest.coverage.all'
     private final Annotation targetCoverage
 
     PlayMultiVersionRunner(Class<?> target) {
@@ -16,38 +14,40 @@ class PlayMultiVersionRunner extends AbstractMultiTestRunner {
 
     @Override
     protected void createExecutions() {
-        if (targetCoverage) {
-            List<VersionNumber> playVersions = targetCoverage.value().newInstance(target, target).call() as List
-            createConfiguredVersionExecutions(playVersions)
+        Boolean allTargetPlatformsEnabled = Boolean.getBoolean(ALL_COVERAGE_SYS_PROP)
+
+        if (targetCoverage && allTargetPlatformsEnabled) {
+            List<TargetPlatform> targetPlatforms = targetCoverage.value().newInstance(target, target).call() as List
+            createConfiguredVersionExecutions(targetPlatforms)
         } else {
             createDefaultVersionExecution()
         }
     }
 
-    private void createConfiguredVersionExecutions(List<VersionNumber> playVersions) {
-        List<VersionExecution> playVersionExecutions = playVersions.collect { new VersionExecution(it) }
+    private void createConfiguredVersionExecutions(List<TargetPlatform> targetPlatforms) {
+        List<VersionExecution> playVersionExecutions = targetPlatforms.collect { new VersionExecution(it) }
         playVersionExecutions.each { add(it) }
     }
 
     private void createDefaultVersionExecution() {
-        add(new VersionExecution(PlayCoverage.DEFAULT_PLAY_VERSION))
+        add(new VersionExecution(PlayCoverage.DEFAULT))
     }
 
     private static class VersionExecution extends AbstractMultiTestRunner.Execution {
-        private final VersionNumber versionNumber
+        private final TargetPlatform targetPlatform
 
-        VersionExecution(VersionNumber versionNumber) {
-            this.versionNumber = versionNumber
+        VersionExecution(TargetPlatform targetPlatform) {
+            this.targetPlatform = targetPlatform
         }
 
         @Override
         protected String getDisplayName() {
-            return versionNumber.toString()
+            return targetPlatform.playVersion.toString()
         }
 
         @Override
         protected void before() {
-            target.versionNumber = versionNumber
+            target.targetPlatform = targetPlatform
         }
     }
 }

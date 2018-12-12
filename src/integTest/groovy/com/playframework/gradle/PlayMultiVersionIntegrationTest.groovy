@@ -1,18 +1,32 @@
 package com.playframework.gradle
 
+import com.playframework.gradle.fixtures.multiversion.PlayCoverage
+import com.playframework.gradle.fixtures.multiversion.PlayMultiVersionRunner
+import com.playframework.gradle.fixtures.multiversion.TargetCoverage
+import com.playframework.gradle.fixtures.multiversion.TargetPlatform
 import org.gradle.util.VersionNumber
+import org.junit.runner.RunWith
 
-import static com.playframework.gradle.fixtures.PlayCoverage.DEFAULT_PLAY_VERSION
-
+@RunWith(PlayMultiVersionRunner)
+@TargetCoverage({ PlayCoverage.ALL })
 abstract class PlayMultiVersionIntegrationTest extends AbstractIntegrationTest {
 
-    VersionNumber versionNumber = DEFAULT_PLAY_VERSION
+    static TargetPlatform targetPlatform
+
+    protected VersionNumber getPlayVersion() {
+        targetPlatform.playVersion
+    }
+
+    protected VersionNumber getScalaVersion() {
+        targetPlatform.scalaVersion
+    }
 
     void configurePlayVersionInBuildScript() {
         buildFile << """
             play {
                 platform {
-                    playVersion = '${versionNumber.toString()}'
+                    playVersion = '${playVersion.toString()}'
+                    scalaVersion = '${scalaVersion.toString()}'
                 }
             }
         """

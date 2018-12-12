@@ -9,7 +9,7 @@ class PlayTestAppWithDependenciesIntegrationTest extends PlayTestApplicationInte
 
     @Override
     PlayApp getPlayApp() {
-        new PlayAppWithDependencies(versionNumber)
+        new PlayAppWithDependencies(playVersion)
     }
 
     @Override

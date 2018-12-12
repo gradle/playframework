@@ -19,7 +19,7 @@ class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTes
 
     @Override
     PlayApp getPlayApp() {
-        new AdvancedPlayApp(versionNumber)
+        new AdvancedPlayApp(playVersion)
     }
 
     String[] getSourcePaths() {
@@ -48,6 +48,6 @@ class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTes
     }
 
     int getExpectedScalaClasspathSize() {
-        PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(versionNumber.toString())]
+        PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(playVersion.toString())]
     }
 }

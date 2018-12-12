@@ -12,7 +12,7 @@ class PlayDistributionAdvancedAppIntegrationTest extends PlayDistributionApplica
 
     @Override
     PlayApp getPlayApp() {
-        new AdvancedPlayApp(versionNumber)
+        new AdvancedPlayApp(playVersion)
     }
 
     @Override

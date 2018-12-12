@@ -38,7 +38,7 @@ ${playRepositories()}
     }
 
     protected String controllers() {
-        if (versionNumber >= VersionNumber.parse('2.6.0')) {
+        if (playVersion >= VersionNumber.parse('2.6.0')) {
             return "@controllers"
         } else {
             return "controllers"
@@ -46,7 +46,7 @@ ${playRepositories()}
     }
 
     protected String controller(String packageId) {
-        if (versionNumber >= VersionNumber.parse('2.6.0')) {
+        if (playVersion >= VersionNumber.parse('2.6.0')) {
             return """
 package controllers${packageId}
 

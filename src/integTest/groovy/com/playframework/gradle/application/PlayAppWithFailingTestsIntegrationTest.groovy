@@ -8,7 +8,7 @@ import org.gradle.testkit.runner.BuildResult
 
 class PlayAppWithFailingTestsIntegrationTest extends PlayMultiVersionIntegrationTest {
 
-    PlayApp playApp = new WithFailingTestsApp(versionNumber)
+    PlayApp playApp = new WithFailingTestsApp(playVersion)
 
     def setup() {
         playApp.writeSources(projectDir)

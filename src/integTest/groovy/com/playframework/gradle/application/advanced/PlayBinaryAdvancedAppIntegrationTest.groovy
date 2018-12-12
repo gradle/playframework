@@ -12,7 +12,7 @@ class PlayBinaryAdvancedAppIntegrationTest extends PlayApplicationPluginIntegrat
 
     @Override
     PlayApp getPlayApp() {
-        new AdvancedPlayApp(versionNumber)
+        new AdvancedPlayApp(playVersion)
     }
 
     @Override

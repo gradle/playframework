@@ -26,7 +26,7 @@ object Application extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
   def root = Action {
-    Ok(views.html.awesome.index(List(new DataType("bar", 2))))
+    Ok(views.html.awesome.index(java.util.Arrays.asList(new DataType("bar", 2))))
   }
   def shutdown = Action {
     System.exit(0)

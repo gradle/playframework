@@ -8,6 +8,6 @@ class PlayDistributionBasicAppIntegrationTest extends PlayDistributionApplicatio
 
     @Override
     PlayApp getPlayApp() {
-        return new BasicPlayApp(versionNumber)
+        return new BasicPlayApp(playVersion)
     }
 }

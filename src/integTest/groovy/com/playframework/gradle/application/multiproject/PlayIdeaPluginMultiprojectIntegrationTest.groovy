@@ -12,7 +12,7 @@ class PlayIdeaPluginMultiprojectIntegrationTest extends PlayIdeaPluginIntegratio
 
     @Override
     PlayApp getPlayApp() {
-        new PlayMultiProject(versionNumber)
+        new PlayMultiProject(playVersion)
     }
 
     File getModuleFile() {
@@ -50,6 +50,6 @@ class PlayIdeaPluginMultiprojectIntegrationTest extends PlayIdeaPluginIntegratio
     }
 
     int getExpectedScalaClasspathSize() {
-        PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(versionNumber.toString())]
+        PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(playVersion.toString())]
     }
 }

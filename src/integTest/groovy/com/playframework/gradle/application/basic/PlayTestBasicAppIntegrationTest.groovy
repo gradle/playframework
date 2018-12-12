@@ -9,7 +9,7 @@ class PlayTestBasicAppIntegrationTest extends PlayTestApplicationIntegrationTest
 
     @Override
     PlayApp getPlayApp() {
-        new BasicPlayApp(versionNumber)
+        new BasicPlayApp(playVersion)
     }
 
     @Override

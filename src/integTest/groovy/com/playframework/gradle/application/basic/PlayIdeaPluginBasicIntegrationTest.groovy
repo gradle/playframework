@@ -20,7 +20,7 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
 
     @Override
     PlayApp getPlayApp() {
-        new BasicPlayApp(versionNumber)
+        new BasicPlayApp(playVersion)
     }
 
     String[] getSourcePaths() {
@@ -46,7 +46,7 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
     }
 
     int getExpectedScalaClasspathSize() {
-        return PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(versionNumber.toString())]
+        return PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(playVersion.toString())]
     }
 
     def "when model configuration changes, IDEA metadata can be rebuilt"() {

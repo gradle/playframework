@@ -8,6 +8,6 @@ class PlayBasicAppIntegrationTest extends PlayMultiVersionApplicationIntegration
 
     @Override
     PlayApp getPlayApp() {
-        new BasicPlayApp(versionNumber)
+        new BasicPlayApp(playVersion)
     }
 }

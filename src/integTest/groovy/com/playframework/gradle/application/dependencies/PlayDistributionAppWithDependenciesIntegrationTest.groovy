@@ -8,6 +8,6 @@ class PlayDistributionAppWithDependenciesIntegrationTest extends PlayDistributio
 
     @Override
     PlayApp getPlayApp() {
-        new PlayAppWithDependencies(versionNumber)
+        new PlayAppWithDependencies(playVersion)
     }
 }

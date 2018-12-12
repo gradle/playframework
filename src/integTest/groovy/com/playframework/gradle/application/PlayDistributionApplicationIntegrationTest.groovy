@@ -101,6 +101,6 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
     }
 
     String determineRoutesClassName() {
-        return versionNumber >= VersionNumber.parse('2.4.0') ? "router/Routes.class" : "Routes.class"
+        return playVersion >= VersionNumber.parse('2.4.0') ? "router/Routes.class" : "Routes.class"
     }
 }
