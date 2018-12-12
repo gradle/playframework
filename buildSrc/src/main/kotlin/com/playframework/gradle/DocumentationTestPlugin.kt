@@ -19,7 +19,7 @@ class DocumentationTestPlugin : Plugin<Project> {
                 groovy.srcDir("src/docTest/groovy")
             }
             resources.srcDir("src/docTest/resources")
-            compileClasspath += sourceSets["main"]!!.output + sourceSets["integTestFixtures"]!!.output + configurations["runtimeClasspath"] + testRuntimeClasspath + integTestFixturesRuntimeClasspath
+            compileClasspath += sourceSets["main"]!!.output + sourceSets["integTestFixtures"]!!.output + testRuntimeClasspath + integTestFixturesRuntimeClasspath
             runtimeClasspath += output + compileClasspath
         }
 
