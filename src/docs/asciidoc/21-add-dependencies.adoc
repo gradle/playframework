@@ -6,5 +6,5 @@ Your Play application might need additional dependencies. The Play plugin expose
 [source,groovy]
 .build.gradle
 ----
-include::{samplesCodeDir}/dependencies/groovy/build.gradle[tag=play-dependencies]
+include::{samplesCodeDir}/advanced/groovy/build.gradle[tag=play-dependencies]
 ----

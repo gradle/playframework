@@ -12,11 +12,13 @@ play {
     injectedRoutesGenerator = true
 }
 
+// tag::play-dependencies[]
 dependencies {
     play "commons-lang:commons-lang:2.6"
     play "com.typesafe.play:play-guice_2.12:2.6.15"
     play "ch.qos.logback:logback-classic:1.2.3"
 }
+// end::play-dependencies[]
 
 repositories {
     jcenter()
