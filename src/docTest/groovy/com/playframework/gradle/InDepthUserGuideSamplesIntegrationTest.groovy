@@ -9,7 +9,6 @@ import org.gradle.samples.test.rule.UsesSample
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -51,7 +50,6 @@ class InDepthUserGuideSamplesIntegrationTest extends Specification {
         new File(sample.dir, "modules/util/build/libs/util.jar").isFile()
     }
 
-    @Ignore
     @UsesSample("source-sets/groovy")
     def "source-sets sample is buildable"() {
         when:
@@ -65,7 +63,7 @@ class InDepthUserGuideSamplesIntegrationTest extends Specification {
             "controllers/date/routes.class",
             "html/main.class"
         )
-        assetsJar(sample.dir).with {
+        assetsJar(sample.dir, "source-sets").with {
             containsDescendants(
                 "public/sample.js"
             )

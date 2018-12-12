@@ -23,7 +23,7 @@ dependencies {
 // tag::add-source-directories[]
 sourceSets {
     main {
-        java {
+        scala {
             srcDir 'additional/java'
         }
         javaScript {
@@ -36,7 +36,7 @@ sourceSets {
 
 sourceSets {
     main {
-        java {
+        scala {
             srcDir 'extra/java'
         }
         twirl {
