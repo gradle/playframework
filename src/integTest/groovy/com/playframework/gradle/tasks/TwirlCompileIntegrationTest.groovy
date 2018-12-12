@@ -322,7 +322,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 doFirst {
                     assert ${shouldBePresent ? "" : "!"} configurations.play.dependencies.any {
                         it.group == "com.typesafe.play" &&
-                        it.name == "play-java_\${play.platform.scalaVersion.get()}" &&
+                        it.name == "play-java_\${play.platform.scalaCompatibilityVersion.get()}" &&
                         it.version == play.platform.playVersion.get()
                     }
                 }
@@ -359,7 +359,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         """
         temporaryFolder.newFolder('app', 'views', 'formats', 'csv')
 
-        if (versionNumber < VersionNumber.parse("2.3.0")) {
+        if (playVersion < VersionNumber.parse("2.3.0")) {
             file("app/views/formats/csv/Csv.scala") << """
 package views.formats.csv
 
