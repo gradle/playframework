@@ -6,8 +6,6 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.file.collections.ImmutableFileCollection;
-import org.gradle.api.tasks.TaskProvider;
-import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.scala.IncrementalCompileOptions;
 import org.gradle.api.tasks.scala.ScalaCompile;
 import org.gradle.api.tasks.testing.Test;
@@ -17,7 +15,6 @@ import java.io.File;
 
 import static com.playframework.gradle.plugins.PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME;
 import static com.playframework.gradle.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
-import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.TEST_TASK_NAME;
 
 public class PlayTestPlugin implements Plugin<Project> {
@@ -36,12 +33,11 @@ public class PlayTestPlugin implements Plugin<Project> {
 
             project.getTasks().named(TEST_SCALA_COMPILE_TASK_NAME, ScalaCompile.class, testScalaCompile -> {
                 testScalaCompile.setDescription("Compiles the scala and java test sources for the Play application.");
-                testScalaCompile.setClasspath(testCompileClasspath);
+                testScalaCompile.setClasspath(testScalaCompile.getClasspath().plus(testCompileClasspath));
                 testScalaCompile.setDestinationDir(testClassesDir);
                 testScalaCompile.setSource(testSources);
 
-                PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME);
-                String targetCompatibility = playExtension.getPlatform().getJavaVersion().get().getMajorVersion();
+                String targetCompatibility = getJavaSourceAndTargetCompatibility(project);
                 testScalaCompile.setSourceCompatibility(targetCompatibility);
                 testScalaCompile.setTargetCompatibility(targetCompatibility);
 
@@ -58,12 +54,16 @@ public class PlayTestPlugin implements Plugin<Project> {
     }
 
     private FileCollection getTestCompileClasspath(Project project) {
-        TaskProvider<Jar> mainJarTask = project.getTasks().named(JAR_TASK_NAME, Jar.class);
         PlayPluginConfigurations configurations = (PlayPluginConfigurations) project.getExtensions().getByName(PLAY_CONFIGURATIONS_EXTENSION_NAME);
-        return ImmutableFileCollection.of(mainJarTask.get().getArchivePath()).plus(configurations.getPlayTest().getAllArtifacts());
+        return ImmutableFileCollection.of(configurations.getPlayTest().getAllArtifacts());
     }
 
     private FileCollection getRuntimeClasspath(File testClassesDir, FileCollection testCompileClasspath) {
         return ImmutableFileCollection.of(testClassesDir).plus(testCompileClasspath);
+    }
+
+    private String getJavaSourceAndTargetCompatibility(Project project) {
+        PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME);
+        return playExtension.getPlatform().getJavaVersion().get().getMajorVersion();
     }
 }
