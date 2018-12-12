@@ -359,7 +359,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         """
         temporaryFolder.newFolder('app', 'views', 'formats', 'csv')
 
-        if (playVersion < VersionNumber.parse("2.3.0")) {
+        if (versionNumber < VersionNumber.parse("2.3.0")) {
             file("app/views/formats/csv/Csv.scala") << """
 package views.formats.csv
 
