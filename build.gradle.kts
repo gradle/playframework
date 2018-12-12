@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.spockframework:spock-core:1.2-groovy-2.4") {
+    testImplementation("org.spockframework:spock-core:1.2-groovy-2.5") {
         exclude(group = "org.codehaus.groovy")
     }
     integTestFixturesImplementation("com.google.guava:guava:23.0")
