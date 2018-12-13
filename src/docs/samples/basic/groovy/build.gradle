@@ -1,6 +1,6 @@
 // tag::use-plugin[]
 plugins {
-    id 'com.playframework.play'
+    id 'org.gradle.playframework'
 }
 
 repositories {

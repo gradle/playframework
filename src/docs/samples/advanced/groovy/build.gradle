@@ -1,5 +1,5 @@
 plugins {
-    id 'com.playframework.play'
+    id 'org.gradle.playframework'
 }
 
 play {

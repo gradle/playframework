@@ -2,7 +2,7 @@
 
 If you want to generate IDE metadata configuration for your Play project, you need to apply the appropriate IDE plugin. Gradle supports generating IDE metadata for IDEA only for Play projects at this time.
 
-To generate IDEA's metadata, apply the `idea` plugin along with the `com.playframework.play` plugin.
+To generate IDEA's metadata, apply the `idea` plugin along with the `org.gradle.playframework` plugin.
 
 [source,groovy]
 .build.gradle

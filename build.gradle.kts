@@ -2,16 +2,16 @@ plugins {
     groovy
     `java-gradle-plugin`
     `build-scan`
-    com.playframework.gradle.`test-setup`
-    com.playframework.gradle.`integration-test-fixtures`
-    com.playframework.gradle.`integration-test`
-    com.playframework.gradle.`user-guide`
-    com.playframework.gradle.`github-pages`
-    com.playframework.gradle.`documentation-test`
+    org.gradle.playframework.`test-setup`
+    org.gradle.playframework.`integration-test-fixtures`
+    org.gradle.playframework.`integration-test`
+    org.gradle.playframework.`user-guide`
+    org.gradle.playframework.`github-pages`
+    org.gradle.playframework.`documentation-test`
     id("com.gradle.plugin-publish") version "0.10.0"
 }
 
-group = "com.playframework"
+group = "org.gradle"
 version = "0.1"
 
 repositories {
@@ -40,59 +40,59 @@ gradlePlugin {
 
     plugins {
         register("play-twirl-plugin") {
-            id = "com.playframework.play-twirl"
+            id = "org.gradle.playframework-twirl"
             displayName = "Play Twirl Plugin"
             description = "Plugin for compiling Twirl sources in a Play application."
-            implementationClass = "com.playframework.gradle.plugins.PlayTwirlPlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayTwirlPlugin"
         }
 
         register("play-routes-plugin") {
-            id = "com.playframework.play-routes"
+            id = "org.gradle.playframework-routes"
             displayName = "Play Routes Plugin"
             description = "Plugin for compiling Play routes sources in a Play application."
-            implementationClass = "com.playframework.gradle.plugins.PlayRoutesPlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayRoutesPlugin"
         }
 
         register("play-application-plugin") {
-            id = "com.playframework.play-application"
+            id = "org.gradle.playframework-application"
             displayName = "Play Application Plugin"
             description = "Plugin for building a Play application."
-            implementationClass = "com.playframework.gradle.plugins.PlayApplicationPlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayApplicationPlugin"
         }
 
         register("play-javascript-plugin") {
-            id = "com.playframework.play-javascript"
+            id = "org.gradle.playframework-javascript"
             displayName = "Play JavaScript Plugin"
             description = "Plugin for adding JavaScript processing to a Play application."
-            implementationClass = "com.playframework.gradle.plugins.PlayJavaScriptPlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayJavaScriptPlugin"
         }
 
         register("play-test-plugin") {
-            id = "com.playframework.play-test"
+            id = "org.gradle.playframework-test"
             displayName = "Play Test Plugin"
             description = "Plugin for executing tests for Play applications."
-            implementationClass = "com.playframework.gradle.plugins.PlayTestPlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayTestPlugin"
         }
 
         register("play-distribution-plugin") {
-            id = "com.playframework.play-distribution"
+            id = "org.gradle.playframework-distribution"
             displayName = "Play Distribution Plugin"
             description = "Plugin for generating distributions for Play applications."
-            implementationClass = "com.playframework.gradle.plugins.PlayDistributionPlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayDistributionPlugin"
         }
 
         register("play-ide-plugin") {
-            id = "com.playframework.play-ide"
+            id = "org.gradle.playframework-ide"
             displayName = "Play IDE Plugin"
             description = "Plugin for generating IDE project files for Play applications."
-            implementationClass = "com.playframework.gradle.plugins.PlayIdePlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayIdePlugin"
         }
 
         register("play-plugin") {
-            id = "com.playframework.play"
+            id = "org.gradle.playframework"
             displayName = "Play Plugin"
             description = "Plugin that supports building, testing and running Play applications with Gradle."
-            implementationClass = "com.playframework.gradle.plugins.PlayPlugin"
+            implementationClass = "org.gradle.playframework.plugins.PlayPlugin"
         }
     }
 }

@@ -20,33 +20,33 @@ kotlinDslPluginOptions {
 gradlePlugin {
     plugins {
         register("integration-test-setup-plugin") {
-            id = "com.playframework.gradle.test-setup"
-            implementationClass = "com.playframework.gradle.TestSetupPlugin"
+            id = "org.gradle.playframework.test-setup"
+            implementationClass = "org.gradle.playframework.TestSetupPlugin"
         }
 
         register("integration-test-fixtures-plugin") {
-            id = "com.playframework.gradle.integration-test-fixtures"
-            implementationClass = "com.playframework.gradle.IntegrationTestFixturesPlugin"
+            id = "org.gradle.playframework.integration-test-fixtures"
+            implementationClass = "org.gradle.playframework.IntegrationTestFixturesPlugin"
         }
 
         register("integration-test-plugin") {
-            id = "com.playframework.gradle.integration-test"
-            implementationClass = "com.playframework.gradle.IntegrationTestPlugin"
+            id = "org.gradle.playframework.integration-test"
+            implementationClass = "org.gradle.playframework.IntegrationTestPlugin"
         }
 
         register("user-guide-plugin") {
-            id = "com.playframework.gradle.user-guide"
-            implementationClass = "com.playframework.gradle.UserGuidePlugin"
+            id = "org.gradle.playframework.user-guide"
+            implementationClass = "org.gradle.playframework.UserGuidePlugin"
         }
 
         register("github-pages-plugin") {
-            id = "com.playframework.gradle.github-pages"
-            implementationClass = "com.playframework.gradle.GitHubPagesPlugin"
+            id = "org.gradle.playframework.github-pages"
+            implementationClass = "org.gradle.playframework.GitHubPagesPlugin"
         }
 
         register("documentation-test-plugin") {
-            id = "com.playframework.gradle.documentation-test"
-            implementationClass = "com.playframework.gradle.DocumentationTestPlugin"
+            id = "org.gradle.playframework.documentation-test"
+            implementationClass = "org.gradle.playframework.DocumentationTestPlugin"
         }
     }
 }

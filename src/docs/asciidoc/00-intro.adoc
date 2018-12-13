@@ -24,7 +24,7 @@ The Play plugin currently has a few limitations.
 
 === Applying the plugin
 
-To use the Play plugin, include the following in your build script to apply the `com.playframework.play` plugin. Currently, the plugin is only available on the Gradle plugin portal.
+To use the Play plugin, include the following in your build script to apply the `org.gradle.playframework` plugin. Currently, the plugin is only available on the Gradle plugin portal.
 
 [IMPORTANT]
 ====

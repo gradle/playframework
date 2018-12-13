@@ -1,0 +1,8 @@
+plugins {
+    id 'org.gradle.playframework'
+}
+
+dependencies {
+    play project(":submodule")
+    play project(":javalibrary")
+}

@@ -18,17 +18,17 @@ One type of element that describes the application are the source sets that defi
 | \**/*.scala
 
 | routes
-| link:{uri-ghpages}/com.playframework.gradle.sourcesets.RoutesSourceSet.html[RoutesSourceSet]
+| link:{uri-ghpages}/org.gradle.playframework.sourcesets.RoutesSourceSet.html[RoutesSourceSet]
 | conf
 | routes, *.routes
 
 | twirl
-| link:{uri-ghpages}/com.playframework.gradle.sourcesets.TwirlSourceSet.html[TwirlSourceSet]
+| link:{uri-ghpages}/org.gradle.playframework.sourcesets.TwirlSourceSet.html[TwirlSourceSet]
 | app
 | \**/*.scala.*
 
 | javaScript
-| link:{uri-ghpages}/com.playframework.gradle.sourcesets.JavaScriptSourceSet.html[JavaScriptSourceSet]
+| link:{uri-ghpages}/org.gradle.playframework.sourcesets.JavaScriptSourceSet.html[JavaScriptSourceSet]
 | app/assets
 | \**/*.js
 |===

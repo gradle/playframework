@@ -1,6 +1,6 @@
 // tag::plugin-definition[]
 plugins {
-    id 'com.playframework.play'
+    id 'org.gradle.playframework'
     id 'idea'
 }
 // end::plugin-definition[]

@@ -1,0 +1,7 @@
+plugins {
+    id 'org.gradle.playframework'
+}
+
+dependencies {
+    play "org.my:java-lib:1.0"
+}
