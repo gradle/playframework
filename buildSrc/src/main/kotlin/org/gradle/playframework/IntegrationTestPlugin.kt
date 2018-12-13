@@ -32,10 +32,10 @@ class IntegrationTestPlugin : Plugin<Project> {
             classpath = integrationTestSourceSet.runtimeClasspath
             mustRunAfter("test")
 
-            val targetPlatform = findProperty("play.int-test.target.platform")
+            val targetPlatform = findProperty("playframework.int-test.target.platform")
 
             if (targetPlatform != null) {
-                systemProperty("play.int-test.target.platform", targetPlatform)
+                systemProperty("playframework.int-test.target.platform", targetPlatform)
             }
         }
 

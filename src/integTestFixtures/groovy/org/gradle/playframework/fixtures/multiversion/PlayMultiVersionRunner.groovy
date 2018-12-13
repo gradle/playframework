@@ -6,7 +6,7 @@ class PlayMultiVersionRunner extends AbstractMultiTestRunner {
 
     public static final String DEFAULT_TARGET_PLATFORM_SYS_PROP_VALUE = 'default'
     public static final String ALL_TARGET_PLATFORM_SYS_PROP_VALUE = 'all'
-    private static final String USER_PROVIDED_TARGET_PLATFORM_SYS_PROP = System.getProperty('play.int-test.target.platform')
+    private static final String USER_PROVIDED_TARGET_PLATFORM_SYS_PROP = System.getProperty('playframework.int-test.target.platform')
     private final Annotation targetCoverage
 
     PlayMultiVersionRunner(Class<?> target) {
@@ -33,9 +33,9 @@ class PlayMultiVersionRunner extends AbstractMultiTestRunner {
                 List<TargetPlatform> targetPlatforms = targetCoverage.value().newInstance(target, target).call() as List
                 createConfiguredVersionExecutions(targetPlatforms)
             }
+        } else {
+            createDefaultVersionExecution()
         }
-
-        createDefaultVersionExecution()
     }
 
     private List<TargetPlatform> determineUserProvidedTargetPlatforms() {
