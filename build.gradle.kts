@@ -2,13 +2,13 @@ plugins {
     groovy
     `java-gradle-plugin`
     `build-scan`
+    com.playframework.gradle.`test-setup`
+    com.playframework.gradle.`integration-test-fixtures`
+    com.playframework.gradle.`integration-test`
+    com.playframework.gradle.`user-guide`
+    com.playframework.gradle.`github-pages`
+    com.playframework.gradle.`documentation-test`
     id("com.gradle.plugin-publish") version "0.10.0"
-    id("com.playframework.gradle.test-setup")
-    id("com.playframework.gradle.integration-test-fixtures")
-    id("com.playframework.gradle.integration-test")
-    id("com.playframework.gradle.user-guide")
-    id("com.playframework.gradle.github-pages")
-    id("com.playframework.gradle.documentation-test")
 }
 
 group = "com.playframework"
@@ -16,9 +16,7 @@ version = "0.1"
 
 repositories {
     jcenter()
-    maven {
-        url = uri("https://repo.gradle.org/gradle/libs")
-    }
+    maven(url = "https://repo.gradle.org/gradle/libs")
 }
 
 dependencies {
@@ -38,7 +36,7 @@ java {
 }
 
 gradlePlugin {
-    testSourceSets(sourceSets["integTest"], sourceSets["docTest"])
+    testSourceSets(sourceSets.integTest.get(), sourceSets.docTest.get())
 
     plugins {
         register("play-twirl-plugin") {

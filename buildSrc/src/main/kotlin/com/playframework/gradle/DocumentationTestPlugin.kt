@@ -2,11 +2,11 @@ package com.playframework.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.*
+
 
 class DocumentationTestPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
@@ -19,11 +19,13 @@ class DocumentationTestPlugin : Plugin<Project> {
                 groovy.srcDir("src/docTest/groovy")
             }
             resources.srcDir("src/docTest/resources")
-            compileClasspath += sourceSets["main"]!!.output + sourceSets["integTestFixtures"]!!.output + testRuntimeClasspath + integTestFixturesRuntimeClasspath
+            val main by sourceSets
+            val integTestFixtures by sourceSets
+            compileClasspath += main.output + integTestFixtures.output + testRuntimeClasspath + integTestFixturesRuntimeClasspath
             runtimeClasspath += output + compileClasspath
         }
 
-        val docTest by tasks.creating(Test::class) {
+        val docTest by tasks.registering(Test::class) {
             description = "Runs the documentation tests"
             group = "verification"
             testClassesDirs = docTestSourceSet.output.classesDirs
@@ -31,6 +33,8 @@ class DocumentationTestPlugin : Plugin<Project> {
             mustRunAfter("test", "integrationTest")
         }
 
-        tasks["check"].dependsOn(docTest)
+        tasks.named("check") {
+            dependsOn(docTest)
+        }
     }
 }

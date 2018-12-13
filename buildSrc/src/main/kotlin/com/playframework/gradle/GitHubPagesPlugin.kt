@@ -9,6 +9,7 @@ import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.external.javadoc.StandardJavadocDocletOptions
 import org.gradle.kotlin.dsl.*
 
+
 class GitHubPagesPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         applyGitPublishPlugin()
@@ -35,8 +36,8 @@ class GitHubPagesPlugin : Plugin<Project> {
 
     private
     fun Project.configureGitPublishExtension() {
-        val javadoc: Javadoc by tasks
-        val asciidoctor: AsciidoctorTask by tasks
+        val javadoc by tasks.existing(Javadoc::class)
+        val asciidoctor by tasks.existing(AsciidoctorTask::class)
 
         configure<GitPublishExtension> {
             repoUri = "https://github.com/gradle/play.git"
@@ -46,15 +47,17 @@ class GitHubPagesPlugin : Plugin<Project> {
                 from(javadoc) {
                     into("api")
                 }
-                from("${asciidoctor.outputDir}/html5")
+                from("${asciidoctor.get().outputDir}/html5")
             }
         }
     }
 
     private
     fun Project.configureTaskDependencies() {
-        val javadoc: Javadoc by tasks
-        val asciidoctor: AsciidoctorTask by tasks
-        tasks["gitPublishCopy"].dependsOn(javadoc, asciidoctor)
+        val javadoc by tasks.existing(Javadoc::class)
+        val asciidoctor by tasks.existing(AsciidoctorTask::class)
+        tasks.named("gitPublishCopy") {
+            dependsOn(javadoc, asciidoctor)
+        }
     }
 }

@@ -3,12 +3,11 @@ package com.playframework.gradle
 import org.asciidoctor.gradle.AsciidoctorExtension
 import org.asciidoctor.gradle.AsciidoctorPlugin
 import org.asciidoctor.gradle.AsciidoctorTask
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.util.PatternSet
 import org.gradle.kotlin.dsl.*
+
 
 class UserGuidePlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
@@ -31,7 +30,7 @@ class UserGuidePlugin : Plugin<Project> {
 
     private
     fun Project.configureAsciidoctorTask() {
-        tasks.named<AsciidoctorTask>("asciidoctor") {
+        val asciidoctor by tasks.existing(AsciidoctorTask::class) {
             sourceDir = file("src/docs/asciidoc")
             sources(delegateClosureOf<PatternSet> {
                 include("index.adoc")
@@ -53,7 +52,7 @@ class UserGuidePlugin : Plugin<Project> {
 
         // Required as the project version is lazily-calculated by the gradle-git plugin
         afterEvaluate {
-            tasks.named<AsciidoctorTask>("asciidoctor") {
+            asciidoctor {
                 attributes.set("project-version", project.version.toString())
             }
         }

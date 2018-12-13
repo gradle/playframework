@@ -7,6 +7,7 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.*
 
+
 class IntegrationTestPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         val sourceSets = the<SourceSetContainer>()
@@ -18,11 +19,13 @@ class IntegrationTestPlugin : Plugin<Project> {
                 groovy.srcDir("src/integTest/groovy")
             }
             resources.srcDir("src/integTest/resources")
-            compileClasspath += sourceSets["main"]!!.output + sourceSets["integTestFixtures"]!!.output + testRuntimeClasspath + integTestFixturesRuntimeClasspath
+            val main by sourceSets
+            val integTestFixtures by sourceSets
+            compileClasspath += main.output + integTestFixtures.output + testRuntimeClasspath + integTestFixturesRuntimeClasspath
             runtimeClasspath += output + compileClasspath
         }
 
-        val integrationTest by tasks.creating(Test::class) {
+        val integrationTest by tasks.registering(Test::class) {
             description = "Runs the integration tests"
             group = "verification"
             testClassesDirs = integrationTestSourceSet.output.classesDirs
@@ -30,6 +33,8 @@ class IntegrationTestPlugin : Plugin<Project> {
             mustRunAfter("test")
         }
 
-        tasks["check"].dependsOn(integrationTest)
+        tasks.named("check") {
+            dependsOn(integrationTest)
+        }
     }
 }
