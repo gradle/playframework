@@ -9,6 +9,7 @@ import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.external.javadoc.StandardJavadocDocletOptions
 import org.gradle.kotlin.dsl.*
 
+
 class GitHubPagesPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         applyGitPublishPlugin()

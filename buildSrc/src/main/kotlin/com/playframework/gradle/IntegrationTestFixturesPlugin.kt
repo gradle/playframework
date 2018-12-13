@@ -6,6 +6,7 @@ import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.*
 
+
 class IntegrationTestFixturesPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         val sourceSets = the<SourceSetContainer>()
