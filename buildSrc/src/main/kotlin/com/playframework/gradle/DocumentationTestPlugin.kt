@@ -23,7 +23,7 @@ class DocumentationTestPlugin : Plugin<Project> {
             runtimeClasspath += output + compileClasspath
         }
 
-        val docTest by tasks.creating(Test::class) {
+        val docTest by tasks.registering(Test::class) {
             description = "Runs the documentation tests"
             group = "verification"
             testClassesDirs = docTestSourceSet.output.classesDirs
@@ -31,6 +31,8 @@ class DocumentationTestPlugin : Plugin<Project> {
             mustRunAfter("test", "integrationTest")
         }
 
-        tasks["check"].dependsOn(docTest)
+        tasks.named("check") {
+            dependsOn(docTest)
+        }
     }
 }

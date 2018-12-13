@@ -31,7 +31,7 @@ class UserGuidePlugin : Plugin<Project> {
 
     private
     fun Project.configureAsciidoctorTask() {
-        tasks.named<AsciidoctorTask>("asciidoctor") {
+        val asciidoctor by tasks.existing(AsciidoctorTask::class) {
             sourceDir = file("src/docs/asciidoc")
             sources(delegateClosureOf<PatternSet> {
                 include("index.adoc")
@@ -53,7 +53,7 @@ class UserGuidePlugin : Plugin<Project> {
 
         // Required as the project version is lazily-calculated by the gradle-git plugin
         afterEvaluate {
-            tasks.named<AsciidoctorTask>("asciidoctor") {
+            asciidoctor {
                 attributes.set("project-version", project.version.toString())
             }
         }

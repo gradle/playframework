@@ -22,7 +22,7 @@ class IntegrationTestPlugin : Plugin<Project> {
             runtimeClasspath += output + compileClasspath
         }
 
-        val integrationTest by tasks.creating(Test::class) {
+        val integrationTest by tasks.registering(Test::class) {
             description = "Runs the integration tests"
             group = "verification"
             testClassesDirs = integrationTestSourceSet.output.classesDirs
@@ -30,6 +30,8 @@ class IntegrationTestPlugin : Plugin<Project> {
             mustRunAfter("test")
         }
 
-        tasks["check"].dependsOn(integrationTest)
+        tasks.named("check") {
+            dependsOn(integrationTest)
+        }
     }
 }
