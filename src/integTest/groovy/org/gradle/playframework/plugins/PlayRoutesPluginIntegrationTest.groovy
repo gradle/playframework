@@ -12,8 +12,7 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
     def setup() {
         buildFile << """
             plugins {
-                id 'org.gradle.playframework-application'
-                id 'org.gradle.playframework-routes'
+                id 'org.gradle.playframework'
             }
             
             ${playRepositories()}

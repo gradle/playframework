@@ -11,8 +11,7 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
     def setup() {
         buildFile << """
             plugins {
-                id 'org.gradle.playframework-application'
-                id 'org.gradle.playframework-javascript'
+                id 'org.gradle.playframework'
             }
             
             ${playRepositories()}

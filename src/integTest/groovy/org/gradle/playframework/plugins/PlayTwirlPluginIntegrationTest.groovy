@@ -11,8 +11,7 @@ class PlayTwirlPluginIntegrationTest extends AbstractIntegrationTest {
     def setup() {
         buildFile << """
             plugins {
-                id 'org.gradle.playframework-application'
-                id 'org.gradle.playframework-twirl'
+                id 'org.gradle.playframework'
             }
             
             ${playRepositories()}
