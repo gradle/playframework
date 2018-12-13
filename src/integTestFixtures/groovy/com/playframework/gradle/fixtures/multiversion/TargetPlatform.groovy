@@ -5,11 +5,11 @@ import org.gradle.util.VersionNumber
 import static com.playframework.gradle.extensions.PlayPlatform.DEFAULT_PLAY_VERSION
 import static com.playframework.gradle.extensions.PlayPlatform.DEFAULT_SCALA_VERSION
 
-final class TargetPlatform {
+enum TargetPlatform {
 
-    public static final TargetPlatform PLAY_2_6 = new TargetPlatform(DEFAULT_PLAY_VERSION, DEFAULT_SCALA_VERSION)
-    public static final TargetPlatform PLAY_2_5 = new TargetPlatform('2.5.18', '2.11')
-    public static final TargetPlatform PLAY_2_4 = new TargetPlatform('2.4.11', '2.11')
+    PLAY_2_6(DEFAULT_PLAY_VERSION, DEFAULT_SCALA_VERSION),
+    PLAY_2_5('2.5.18', '2.11'),
+    PLAY_2_4('2.4.11', '2.11')
 
     private final VersionNumber playVersion
     private final VersionNumber scalaVersion
@@ -25,6 +25,19 @@ final class TargetPlatform {
 
     VersionNumber getScalaVersion() {
         scalaVersion
+    }
+
+    static TargetPlatform forPlayVersion(String playVersion) {
+        VersionNumber parsedPlayVersion = VersionNumber.parse(playVersion)
+
+        for (TargetPlatform targetPlatform : values()) {
+            if (targetPlatform.playVersion.major == parsedPlayVersion.major
+                && targetPlatform.playVersion.minor == parsedPlayVersion.minor) {
+                return targetPlatform
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown Play version: $playVersion")
     }
 
     @Override
