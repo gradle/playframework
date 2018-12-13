@@ -16,7 +16,8 @@ class IntegrationTestFixturesPlugin : Plugin<Project> {
                 groovy.srcDir("src/integTestFixtures/groovy")
             }
             resources.srcDir("src/integTestFixtures/resources")
-            compileClasspath += sourceSets["main"]!!.output + testRuntimeClasspath
+            val main by sourceSets
+            compileClasspath += main.output + testRuntimeClasspath
             runtimeClasspath += output + compileClasspath
         }
     }
