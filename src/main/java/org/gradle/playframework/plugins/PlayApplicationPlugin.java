@@ -1,15 +1,6 @@
 package org.gradle.playframework.plugins;
 
-import org.gradle.playframework.plugins.internal.PlayPluginHelper;
-import org.gradle.playframework.extensions.PlayExtension;
-import org.gradle.playframework.extensions.PlayPlatform;
-import org.gradle.playframework.extensions.PlayPluginConfigurations;
-import org.gradle.playframework.extensions.internal.PlayMajorVersion;
-import org.gradle.playframework.tasks.PlayRun;
-import org.gradle.playframework.tasks.RoutesCompile;
-import org.gradle.playframework.tasks.TwirlCompile;
 import org.gradle.api.GradleException;
-import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
@@ -25,13 +16,19 @@ import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.scala.ScalaCompile;
+import org.gradle.playframework.extensions.PlayExtension;
+import org.gradle.playframework.extensions.PlayPlatform;
+import org.gradle.playframework.extensions.PlayPluginConfigurations;
+import org.gradle.playframework.extensions.internal.PlayMajorVersion;
+import org.gradle.playframework.plugins.internal.PlayPluginHelper;
+import org.gradle.playframework.tasks.PlayRun;
+import org.gradle.playframework.tasks.RoutesCompile;
+import org.gradle.playframework.tasks.TwirlCompile;
 import org.gradle.util.VersionNumber;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.gradle.playframework.extensions.PlayPlatform.DEFAULT_PLAY_VERSION;
-import static org.gradle.playframework.extensions.PlayPlatform.DEFAULT_SCALA_VERSION;
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaBasePlugin.BUILD_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME;
@@ -51,7 +48,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        PlayExtension playExtension = createPlayExtension(project);
+        PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project.getObjects());
         PlayPluginConfigurations playPluginConfigurations = project.getExtensions().create(PLAY_CONFIGURATIONS_EXTENSION_NAME, PlayPluginConfigurations.class, project.getConfigurations(), project.getDependencies());
 
         applyPlugins(project);
@@ -75,15 +72,6 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         project.getPluginManager().apply(ScalaPlugin.class);
         project.getPluginManager().apply(PlayTwirlPlugin.class);
         project.getPluginManager().apply(PlayRoutesPlugin.class);
-    }
-
-    private PlayExtension createPlayExtension(Project project) {
-        PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project.getObjects());
-        playExtension.getPlatform().getPlayVersion().set(DEFAULT_PLAY_VERSION);
-        playExtension.getPlatform().getScalaVersion().set(DEFAULT_SCALA_VERSION);
-        playExtension.getPlatform().getJavaVersion().set(JavaVersion.current());
-        playExtension.getInjectedRoutesGenerator().set(false);
-        return playExtension;
     }
 
     private void failIfInjectedRouterIsUsedWithOldVersion(Boolean injectedRoutesGenerator, PlayPlatform playPlatform) {
