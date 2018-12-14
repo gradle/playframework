@@ -1,7 +1,7 @@
 = Gradle Play Plugin User Guide & Examples
 :uri-gradle-userguide: https://docs.gradle.org/current/userguide
 :uri-gradle-dsl-reference: https://docs.gradle.org/current/dsl
-:uri-ghpages: https://gradle.github.io/play
+:uri-ghpages: https://gradle.github.io/playframework
 
 include::00-intro.adoc[]
 

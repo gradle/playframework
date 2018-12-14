@@ -40,7 +40,7 @@ class GitHubPagesPlugin : Plugin<Project> {
         val asciidoctor by tasks.existing(AsciidoctorTask::class)
 
         configure<GitPublishExtension> {
-            repoUri = "https://github.com/gradle/play.git"
+            repoUri = "https://github.com/gradle/playframework.git"
             branch = "gh-pages"
 
             contents {

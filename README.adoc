@@ -1,4 +1,4 @@
-= Gradle Play Plugin image:https://travis-ci.org/gradle/play.svg?branch=master["Build Status", link="https://travis-ci.org/gradle/play"]
+= Gradle Play Plugin image:https://travis-ci.org/gradle/playframework.svg?branch=master["Build Status", link="https://travis-ci.org/gradle/playframework"]
 
 == Development
 
