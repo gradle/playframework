@@ -7,3 +7,4 @@ The following features are not available in this plugin:
 * The extension does not allow for configuring a target platform. You will need to configure Play, Scala and Java version individually.
 * {uri-gradle-userguide}//play_plugin.html#sec:adding_extra_source_sets[Adding new source sets] of a specific type is a built-in feature of the software model. This functionality is currently not available.
 * The concept of an "asset" does not exist and therefore cannot be used to {uri-gradle-userguide}/play_plugin.html#sec:injecting_a_custom_asset_pipeline[configure a custom asset pipeline].
+* The CoffeeScript plugin is not available anymore.
