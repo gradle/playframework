@@ -50,10 +50,15 @@ class UserGuidePlugin : Plugin<Project> {
             )
         }
 
-        // Required as the project version is lazily-calculated by the gradle-git plugin
         afterEvaluate {
             asciidoctor {
-                attributes.set("project-version", project.version.toString())
+                // Replace hard-coded version in samples with project version
+                doLast {
+                    val htmlUserGuideFile = file("$outputDir/html5/index.html")
+                    var text = htmlUserGuideFile.readText()
+                    text = text.replace(Regex("id 'org.gradle.playframework' version '.+'"), "id 'org.gradle.playframework' version '${project.version}'")
+                    htmlUserGuideFile.writeText(text)
+                }
             }
         }
     }

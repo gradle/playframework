@@ -39,6 +39,16 @@ gradlew.bat build
 
 Importing the project into IntelliJ is straight forward. From the menu select _File > Open... > Open as Project_ and point it to the `build.gradle.kts` file. In the following pop-up window, ensure that the default Gradle Wrapper is selected and "Create separate module per source set" is checked.
 
+== Release
+
+The project currently doesn't define a release process that can be triggered by running a single task. Following the process below.
+
+1. Build the binary artifact and publish it to the Gradle Plugin Portal by running the task `publishPlugins`.
+2. Build and publish the Javadocs and the user guide by running the task `gitPublishPush`.
+3. Manually update the plugin version for all samples in the directory `src/docs/samples`. Commit and push the changes to GitHub.
+
+The following paragraphs explain some of the steps in more detail.
+
 === Generating documentation
 
 The markup language for the user guide of this plugin is AsciiDoc. Documentation sources sit in the directory `src/docs`. To generate the HTML version of the plugin user guide, run the task `asciidoctor`. The generated HTML will be available in the directory `build/asciidoc/html5`.
