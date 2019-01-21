@@ -4,6 +4,8 @@ import org.gradle.playframework.fixtures.archive.ArchiveTestFixture
 import org.gradle.playframework.fixtures.archive.JarTestFixture
 import org.gradle.playframework.fixtures.archive.TarTestFixture
 import org.gradle.playframework.fixtures.archive.ZipTestFixture
+import org.gradle.playframework.fixtures.test.JUnitXmlTestExecutionResult
+import org.gradle.playframework.fixtures.test.TestExecutionResult
 import org.gradle.samples.test.rule.Sample
 import org.gradle.samples.test.rule.UsesSample
 import org.gradle.testkit.runner.BuildResult
@@ -19,24 +21,30 @@ class InDepthUserGuideSamplesIntegrationTest extends Specification {
     @Rule
     Sample sample = Sample.from("src/docs/samples")
 
-    // TODO: To compile/run the tests in this sample additional dependencies need to be added in the build script
     @UsesSample("basic/groovy")
     def "basic sample is buildable"() {
         when:
-        build("assemble")
+        build("build")
 
         then:
         new File(sample.dir, "build/libs/basic.jar").isFile()
+        TestExecutionResult result = new JUnitXmlTestExecutionResult(sample.dir)
+        result.assertTestClassesExecuted("ApplicationSpec", "IntegrationSpec")
+        result.testClass("ApplicationSpec").assertTestCount(4, 0, 0)
+        result.testClass("IntegrationSpec").assertTestCount(1, 0, 0)
     }
 
-    // TODO: To compile/run the tests in this sample additional dependencies need to be added in the build script
     @UsesSample("advanced/groovy")
     def "advanced sample is buildable"() {
         when:
-        build("assemble")
+        build("build")
 
         then:
         new File(sample.dir, "build/libs/advanced.jar").isFile()
+        TestExecutionResult result = new JUnitXmlTestExecutionResult(sample.dir)
+        result.assertTestClassesExecuted("ApplicationSpec", "IntegrationSpec")
+        result.testClass("ApplicationSpec").assertTestCount(2, 0, 0)
+        result.testClass("IntegrationSpec").assertTestCount(1, 0, 0)
     }
 
     @UsesSample("multi-project/groovy")
