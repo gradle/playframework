@@ -3,7 +3,7 @@ package org.gradle.playframework.sourcesets;
 import java.util.Collection;
 
 /**
- * Twirl Template format mapping
+ * Twirl Template format mapping.
  */
 public interface TwirlTemplateFormat {
     /**
