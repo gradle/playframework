@@ -18,7 +18,7 @@ Stages the Play distribution.
 
 The plugin also provides tasks for running, testing and packaging your Play application.
 
-`runPlay` — {uri-ghpages}/org.gradle.playframework.tasks.PlayRun.html[PlayRun]::
+`runPlay` — {uri-plugin-api}/org/gradle/playframework/tasks/PlayRun.html[PlayRun]::
 _Depends on_: `build` to build Play application.
 +
 Runs the Play application for local development. See how this works with continuous build.
@@ -56,17 +56,17 @@ _Depends on_: Scala and Java
 +
 Compiles all Scala and Java sources defined by the Play application.
 
-`compilePlayTwirlTemplates` — link:{uri-ghpages}/org.gradle.playframework.tasks.TwirlCompile.html[TwirlCompile]::
+`compilePlayTwirlTemplates` — link:{uri-plugin-api}/org/gradle/playframework/tasks/TwirlCompile.html[TwirlCompile]::
 _Depends on_: Twirl templates
 +
 Compiles Twirl templates with the Twirl compiler. Gradle supports all of the built-in Twirl template formats (HTML, XML, TXT and JavaScript). Twirl templates need to match the pattern `\*.scala.*`.
 
-`compilePlayRoutes` — link:{uri-ghpages}/org.gradle.playframework.tasks.RoutesCompile.html[RoutesCompile]::
+`compilePlayRoutes` — link:{uri-plugin-api}/org/gradle/playframework/tasks/RoutesCompile.html[RoutesCompile]::
 _Depends on_: Play Route files
 +
 Compiles routes files into Scala sources.
 
-`minifyPlayJavaScript` — link:{uri-ghpages}/org.gradle.playframework.tasks.JavaScriptMinify.html[JavaScriptMinify]::
+`minifyPlayJavaScript` — link:{uri-plugin-api}/org/gradle/playframework/tasks/JavaScriptMinify.html[JavaScriptMinify]::
 _Depends on_: JavaScript files
 +
 Minifies JavaScript files with the Google Closure compiler.
