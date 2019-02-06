@@ -1,45 +1,22 @@
 package org.gradle.playframework.tools.internal.reflection;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 public final class JavaReflectionUtil {
 
     private JavaReflectionUtil() {}
 
-    /**
-     * Locates the given method. Searches all methods, including private methods.
-     *
-     * @param target The target class
-     * @param returnType The return type
-     * @param paramTypes The parameter types
-     * @return The Java method representation
-     */
     public static <T, R> JavaMethod<T, R> method(Class<T> target, Class<R> returnType, String name, Class<?>... paramTypes) {
         return new JavaMethod<>(target, returnType, name, paramTypes);
     }
 
-    /**
-     * Locates the given method. Searches all methods, including private methods.
-     *
-     * @param target The target type
-     * @param returnType The return type
-     * @param paramTypes The Parameter types
-     * @return The Java method representation
-     */
     public static <T, R> JavaMethod<T, R> method(T target, Class<R> returnType, String name, Class<?>... paramTypes) {
         @SuppressWarnings("unchecked")
         Class<T> targetClass = (Class<T>) target.getClass();
         return method(targetClass, returnType, name, paramTypes);
     }
 
-    /**
-     * Locates the field with the given name as a readable property.  Searches only public fields.
-     *
-     * @param target The target class
-     * @param fieldType The field type
-     * @param fieldName The field name
-     * @return The property accessor
-     */
     public static <T, F> PropertyAccessor<T, F> readableField(Class<T> target, Class<F> fieldType, String fieldName) {
         Field field = findField(target, fieldName);
         if (field == null) {
@@ -49,31 +26,35 @@ public final class JavaReflectionUtil {
         return new FieldBackedPropertyAccessor<>(fieldName, fieldType, field);
     }
 
-    /**
-     * Locates the field with the given name as a readable property.  Searches only public fields.
-     *
-     * @param target The target type
-     * @param fieldType The field type
-     * @param fieldName The field name
-     * @return The property accessor
-     */
     public static <T, F> PropertyAccessor<T, F> readableField(T target, Class<F> fieldType, String fieldName) {
         @SuppressWarnings("unchecked")
         Class<T> targetClass = (Class<T>) target.getClass();
         return readableField(targetClass, fieldType, fieldName);
     }
 
-    /**
-     * Locates the given static method. Searches all methods, including private methods.
-     *
-     * @param target The target class
-     * @param returnType The return type
-     * @param name The method name
-     * @param paramTypes The parameter types
-     * @return The Java method representation
-     */
     public static <T, R> JavaMethod<T, R> staticMethod(Class<T> target, Class<R> returnType, String name, Class<?>... paramTypes) {
         return new JavaMethod<>(target, returnType, name, true, paramTypes);
+    }
+
+    public static Class<?> getWrapperTypeForPrimitiveType(Class<?> type) {
+        if (type == Character.TYPE) {
+            return Character.class;
+        } else if (type == Boolean.TYPE) {
+            return Boolean.class;
+        } else if (type == Long.TYPE) {
+            return Long.class;
+        } else if (type == Integer.TYPE) {
+            return Integer.class;
+        } else if (type == Short.TYPE) {
+            return Short.class;
+        } else if (type == Byte.TYPE) {
+            return Byte.class;
+        } else if (type == Float.TYPE) {
+            return Float.class;
+        } else if (type == Double.TYPE) {
+            return Double.class;
+        }
+        throw new IllegalArgumentException(String.format("Don't know the wrapper type for primitive type %s.", type));
     }
 
     private static Field findField(Class<?> target, String fieldName) {
@@ -114,6 +95,12 @@ public final class JavaReflectionUtil {
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public static class CachedConstructor extends ReflectionCache.CachedInvokable<Constructor<?>> {
+        public CachedConstructor(Constructor<?> ctor) {
+            super(ctor);
         }
     }
 }

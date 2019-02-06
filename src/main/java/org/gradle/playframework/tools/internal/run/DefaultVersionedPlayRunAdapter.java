@@ -6,7 +6,7 @@ import org.gradle.internal.Cast;
 import org.gradle.internal.UncheckedException;
 import org.gradle.internal.classpath.ClassPath;
 import org.gradle.internal.classpath.DefaultClassPath;
-import org.gradle.internal.reflect.DirectInstantiator;
+import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
 import org.gradle.scala.internal.reflect.ScalaMethod;
 import org.gradle.scala.internal.reflect.ScalaReflectionUtil;

@@ -3,7 +3,7 @@ package org.gradle.playframework.tools.internal.routes;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.internal.Cast;
-import org.gradle.internal.reflect.DirectInstantiator;
+import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaMethod;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
 import org.gradle.scala.internal.reflect.ScalaListBuffer;
