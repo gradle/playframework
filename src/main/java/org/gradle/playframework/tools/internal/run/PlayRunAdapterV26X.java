@@ -1,6 +1,6 @@
 package org.gradle.playframework.tools.internal.run;
 
-import org.gradle.internal.reflect.JavaReflectionUtil;
+import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
 import org.gradle.scala.internal.reflect.ScalaMethod;
 import org.gradle.scala.internal.reflect.ScalaReflectionUtil;
 

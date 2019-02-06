@@ -1,14 +1,14 @@
 package org.gradle.playframework.tools.internal.javascript;
 
-import org.gradle.playframework.tools.internal.Compiler;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.tasks.WorkResult;
 import org.gradle.api.tasks.WorkResults;
 import org.gradle.internal.UncheckedException;
 import org.gradle.internal.reflect.DirectInstantiator;
-import org.gradle.internal.reflect.JavaMethod;
-import org.gradle.internal.reflect.JavaReflectionUtil;
-import org.gradle.internal.reflect.PropertyAccessor;
+import org.gradle.playframework.tools.internal.Compiler;
+import org.gradle.playframework.tools.internal.reflection.JavaMethod;
+import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
+import org.gradle.playframework.tools.internal.reflection.PropertyAccessor;
 import org.gradle.plugins.javascript.base.SourceTransformationException;
 import org.gradle.util.GFileUtils;
 
