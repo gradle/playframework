@@ -1,6 +1,14 @@
 == Change Log
 
 [discrete]
+=== v0.2 (TBA)
+
+* Ensure compatibility with Gradle 5.2 ({uri-github-issues}/82[issue #82]).
+* Fix test code in basic and advanced samples ({uri-github-issues}/74[issue #74]).
+* Improve Javadoc for public API ({uri-github-issues}/80[issue #80]).
+* Samples can be run as standalone projects ({uri-github-issues}/76[issue #76]).
+
+[discrete]
 === v0.1 (2018-12-14)
 
 * Initial version of plugin.
