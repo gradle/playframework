@@ -18,16 +18,18 @@ public class DefaultTwirlSourceSet implements TwirlSourceSet {
     private final Property<TwirlImports> defaultImports;
     private final ListProperty<TwirlTemplateFormat> userTemplateFormats;
     private final ListProperty<String> additionalImports;
+    private final ListProperty<String> constructorAnnotations;
 
     @Inject
     public DefaultTwirlSourceSet(String name, String displayName, ObjectFactory objectFactory) {
-        twirl = objectFactory.sourceDirectorySet(name, displayName +  " Twirl source");
+        twirl = objectFactory.sourceDirectorySet(name, displayName + " Twirl source");
         twirl.srcDirs("app");
         twirl.include("**/*.scala.*");
         defaultImports = objectFactory.property(TwirlImports.class);
         defaultImports.set(TwirlImports.SCALA);
         userTemplateFormats = objectFactory.listProperty(TwirlTemplateFormat.class).empty();
         additionalImports = objectFactory.listProperty(String.class).empty();
+        constructorAnnotations = objectFactory.listProperty(String.class).empty();
     }
 
     @Override
@@ -59,5 +61,10 @@ public class DefaultTwirlSourceSet implements TwirlSourceSet {
     @Override
     public ListProperty<String> getAdditionalImports() {
         return additionalImports;
+    }
+
+    @Override
+    public ListProperty<String> getConstructorAnnotations() {
+        return constructorAnnotations;
     }
 }

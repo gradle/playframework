@@ -134,6 +134,57 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         generatedFile.text.contains("import my.pkg.MyClass")
     }
 
+    def "can specify constructor annotations for a Twirl template"() {
+        given:
+        buildFile << """
+            sourceSets {
+                main {
+                    twirl{
+                        constructorAnnotations = [ '@javax.inject.Inject()']
+                    }
+                }
+            }
+        """
+        temporaryFolder.newFolder('app', 'views')
+        file("app/views/IndexTemplate.scala.html") << """
+            @this(summarizer: models.Summarizer)
+            @(item: String)
+
+            @{summarizer.summarize(item)}
+        """
+        temporaryFolder.newFolder('app', 'models')
+        file("app/models/Summarizer.scala") << """
+            package models
+            trait Summarizer {
+                /** Provide short form of string if over a certain length */
+                def summarize(item: String)
+            }
+        """
+        temporaryFolder.newFolder('app', 'controllers')
+        file("app/controllers/MyController.scala") << """
+
+            import play.api.mvc.{AbstractController, Action, BaseController, ControllerComponents}
+            import play.mvc.Results._
+            import javax.inject.Inject
+            
+            class MyController @Inject()(template: views.html.IndexTemplate, cc: ControllerComponents) extends AbstractController(cc) {
+  
+                def index = Action { implicit request =>
+                    val item = "some extremely long text"
+                    Ok(template(item))
+                }
+            }
+        """
+
+        when:
+        BuildResult result = build(TWIRL_COMPILE_TASK_PATH)
+        then:
+        result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
+        def generatedFile = new File(destinationDir, "html/IndexTemplate.template.scala")
+        generatedFile.isFile()
+        generatedFile.text.contains("class IndexTemplate @javax.inject.Inject()")
+    }
+
     @Ignore("does not support incrementality anymore")
     def "runs compiler incrementally"() {
         when:

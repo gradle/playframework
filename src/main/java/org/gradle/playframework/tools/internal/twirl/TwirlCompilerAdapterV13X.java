@@ -55,7 +55,7 @@ class TwirlCompilerAdapterV13X extends TwirlCompilerAdapterV10X {
     }
 
     @Override
-    public Object[] createCompileParameters(ClassLoader cl, File file, File sourceDirectory, File destinationDirectory, TwirlImports defaultPlayImports, TwirlTemplateFormat templateFormat, List<String> additionalImports) {
+    public Object[] createCompileParameters(ClassLoader cl, File file, File sourceDirectory, File destinationDirectory, TwirlImports defaultPlayImports, TwirlTemplateFormat templateFormat, List<String> additionalImports, List<String> constructorAnnotations) {
         final List<String> defaultImports = new ArrayList<String>(DEFAULT_TEMPLATE_IMPORTS);
         defaultImports.addAll(playTwirlAdapter.getDefaultImports(defaultPlayImports));
         return new Object[]{
@@ -64,7 +64,7 @@ class TwirlCompilerAdapterV13X extends TwirlCompilerAdapterV10X {
                 destinationDirectory,
                 templateFormat.getFormatType(),
                 toScalaSeq(CollectionUtils.flattenCollections(defaultImports, additionalImports, templateFormat.getTemplateImports()), cl),
-                toScalaSeq(Collections.emptyList(), cl),
+                toScalaSeq(constructorAnnotations, cl),
                 ScalaCodecMapper.create(cl, "UTF-8"),
                 isInclusiveDots(),
         };

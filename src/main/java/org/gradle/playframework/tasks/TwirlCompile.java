@@ -54,6 +54,7 @@ public class TwirlCompile extends SourceTask {
     private final ListProperty<TwirlTemplateFormat> userTemplateFormats;
     private final ListProperty<String> additionalImports;
     private final ConfigurableFileCollection twirlCompilerClasspath;
+    private final ListProperty<String> constructorAnnotations;
 
     @Inject
     public TwirlCompile(WorkerExecutor workerExecutor) {
@@ -64,6 +65,7 @@ public class TwirlCompile extends SourceTask {
         userTemplateFormats = getProject().getObjects().listProperty(TwirlTemplateFormat.class).empty();
         additionalImports = getProject().getObjects().listProperty(String.class);
         twirlCompilerClasspath = getProject().getLayout().configurableFiles();
+        constructorAnnotations = getProject().getObjects().listProperty(String.class).empty();
     }
 
     /**
@@ -87,9 +89,12 @@ public class TwirlCompile extends SourceTask {
 
     /**
      * Returns the default imports that will be used when compiling templates.
+     *
      * @return The imports that will be used.
      */
-    @Nullable @Optional @Input
+    @Nullable
+    @Optional
+    @Input
     public Property<TwirlImports> getDefaultImports() {
         return defaultImports;
     }
@@ -104,7 +109,7 @@ public class TwirlCompile extends SourceTask {
     void compile() {
         RelativeFileCollector relativeFileCollector = new RelativeFileCollector();
         getSource().visit(relativeFileCollector);
-        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory().get().getAsFile(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get());
+        final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory().get().getAsFile(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get(), constructorAnnotations.get());
 
         workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
             workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
@@ -143,6 +148,16 @@ public class TwirlCompile extends SourceTask {
     @Input
     public ListProperty<String> getAdditionalImports() {
         return additionalImports;
+    }
+
+    /**
+     * Returns the list of constructor annotations to add to the generated Scala code.
+     *
+     * @return List of constructor annotations
+     **/
+    @Input
+    public ListProperty<String> getConstructorAnnotations() {
+        return constructorAnnotations;
     }
 
     private static class RelativeFileCollector implements FileVisitor {

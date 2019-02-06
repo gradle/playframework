@@ -67,6 +67,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
             twirlCompile.getUserTemplateFormats().set(twirlSourceSet.getUserTemplateFormats());
             twirlCompile.getAdditionalImports().set(twirlSourceSet.getAdditionalImports());
             twirlCompile.getTwirlCompilerClasspath().setFrom(compilerConfiguration);
+            twirlCompile.getConstructorAnnotations().set(twirlSourceSet.getConstructorAnnotations());
         });
     }
 
