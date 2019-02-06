@@ -1,22 +1,22 @@
 package org.gradle.playframework.tools.internal.javascript;
 
+import org.gradle.api.UncheckedIOException;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.tasks.WorkResult;
 import org.gradle.api.tasks.WorkResults;
-import org.gradle.internal.UncheckedException;
 import org.gradle.playframework.tools.internal.Compiler;
 import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaMethod;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
 import org.gradle.playframework.tools.internal.reflection.PropertyAccessor;
 import org.gradle.plugins.javascript.base.SourceTransformationException;
-import org.gradle.util.GFileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,7 +89,11 @@ public class GoogleClosureCompiler implements Compiler<JavaScriptCompileSpec>, S
             // If no errors, get the compiled source and write it to the destination file
             JavaMethod<Object, String> toSourceMethod = JavaReflectionUtil.method(compilerClass, String.class, "toSource");
             String compiledSource = toSourceMethod.invoke(compiler);
-            GFileUtils.writeFile(compiledSource, destinationCalculator.transform(javascriptFile));
+            try {
+                Files.write(destinationCalculator.transform(javascriptFile).toPath(), compiledSource.getBytes());
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
         } else {
             for (Object error : jsErrors) {
                 errors.add(error.toString());
@@ -116,7 +120,7 @@ public class GoogleClosureCompiler implements Compiler<JavaScriptCompileSpec>, S
                 compilerClass = clazz;
             }
         } catch (ClassNotFoundException e) {
-            throw UncheckedException.throwAsUncheckedException(e);
+            throw new RuntimeException(e);
         }
     }
 
