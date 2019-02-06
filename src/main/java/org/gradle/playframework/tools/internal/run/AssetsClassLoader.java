@@ -1,7 +1,6 @@
 package org.gradle.playframework.tools.internal.run;
 
 import org.gradle.internal.UncheckedException;
-import org.gradle.util.CollectionUtils;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -26,7 +25,10 @@ class AssetsClassLoader extends ClassLoader {
     }
 
     private AssetDir findResourceInAssetDir(final String name) {
-        return CollectionUtils.findFirst(assetDirs, assetDir -> assetDir.exists(name));
+        return assetDirs.stream()
+                .filter(assetDir -> assetDir.exists(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public static class AssetDir {
