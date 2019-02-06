@@ -1,6 +1,5 @@
 package org.gradle.playframework.fixtures.multiversion
 
-import org.gradle.internal.UncheckedException
 import org.junit.runner.Description
 import org.junit.runner.RunWith
 import org.junit.runner.Runner
@@ -77,7 +76,7 @@ abstract class AbstractMultiTestRunner extends Runner implements Filterable {
                 UnrollAwareSuite descriptionProvider = createRunnerFor(Collections.singletonList(target), Collections.<Filter>emptyList(), null)
                 templateDescription = descriptionProvider.getDescription()
             } catch (InitializationError initializationError) {
-                throw UncheckedException.throwAsUncheckedException(initializationError)
+                throw new RuntimeException(initializationError)
             }
             createExecutions()
             for (Execution execution : executions) {
