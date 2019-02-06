@@ -3,6 +3,7 @@
 == Documentation 
 
 - https://gradle.github.io/playframework/[User manual]
+- https://gradle.github.io/playframework/api[Javadocs]
 - https://github.com/gradle/playframework/tree/master/src/docs/samples[Samples]
 
 == Development
