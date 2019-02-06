@@ -2,7 +2,6 @@ package org.gradle.playframework.tasks
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import spock.lang.Ignore
 
 class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegrationTest {
 
@@ -75,7 +74,6 @@ play {
         }
     }
 
-    @Ignore("requires Gradle 5.1 to pass")
     def "failure to generate routes fails the build with useful message"() {
         given:
         File confDir = temporaryFolder.newFolder('conf')
