@@ -6,19 +6,25 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationPublications;
 import org.gradle.api.artifacts.PublishArtifact;
+import org.gradle.api.artifacts.ResolvedArtifact;
+import org.gradle.api.artifacts.component.ProjectComponentIdentifier;
+import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.type.ArtifactTypeDefinition;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.artifacts.ArtifactAttributes;
 import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact;
+import org.gradle.api.internal.file.FileCollectionInternal;
+import org.gradle.api.internal.file.collections.ImmutableFileCollection;
+import org.gradle.api.internal.file.collections.LazilyInitializedFileCollection;
+import org.gradle.api.internal.tasks.TaskDependencyResolveContext;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.bundling.Jar;
-import org.gradle.api.tasks.scala.ScalaCompile;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.extensions.PlayPlatform;
-import org.gradle.playframework.extensions.PlayPluginConfigurations;
 import org.gradle.playframework.extensions.internal.PlayMajorVersion;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.tasks.PlayRun;
@@ -26,8 +32,11 @@ import org.gradle.playframework.tasks.RoutesCompile;
 import org.gradle.playframework.tasks.TwirlCompile;
 import org.gradle.util.VersionNumber;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaBasePlugin.BUILD_TASK_NAME;
@@ -40,16 +49,19 @@ import static org.gradle.api.plugins.JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_N
 public class PlayApplicationPlugin implements Plugin<Project> {
 
     public static final String PLAY_EXTENSION_NAME = "play";
-    public static final String PLAY_CONFIGURATIONS_EXTENSION_NAME = "playConfigurations";
     public static final String ASSETS_JAR_TASK_NAME = "createPlayAssetsJar";
     public static final String RUN_TASK_NAME = "runPlay";
     public static final int DEFAULT_HTTP_PORT = 9000;
     public static final String RUN_GROUP = "Run";
+    public static final String PLATFORM_CONFIGURATION = "play";
 
     @Override
     public void apply(Project project) {
+        project.getPluginManager().apply(ScalaPlugin.class);
+
         PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project.getObjects());
-        PlayPluginConfigurations playPluginConfigurations = project.getExtensions().create(PLAY_CONFIGURATIONS_EXTENSION_NAME, PlayPluginConfigurations.class, project.getConfigurations(), project.getDependencies());
+        Configuration playConfiguration = project.getConfigurations().create(PLATFORM_CONFIGURATION);
+        project.getConfigurations().getByName(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME).extendsFrom(playConfiguration);
 
         applyPlugins(project);
 
@@ -62,14 +74,12 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         project.afterEvaluate(project1 -> {
             PlayPlatform playPlatform = playExtension.getPlatform();
             failIfInjectedRouterIsUsedWithOldVersion(playExtension.getInjectedRoutesGenerator().get(), playPlatform);
-            initialiseConfigurations(playPluginConfigurations, playPlatform);
-            configureScalaCompileTask(project, playPluginConfigurations);
-            configureRunTask(playRun, playPluginConfigurations);
+            addAutomaticDependencies(project.getDependencies(), playPlatform);
+            configureRunTask(playRun, filtered(project.getConfigurations().getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)));
         });
     }
 
     private void applyPlugins(Project project) {
-        project.getPluginManager().apply(ScalaPlugin.class);
         project.getPluginManager().apply(PlayTwirlPlugin.class);
         project.getPluginManager().apply(PlayRoutesPlugin.class);
     }
@@ -84,10 +94,10 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         }
     }
 
-    private void initialiseConfigurations(PlayPluginConfigurations configurations, PlayPlatform playPlatform) {
-        configurations.getPlayPlatform().addDependency(playPlatform.getDependencyNotation("play").get());
-        configurations.getPlayTest().addDependency(playPlatform.getDependencyNotation("play-test").get());
-        configurations.getPlayRun().addDependency(playPlatform.getDependencyNotation("play-docs").get());
+    private void addAutomaticDependencies(DependencyHandler dependencies, PlayPlatform playPlatform) {
+        dependencies.add(PLATFORM_CONFIGURATION, playPlatform.getDependencyNotation("play").get());
+        dependencies.add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, playPlatform.getDependencyNotation("play-test").get());
+        dependencies.add(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME, playPlatform.getDependencyNotation("play-docs").get());
 
         PlayMajorVersion playMajorVersion = PlayMajorVersion.forPlatform(playPlatform);
         if (playMajorVersion == PlayMajorVersion.PLAY_2_6_X) {
@@ -95,7 +105,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             // including Scala based projects. Still, users can exclude the dependency if they
             // want/need. Maybe in the future we can enable users to have some flag to specify
             // if the project is Java or Scala based.
-            configurations.getPlayPlatform().addDependency(playPlatform.getDependencyNotation("play-java-forms").get());
+            dependencies.add(PLATFORM_CONFIGURATION, playPlatform.getDependencyNotation("play-java-forms").get());
         }
     }
 
@@ -132,16 +142,6 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         publications.getAttributes().attribute(ArtifactAttributes.ARTIFACT_FORMAT, ArtifactTypeDefinition.JAR_TYPE);
     }
 
-    private void configureScalaCompileTask(Project project, PlayPluginConfigurations configurations) {
-        project.getTasks().named("compileScala", ScalaCompile.class, scalaCompile -> {
-            FileCollection playArtifacts = configurations.getPlay().getAllArtifacts();
-            scalaCompile.setClasspath(playArtifacts);
-            scalaCompile.getOptions().setAnnotationProcessorPath(playArtifacts);
-            scalaCompile.dependsOn(getTwirlCompileTask(project));
-            scalaCompile.dependsOn(getRoutesCompileTask(project));
-        });
-    }
-
     private static TaskProvider<TwirlCompile> getTwirlCompileTask(Project project) {
         return project.getTasks().named(PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME, TwirlCompile.class);
     }
@@ -164,10 +164,64 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         });
     }
 
-    private void configureRunTask(TaskProvider<PlayRun> playRun, PlayPluginConfigurations configurations) {
+    private void configureRunTask(TaskProvider<PlayRun> playRun, PlayConfiguration filteredRuntime) {
         playRun.configure(task -> {
-            task.setRuntimeClasspath(configurations.getPlayRun().getNonChangingArtifacts());
-            task.setChangingClasspath(configurations.getPlayRun().getChangingArtifacts());
+            task.setRuntimeClasspath(filteredRuntime.getNonChangingArtifacts());
+            task.setChangingClasspath(filteredRuntime.getChangingArtifacts());
         });
+    }
+
+    PlayConfiguration filtered(Configuration configuration) {
+        return new PlayConfiguration(configuration);
+    }
+
+    /**
+     * Wrapper around a Configuration instance used by the PlayApplicationPlugin.
+     */
+    class PlayConfiguration {
+        private final Configuration configuration;
+
+        PlayConfiguration(Configuration configuration) {
+            this.configuration = configuration;
+        }
+
+        FileCollection getChangingArtifacts() {
+            return new FilterByProjectComponentTypeFileCollection(configuration, true);
+        }
+
+        FileCollection getNonChangingArtifacts() {
+            return new FilterByProjectComponentTypeFileCollection(configuration, false);
+        }
+    }
+
+    private static class FilterByProjectComponentTypeFileCollection extends LazilyInitializedFileCollection {
+        private final Configuration configuration;
+        private final boolean matchProjectComponents;
+
+        private FilterByProjectComponentTypeFileCollection(Configuration configuration, boolean matchProjectComponents) {
+            this.configuration = configuration;
+            this.matchProjectComponents = matchProjectComponents;
+        }
+
+        @Override
+        public String getDisplayName() {
+            return configuration.toString();
+        }
+
+        @Override
+        public FileCollectionInternal createDelegate() {
+            Set<File> files = new HashSet<>();
+            for (ResolvedArtifact artifact : configuration.getResolvedConfiguration().getResolvedArtifacts()) {
+                if ((artifact.getId().getComponentIdentifier() instanceof ProjectComponentIdentifier) == matchProjectComponents) {
+                    files.add(artifact.getFile());
+                }
+            }
+            return ImmutableFileCollection.of(Collections.unmodifiableSet(files));
+        }
+
+        @Override
+        public void visitDependencies(TaskDependencyResolveContext context) {
+            context.add(configuration);
+        }
     }
 }

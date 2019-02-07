@@ -1,8 +1,9 @@
 package org.gradle.playframework.plugins;
 
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.extensions.PlayPlatform;
-import org.gradle.playframework.extensions.PlayPluginConfigurations;
 import org.gradle.playframework.extensions.internal.PlayMajorVersion;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
@@ -73,7 +74,6 @@ public class PlayDistributionPlugin implements Plugin<Project> {
     }
 
     private void createDistributionContentTasks(Project project, Distribution distribution) {
-        PlayPluginConfigurations configurations = (PlayPluginConfigurations) project.getExtensions().getByName(PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME);
         PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PlayApplicationPlugin.PLAY_EXTENSION_NAME);
         TaskProvider<Jar> mainJarTask = project.getTasks().named(JAR_TASK_NAME, Jar.class);
         TaskProvider<Jar> assetsJarTask = project.getTasks().named(PlayApplicationPlugin.ASSETS_JAR_TASK_NAME, Jar.class);
@@ -90,7 +90,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.setBaseName(mainJarTask.get().getBaseName());
 
             Map<String, Object> classpath = new HashMap<>();
-            classpath.put("Class-Path", new PlayManifestClasspath(configurations.getPlayRun(), assetsJarTask.get().getArchivePath()));
+            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath()));
             jar.getManifest().attributes(classpath);
         });
 
@@ -108,8 +108,8 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         distSpec.into("lib", copySpec -> {
             copySpec.from(distributionJarTask);
             copySpec.from(assetsJarTask.get().getArchivePath());
-            copySpec.from(configurations.getPlayRun().getAllArtifacts());
-            copySpec.eachFile(new PrefixArtifactFileNames(configurations.getPlayRun()));
+            copySpec.from(project.getConfigurations().getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME).getAllArtifacts());
+            copySpec.eachFile(new PrefixArtifactFileNames(project.getConfigurations().getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)));
         });
 
         distSpec.into("bin", copySpec -> {
@@ -180,17 +180,17 @@ public class PlayDistributionPlugin implements Plugin<Project> {
      * Represents a classpath to be defined in a jar manifest
      */
     static class PlayManifestClasspath {
-        final PlayPluginConfigurations.PlayConfiguration playConfiguration;
+        final Configuration playConfiguration;
         final File assetsJarFile;
 
-        public PlayManifestClasspath(PlayPluginConfigurations.PlayConfiguration playConfiguration, File assetsJarFile) {
+        public PlayManifestClasspath(Configuration playConfiguration, File assetsJarFile) {
             this.playConfiguration = playConfiguration;
             this.assetsJarFile = assetsJarFile;
         }
 
         @Override
         public String toString() {
-            Stream<File> allFiles = Stream.concat(playConfiguration.getAllArtifacts().getFiles().stream(), Collections.singleton(assetsJarFile).stream());
+            Stream<File> allFiles = Stream.concat(playConfiguration.getAllArtifacts().getFiles().getFiles().stream(), Collections.singleton(assetsJarFile).stream());
             Stream<String> transformedFiles = allFiles.map(new PrefixArtifactFileNames(playConfiguration));
             return String.join(" ",
                     transformedFiles.collect(Collectors.toList())
@@ -199,10 +199,10 @@ public class PlayDistributionPlugin implements Plugin<Project> {
     }
 
     static class PrefixArtifactFileNames implements Action<FileCopyDetails>, Function<File, String> {
-        private final PlayPluginConfigurations.PlayConfiguration configuration;
+        private final Configuration configuration;
         Map<File, String> renames;
 
-        PrefixArtifactFileNames(PlayPluginConfigurations.PlayConfiguration configuration) {
+        PrefixArtifactFileNames(Configuration configuration) {
             this.configuration = configuration;
         }
 
@@ -247,7 +247,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         }
 
         Set<ResolvedArtifactResult> getResolvedArtifacts() {
-            ArtifactCollection artifacts = configuration.getConfiguration().getIncoming().getArtifacts();
+            ArtifactCollection artifacts = configuration.getIncoming().getArtifacts();
             return artifacts.getArtifacts();
         }
 

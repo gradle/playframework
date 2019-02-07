@@ -1,12 +1,13 @@
 package org.gradle.playframework.plugins;
 
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.playframework.extensions.PlayExtension;
-import org.gradle.playframework.extensions.PlayPluginConfigurations;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.sourcesets.TwirlImports;
 import org.gradle.playframework.sourcesets.TwirlSourceSet;
 import org.gradle.playframework.sourcesets.internal.DefaultTwirlSourceSet;
 import org.gradle.playframework.tasks.TwirlCompile;
+import org.gradle.playframework.tools.internal.run.PlayApplication;
 import org.gradle.playframework.tools.internal.twirl.TwirlCompilerFactory;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
@@ -25,7 +26,6 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
     @Override
     public void apply(Project project) {
         PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PlayApplicationPlugin.PLAY_EXTENSION_NAME);
-        PlayPluginConfigurations configurations = (PlayPluginConfigurations) project.getExtensions().getByName(PlayApplicationPlugin.PLAY_CONFIGURATIONS_EXTENSION_NAME);
 
         Configuration twirlCompilerConfiguration = createTwirlCompilerConfiguration(project);
         declareDefaultDependencies(project, twirlCompilerConfiguration, playExtension);
@@ -34,7 +34,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
 
         project.afterEvaluate(project1 -> {
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
-                configurations.getPlay().addDependency(playExtension.getPlatform().getDependencyNotation("play-java").get());
+                project.getDependencies().add(PlayApplicationPlugin.PLATFORM_CONFIGURATION, playExtension.getPlatform().getDependencyNotation("play-java").get());
             }
         });
     }
