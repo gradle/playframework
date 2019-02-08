@@ -1,7 +1,9 @@
 == Change Log
 
 [discrete]
-=== v0.3 (TBA)
+=== v0.3 (2019-02-08)
+
+* Move classes from package `org.gradle.scala.internal.reflect` from Gradle core into plugin code base.
 
 [discrete]
 === v0.2 (2019-02-08)
