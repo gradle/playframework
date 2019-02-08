@@ -2,7 +2,7 @@ package org.gradle.playframework.tools.internal.twirl;
 
 import org.gradle.playframework.sourcesets.TwirlImports;
 import org.gradle.playframework.sourcesets.TwirlTemplateFormat;
-import org.gradle.scala.internal.reflect.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 
 import java.io.File;
 import java.io.Serializable;

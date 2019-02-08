@@ -1,9 +1,9 @@
 package org.gradle.playframework.tools.internal.routes;
 
-import org.gradle.playframework.tools.internal.Compiler;
 import org.gradle.api.tasks.WorkResult;
 import org.gradle.api.tasks.WorkResults;
-import org.gradle.scala.internal.reflect.ScalaMethod;
+import org.gradle.playframework.tools.internal.Compiler;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 
 import java.io.File;
 import java.io.Serializable;

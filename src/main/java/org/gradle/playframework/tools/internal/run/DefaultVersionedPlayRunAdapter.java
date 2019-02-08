@@ -8,8 +8,8 @@ import org.gradle.internal.classpath.ClassPath;
 import org.gradle.internal.classpath.DefaultClassPath;
 import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
-import org.gradle.scala.internal.reflect.ScalaMethod;
-import org.gradle.scala.internal.reflect.ScalaReflectionUtil;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
 
 import java.io.Closeable;
 import java.io.File;

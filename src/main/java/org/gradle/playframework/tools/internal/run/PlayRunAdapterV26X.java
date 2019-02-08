@@ -1,8 +1,8 @@
 package org.gradle.playframework.tools.internal.run;
 
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
-import org.gradle.scala.internal.reflect.ScalaMethod;
-import org.gradle.scala.internal.reflect.ScalaReflectionUtil;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
 
 import java.net.InetSocketAddress;
 

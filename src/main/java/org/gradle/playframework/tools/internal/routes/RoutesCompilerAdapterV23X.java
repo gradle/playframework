@@ -1,9 +1,9 @@
 package org.gradle.playframework.tools.internal.routes;
 
 import org.gradle.internal.Cast;
-import org.gradle.scala.internal.reflect.ScalaListBuffer;
-import org.gradle.scala.internal.reflect.ScalaMethod;
-import org.gradle.scala.internal.reflect.ScalaReflectionUtil;
+import org.gradle.playframework.tools.internal.scala.ScalaListBuffer;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

@@ -1,6 +1,6 @@
 package org.gradle.playframework.tools.internal.routes;
 
-import org.gradle.scala.internal.reflect.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 
 import java.io.File;
 import java.io.Serializable;

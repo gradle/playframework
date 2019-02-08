@@ -7,8 +7,8 @@ import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.WorkResult;
 import org.gradle.api.tasks.WorkResults;
 import org.gradle.internal.FileUtils;
-import org.gradle.scala.internal.reflect.ScalaMethod;
-import org.gradle.scala.internal.reflect.ScalaOptionInvocationWrapper;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaOptionInvocationWrapper;
 import org.gradle.util.CollectionUtils;
 
 import java.io.File;

@@ -57,6 +57,16 @@ public final class JavaReflectionUtil {
         throw new IllegalArgumentException(String.format("Don't know the wrapper type for primitive type %s.", type));
     }
 
+    public static <T> T newInstance(Class<T> c) {
+        try {
+            Constructor<T> constructor = c.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static Field findField(Class<?> target, String fieldName) {
         Field[] fields = target.getFields();
         for (Field field : fields) {

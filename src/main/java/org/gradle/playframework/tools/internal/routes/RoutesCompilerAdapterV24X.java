@@ -6,10 +6,10 @@ import org.gradle.internal.Cast;
 import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaMethod;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
-import org.gradle.scala.internal.reflect.ScalaListBuffer;
-import org.gradle.scala.internal.reflect.ScalaMethod;
-import org.gradle.scala.internal.reflect.ScalaObject;
-import org.gradle.scala.internal.reflect.ScalaReflectionUtil;
+import org.gradle.playframework.tools.internal.scala.ScalaListBuffer;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaObject;
+import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
 
 import java.io.File;
 import java.util.ArrayList;

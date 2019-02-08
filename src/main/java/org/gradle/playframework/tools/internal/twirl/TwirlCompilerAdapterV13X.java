@@ -2,9 +2,9 @@ package org.gradle.playframework.tools.internal.twirl;
 
 import org.gradle.playframework.sourcesets.TwirlImports;
 import org.gradle.playframework.sourcesets.TwirlTemplateFormat;
-import org.gradle.scala.internal.reflect.ScalaCodecMapper;
-import org.gradle.scala.internal.reflect.ScalaMethod;
-import org.gradle.scala.internal.reflect.ScalaReflectionUtil;
+import org.gradle.playframework.tools.internal.scala.ScalaCodecMapper;
+import org.gradle.playframework.tools.internal.scala.ScalaMethod;
+import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
 import org.gradle.util.CollectionUtils;
 
 import java.io.File;
