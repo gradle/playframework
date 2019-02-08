@@ -1,7 +1,7 @@
 == Change Log
 
 [discrete]
-=== v0.2 (TBA)
+=== v0.2 (2019-02-08)
 
 * Ensure compatibility with Gradle 5.2 ({uri-github-issues}/82[issue #82]).
 * Fix test code in basic and advanced samples ({uri-github-issues}/74[issue #74]).
