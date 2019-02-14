@@ -1,15 +1,15 @@
 package org.gradle.playframework.application.basic
 
+import org.gradle.play.internal.platform.PlayMajorVersion
 import org.gradle.playframework.application.PlayIdeaPluginIntegrationTest
 import org.gradle.playframework.fixtures.app.BasicPlayApp
 import org.gradle.playframework.fixtures.app.PlayApp
-import org.gradle.play.internal.platform.PlayMajorVersion
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
+import static org.gradle.playframework.fixtures.ide.IdeaFixtures.parseIml
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
-import static org.gradle.playframework.fixtures.ide.IdeaFixtures.parseIml
 
 class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
     private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()

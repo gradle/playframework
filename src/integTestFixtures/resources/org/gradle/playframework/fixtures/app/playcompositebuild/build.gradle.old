@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    play "org.my:java-lib:1.0"
+    implementation "org.my:java-lib:1.0"
 }

@@ -24,10 +24,6 @@ class PlayApplicationDependenciesIntegrationTest extends AbstractIntegrationTest
         then:
         result.output.contains("""play
 +--- com.typesafe.play:play_2.12:2.6.15""")
-        result.output.contains("""playRun
-+--- com.typesafe.play:play_2.12:2.6.15""")
-        result.output.contains("""playTest
-+--- com.typesafe.play:play_2.12:2.6.15""")
     }
 
     def "can resolve dependencies for Play platform configured by extension"() {
@@ -46,10 +42,6 @@ class PlayApplicationDependenciesIntegrationTest extends AbstractIntegrationTest
 
         then:
         result.output.contains("""play
-+--- com.typesafe.play:play_2.12:2.6.14""")
-        result.output.contains("""playRun
-+--- com.typesafe.play:play_2.12:2.6.14""")
-        result.output.contains("""playTest
 +--- com.typesafe.play:play_2.12:2.6.14""")
     }
 

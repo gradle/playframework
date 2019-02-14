@@ -14,7 +14,7 @@ play {
 }
 
 dependencies {
-    play "com.typesafe.play:play-guice_2.12:2.6.7"
+    implementation "com.typesafe.play:play-guice_2.12:2.6.7"
 }
 
 repositories {

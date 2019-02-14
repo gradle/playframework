@@ -17,8 +17,12 @@ class PlayJavaAnnotationProcessingIntegrationTest extends AbstractIntegrationTes
             
             ${playRepositories()}
 
+            configurations {
+                annotationProcessor.extendsFrom configurations.compileOnly
+            }
+
             dependencies {
-                play 'org.projectlombok:lombok:1.16.22'
+                compileOnly 'org.projectlombok:lombok:1.16.22'
             }
         """
 

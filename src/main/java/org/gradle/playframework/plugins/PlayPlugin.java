@@ -1,10 +1,10 @@
 package org.gradle.playframework.plugins;
 
-import org.gradle.playframework.tasks.JavaScriptMinify;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.bundling.Jar;
+import org.gradle.playframework.tasks.JavaScriptMinify;
 
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 
@@ -19,7 +19,6 @@ public class PlayPlugin implements Plugin<Project> {
     private static void applyPlugins(Project project) {
         project.getPluginManager().apply(PlayApplicationPlugin.class);
         project.getPluginManager().apply(PlayJavaScriptPlugin.class);
-        project.getPluginManager().apply(PlayTestPlugin.class);
         project.getPluginManager().apply(PlayDistributionPlugin.class);
         project.getPluginManager().apply(PlayIdePlugin.class);
     }

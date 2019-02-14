@@ -1,13 +1,13 @@
 === Dependency configurations
 
-You can add compile, test and runtime dependencies to a Play application through link:{uri-gradle-dsl-reference}/org.gradle.api.artifacts.Configuration.html[Configuration] created by the Play plugin.
+You can add compile, test and runtime dependencies to a Play application through the standard link:{uri-gradle-dsl-reference}/org.gradle.api.artifacts.Configuration.html[Configuration]s created by the {uri-gradle-userguide}/java_plugin.html[Java plugin].
 
 If you are coming from SBT, the Play SBT plugin provides short names for common dependencies. For instance, if your project has a dependency on `ws`, you will need to add a dependency to `com.typesafe.play:play-ws_2.11:2.3.9` where `2.11` is your Scala version and `2.3.9` is your Play framework version.
 
 Other dependencies that have short names, such as `jackson` may actually be multiple dependencies. For those dependencies, you will need to work out the dependency coordinates from a dependency report.
 
-*  `play` is used for compile time dependencies.
-*  `playTest` is used for test compile time dependencies.
-*  `playRun` is used for run time dependencies.
-
 You can <<adding-dependencies,add dependencies>> to those configurations as needed.
+
+The Play plugin creates a custom configuration and assigns Play dependencies automatically based on the configuration of the Play platform. The custom configuration is not meant for assigning dependencies from a project using the plugin.
+
+*  `play` is used for Play-specific compile time dependencies.

@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    play project(":submodule")
-    play project(":javalibrary")
+    implementation project(":submodule")
+    implementation project(":javalibrary")
 }

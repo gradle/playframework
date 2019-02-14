@@ -67,13 +67,6 @@ gradlePlugin {
             implementationClass = "org.gradle.playframework.plugins.PlayJavaScriptPlugin"
         }
 
-        register("play-test-plugin") {
-            id = "org.gradle.playframework-test"
-            displayName = "Play Test Plugin"
-            description = "Plugin for executing tests for Play applications."
-            implementationClass = "org.gradle.playframework.plugins.PlayTestPlugin"
-        }
-
         register("play-distribution-plugin") {
             id = "org.gradle.playframework-distribution"
             displayName = "Play Distribution Plugin"

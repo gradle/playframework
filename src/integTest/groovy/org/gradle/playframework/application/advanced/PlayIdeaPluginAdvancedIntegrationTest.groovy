@@ -1,9 +1,9 @@
 package org.gradle.playframework.application.advanced
 
+import org.gradle.play.internal.platform.PlayMajorVersion
 import org.gradle.playframework.application.PlayIdeaPluginIntegrationTest
 import org.gradle.playframework.fixtures.app.AdvancedPlayApp
 import org.gradle.playframework.fixtures.app.PlayApp
-import org.gradle.play.internal.platform.PlayMajorVersion
 
 import static org.gradle.playframework.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME

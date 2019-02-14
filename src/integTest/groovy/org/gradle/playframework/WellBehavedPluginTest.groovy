@@ -26,7 +26,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
             gradle.buildFinished {
                 def configuredTaskPaths = configuredTasks*.path
                 
-                assert configuredTaskPaths == [':createPlayAssetsJar', ':minifyPlayJavaScript', ':compilePlayTwirlTemplates', ':jar', ':distZip', ':distTar', ':compileJava', ':processResources', ':help']
+                assert configuredTaskPaths == [':createPlayAssetsJar', ':minifyPlayJavaScript', ':compilePlayTwirlTemplates', ':help']
             }
         """
 

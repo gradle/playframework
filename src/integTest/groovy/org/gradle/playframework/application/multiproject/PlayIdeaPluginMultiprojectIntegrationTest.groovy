@@ -1,9 +1,9 @@
 package org.gradle.playframework.application.multiproject
 
+import org.gradle.play.internal.platform.PlayMajorVersion
 import org.gradle.playframework.application.PlayIdeaPluginIntegrationTest
 import org.gradle.playframework.fixtures.app.PlayApp
 import org.gradle.playframework.fixtures.app.PlayMultiProject
-import org.gradle.play.internal.platform.PlayMajorVersion
 
 import static org.gradle.playframework.application.basic.PlayIdeaPluginBasicIntegrationTest.PLAY_VERSION_TO_CLASSPATH_SIZE
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME

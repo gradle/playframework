@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    play "com.google.guava:guava:17.0"
-    playTest "commons-lang:commons-lang:2.6"
+    implementation "com.google.guava:guava:17.0"
+    testImplementation "commons-lang:commons-lang:2.6"
 }
 
 // repositories added in PlayApp class

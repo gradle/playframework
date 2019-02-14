@@ -17,8 +17,21 @@ public final class PlayPluginHelper {
         return javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
     }
 
-    public static SourceDirectorySet getScalaSourceDirectorySet(Project project) {
-        return ((SourceDirectorySet) InvokerHelper.invokeMethod(getMainJavaSourceSet(project), "getScala", null));
+    public static SourceSet getTestJavaSourceSet(Project project) {
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        return javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
+    }
+
+    public static SourceDirectorySet getMainScalaSourceDirectorySet(Project project) {
+        return getScalaSourceDirectorySet(getMainJavaSourceSet(project));
+    }
+
+    public static SourceDirectorySet getTestScalaSourceDirectorySet(Project project) {
+        return getScalaSourceDirectorySet(getTestJavaSourceSet(project));
+    }
+
+    private static SourceDirectorySet getScalaSourceDirectorySet(SourceSet sourceSet) {
+        return ((SourceDirectorySet) InvokerHelper.invokeMethod(sourceSet, "getScala", null));
     }
 
     public static <T> T createCustomSourceSet(Project project, Class<? extends T> t, String name) {

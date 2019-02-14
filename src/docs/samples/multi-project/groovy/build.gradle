@@ -19,8 +19,8 @@ allprojects {
 
 // tag::play-multiproject-dependencies[]
 dependencies {
-    play project(":admin")
-    play project(":user")
-    play project(":util")
+    implementation project(":admin")
+    implementation project(":user")
+    implementation project(":util")
 }
 // end::play-multiproject-dependencies[]

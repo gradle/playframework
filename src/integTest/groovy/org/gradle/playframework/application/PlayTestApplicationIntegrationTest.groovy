@@ -6,10 +6,9 @@ import org.gradle.playframework.fixtures.test.TestExecutionResult
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
-import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
-import static org.gradle.playframework.plugins.PlayTestPlugin.TEST_SCALA_COMPILE_TASK_NAME
-import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 import static org.gradle.api.plugins.JavaPlugin.TEST_TASK_NAME
+import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
+import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
 abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplicationIntegrationTest {
 
@@ -17,7 +16,8 @@ abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplic
     private static final TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
     private static final SCALA_COMPILE_TASK_NAME = 'compileScala'
     private static final SCALA_COMPILE_TASK_PATH = ":$SCALA_COMPILE_TASK_NAME".toString()
-    private static final SCALA_TEST_COMPILE_TASK_PATH = ":$TEST_SCALA_COMPILE_TASK_NAME".toString()
+    private static final SCALA_COMPILE_TEST_TASK_NAME = 'compileTestScala'
+    private static final SCALA_TEST_COMPILE_TASK_PATH = ":$SCALA_COMPILE_TEST_TASK_NAME".toString()
     private static final TEST_TASK_PATH = ":$TEST_TASK_NAME".toString()
 
     def "can run play app tests"() {

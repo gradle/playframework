@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    play project(":submodule")
-    play project(":javalibrary")
-    play "com.typesafe.play:play-guice_2.12:2.6.15"
-    play "ch.qos.logback:logback-classic:1.2.3"
+    implementation project(":submodule")
+    implementation project(":javalibrary")
+    implementation "com.typesafe.play:play-guice_2.12:2.6.15"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
 }
