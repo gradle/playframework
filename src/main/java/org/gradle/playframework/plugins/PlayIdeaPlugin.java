@@ -51,8 +51,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
                 return Collections.unmodifiableSet(sourceDirs);
             });
 
-            conventionMapping.map("testSourceDirs", (Callable<Set<File>>) () -> getTestScalaSourceDirectorySet(project).getSrcDirs());
-
             conventionMapping.map("singleEntryLibraries", (Callable<Map<String, Iterable<File>>>) () -> {
                 SourceSet mainSourceSet = getMainJavaSourceSet(project);
                 SourceSet testSourceSet = getTestJavaSourceSet(project);
