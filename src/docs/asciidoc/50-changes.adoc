@@ -1,7 +1,14 @@
 == Change Log
 
 [discrete]
-=== v0.4 (TBA)
+=== v0.5 (TBD)
+
+* TBD
+
+[discrete]
+=== v0.4 (2019-02-18)
+
+* Rework plugins to rely on Java/Scala plugin configurations
 
 [discrete]
 === v0.3 (2019-02-08)
