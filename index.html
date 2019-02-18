@@ -558,7 +558,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-    id 'org.gradle.playframework' version '0.2'
+    id 'org.gradle.playframework' version '0.5'
 }
 
 repositories {
@@ -832,7 +832,7 @@ repositories {
 <div class="sect2">
 <h3 id="dependency_configurations"><a class="anchor" href="#dependency_configurations"></a>2.5. Dependency configurations</h3>
 <div class="paragraph">
-<p>You can add compile, test and runtime dependencies to a Play application through <a href="https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.Configuration.html">Configuration</a> created by the Play plugin.</p>
+<p>You can add compile, test and runtime dependencies to a Play application through the standard <a href="https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.Configuration.html">Configuration</a>s created by the <a href="https://docs.gradle.org/current/userguide/java_plugin.html">Java plugin</a>.</p>
 </div>
 <div class="paragraph">
 <p>If you are coming from SBT, the Play SBT plugin provides short names for common dependencies. For instance, if your project has a dependency on <code>ws</code>, you will need to add a dependency to <code>com.typesafe.play:play-ws_2.11:2.3.9</code> where <code>2.11</code> is your Scala version and <code>2.3.9</code> is your Play framework version.</p>
@@ -840,21 +840,18 @@ repositories {
 <div class="paragraph">
 <p>Other dependencies that have short names, such as <code>jackson</code> may actually be multiple dependencies. For those dependencies, you will need to work out the dependency coordinates from a dependency report.</p>
 </div>
+<div class="paragraph">
+<p>You can <a href="#adding-dependencies">add dependencies</a> to those configurations as needed.</p>
+</div>
+<div class="paragraph">
+<p>The Play plugin creates a custom configuration and assigns Play dependencies automatically based on the configuration of the Play platform. The custom configuration is not meant for assigning dependencies from a project using the plugin.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>play</code> is used for compile time dependencies.</p>
-</li>
-<li>
-<p><code>playTest</code> is used for test compile time dependencies.</p>
-</li>
-<li>
-<p><code>playRun</code> is used for run time dependencies.</p>
+<p><code>play</code> is used for Play-specific compile time dependencies.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>You can <a href="#adding-dependencies">add dependencies</a> to those configurations as needed.</p>
 </div>
 </div>
 </div>
@@ -865,16 +862,16 @@ repositories {
 <div class="sect2">
 <h3 id="adding-dependencies"><a class="anchor" href="#adding-dependencies"></a>3.1. Adding dependencies</h3>
 <div class="paragraph">
-<p>Your Play application might need additional dependencies. The Play plugin exposes custom configurations for adding dependencies.</p>
+<p>Your Play application might need additional dependencies. The Java plugin exposes standard configurations for adding dependencies.</p>
 </div>
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-    play "commons-lang:commons-lang:2.6"
-    play "com.typesafe.play:play-guice_2.12:2.6.15"
-    play "ch.qos.logback:logback-classic:1.2.3"
-    playTest "org.scalatestplus.play:scalatestplus-play_2.12:3.1.2"
+    implementation "commons-lang:commons-lang:2.6"
+    implementation "com.typesafe.play:play-guice_2.12:2.6.15"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
+    testImplementation "org.scalatestplus.play:scalatestplus-play_2.12:3.1.2"
 }</code></pre>
 </div>
 </div>
@@ -915,9 +912,9 @@ repositories {
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-    play project(":admin")
-    play project(":user")
-    play project(":util")
+    implementation project(":admin")
+    implementation project(":user")
+    implementation project(":util")
 }</code></pre>
 </div>
 </div>
@@ -934,7 +931,7 @@ repositories {
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-    id 'org.gradle.playframework' version '0.2'
+    id 'org.gradle.playframework' version '0.5'
     id 'idea'
 }</code></pre>
 </div>
@@ -1065,6 +1062,9 @@ repositories {
 <p>Any features of the <a href="https://blog.gradle.org/state-and-future-of-the-gradle-software-model">Gradle software model</a> and its plugin ecosystem.</p>
 </li>
 <li>
+<p>The custom configurations <code>playTest</code> and <code>playRun</code> do not exist anymore. Use the standard configurations <code>implementation</code>, <code>testImplementation</code> and <code>runtime</code> of the Java/Scala plugin instead.</p>
+</li>
+<li>
 <p>The extension does not allow for configuring a target platform. You will need to configure Play, Scala and Java version individually.</p>
 </li>
 <li>
@@ -1086,6 +1086,30 @@ repositories {
 <div class="sect1">
 <h2 id="change_log"><a class="anchor" href="#change_log"></a>6. Change Log</h2>
 <div class="sectionbody">
+<h3 id="v0_5_tbd" class="discrete">v0.5 (TBD)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>TBD</p>
+</li>
+</ul>
+</div>
+<h3 id="v0_4_2019_02_18" class="discrete">v0.4 (2019-02-18)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Rework plugins to rely on Java/Scala plugin configurations</p>
+</li>
+</ul>
+</div>
+<h3 id="v0_3_2019_02_08" class="discrete">v0.3 (2019-02-08)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Move classes from package <code>org.gradle.scala.internal.reflect</code> from Gradle core into plugin code base.</p>
+</li>
+</ul>
+</div>
 <h3 id="v0_2_2019_02_08" class="discrete">v0.2 (2019-02-08)</h3>
 <div class="ulist">
 <ul>
@@ -1116,7 +1140,7 @@ repositories {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-02-08 15:31:41 +0100
+Last updated 2019-02-07 00:50:05 -0500
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
