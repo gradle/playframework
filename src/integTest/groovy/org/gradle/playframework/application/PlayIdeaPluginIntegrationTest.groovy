@@ -139,13 +139,14 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         applyIdePlugin()
         buildFile << """
             allprojects {
+                File customDir = file('custom')
                 Set<File> allSourceDirs = ideaModule.module.sourceDirs
-                allSourceDirs.addAll(sourceSets.main.java.srcDirs)
+                allSourceDirs.add(customDir)
                 ideaModule.module.sourceDirs = allSourceDirs
                 
                 tasks.idea {
                     doLast {
-                        assert ideaModule.module.sourceDirs.contains(file('src/main/java'))
+                        assert ideaModule.module.sourceDirs.contains(customDir)
                     }
                 }
             }
