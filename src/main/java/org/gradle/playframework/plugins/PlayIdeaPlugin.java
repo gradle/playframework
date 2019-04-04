@@ -48,7 +48,7 @@ public class PlayIdeaPlugin implements Plugin<Project> {
                 SourceDirectorySet scalaSourceDirectorySet = getMainScalaSourceDirectorySet(project);
                 sourceDirs.addAll(scalaSourceDirectorySet.getSrcDirs());
                 sourceDirs.add(javaScriptMinifyTask.get().getDestinationDir().get().getAsFile());
-                return Collections.unmodifiableSet(sourceDirs);
+                return sourceDirs;
             });
 
             conventionMapping.map("singleEntryLibraries", (Callable<Map<String, Iterable<File>>>) () -> {

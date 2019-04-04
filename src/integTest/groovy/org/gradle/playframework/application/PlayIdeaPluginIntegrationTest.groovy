@@ -134,4 +134,29 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
             assert result.task(it).outcome == TaskOutcome.SUCCESS
         }
     }
+
+    def "can modify source directories"() {
+        applyIdePlugin()
+        buildFile << """
+            allprojects {
+                Set<File> allSourceDirs = ideaModule.module.sourceDirs
+                allSourceDirs.addAll(sourceSets.main.java.srcDirs)
+                ideaModule.module.sourceDirs = allSourceDirs
+                
+                tasks.idea {
+                    doLast {
+                        assert ideaModule.module.sourceDirs.contains(file('src/main/java'))
+                    }
+                }
+            }
+        """
+
+        when:
+        BuildResult result = build(ideTask)
+
+        then:
+        buildTasks.each {
+            assert result.task(it).outcome == TaskOutcome.SUCCESS
+        }
+    }
 }
