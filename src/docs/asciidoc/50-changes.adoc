@@ -3,7 +3,7 @@
 [discrete]
 === v0.5 (TBD)
 
-* TBD
+* IDEA plugin should allow users to modify source directories
 
 [discrete]
 === v0.4 (2019-02-18)
