@@ -1,7 +1,12 @@
 == Change Log
 
 [discrete]
-=== v0.5 (TBD)
+=== v0.6 (TBD)
+
+* TBD
+
+[discrete]
+=== v0.5 (2019-04-10)
 
 * IDEA plugin should allow users to modify source directories
 
