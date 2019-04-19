@@ -89,7 +89,6 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.setDestinationDir(distJarDir);
             jar.setBaseName(mainJarTask.get().getBaseName());
 
-            System.out.println("----> " + project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME).getFiles());
             Map<String, Object> classpath = new HashMap<>();
             classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath()));
             jar.getManifest().attributes(classpath);
