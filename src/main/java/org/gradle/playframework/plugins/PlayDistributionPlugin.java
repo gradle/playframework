@@ -89,6 +89,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.setDestinationDir(distJarDir);
             jar.setBaseName(mainJarTask.get().getBaseName());
 
+            System.out.println("----> " + project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME).getFiles());
             Map<String, Object> classpath = new HashMap<>();
             classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath()));
             jar.getManifest().attributes(classpath);
@@ -180,18 +181,18 @@ public class PlayDistributionPlugin implements Plugin<Project> {
      * Represents a classpath to be defined in a jar manifest
      */
     static class PlayManifestClasspath {
-        final Configuration playConfiguration;
+        final Configuration configuration;
         final File assetsJarFile;
 
-        public PlayManifestClasspath(Configuration playConfiguration, File assetsJarFile) {
-            this.playConfiguration = playConfiguration;
+        public PlayManifestClasspath(Configuration configuration, File assetsJarFile) {
+            this.configuration = configuration;
             this.assetsJarFile = assetsJarFile;
         }
 
         @Override
         public String toString() {
-            Stream<File> allFiles = Stream.concat(playConfiguration.getAllArtifacts().getFiles().getFiles().stream(), Collections.singleton(assetsJarFile).stream());
-            Stream<String> transformedFiles = allFiles.map(new PrefixArtifactFileNames(playConfiguration));
+            Stream<File> allFiles = Stream.concat(configuration.getFiles().stream(), Collections.singleton(assetsJarFile).stream());
+            Stream<String> transformedFiles = allFiles.map(new PrefixArtifactFileNames(configuration));
             return String.join(" ",
                     transformedFiles.collect(Collectors.toList())
             );
