@@ -26,7 +26,8 @@ class GitHubPagesPlugin : Plugin<Project> {
     private
     fun Project.addLinks() {
         val javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"
-        val groovyApiUrl = "https://docs.groovy-lang.org/2.5.4/html/gapi/"
+        // TODO: This should be https, but the Groovy site has an invalid certificate right now.
+        val groovyApiUrl = "http://docs.groovy-lang.org/2.5.4/html/gapi/"
         val gradleApiUrl = "https://docs.gradle.org/${project.gradle.gradleVersion}/javadoc/"
 
         tasks.withType<Javadoc>().configureEach {
