@@ -8,7 +8,7 @@ plugins {
     org.gradle.playframework.`user-guide`
     org.gradle.playframework.`github-pages`
     org.gradle.playframework.`documentation-test`
-    id("com.gradle.plugin-publish") version "0.10.0"
+    id("com.gradle.plugin-publish") version "0.10.1"
 }
 
 group = "org.gradle.playframework"
