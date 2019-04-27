@@ -2,9 +2,12 @@ package org.gradle.playframework.application
 
 import org.gradle.playframework.PlayMultiVersionApplicationIntegrationTest
 import org.gradle.playframework.fixtures.archive.ArchiveTestFixture
+import org.gradle.playframework.fixtures.archive.JarTestFixture
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
+
+import java.util.jar.Attributes
 
 import static org.gradle.playframework.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
@@ -78,14 +81,20 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
     }
 
     void verifyJars() {
-        jar("build/distributionJars/main/${playApp.name}.jar").containsDescendants(
+        def mainJar = jar("build/distributionJars/main/${playApp.name}.jar")
+        mainJar.containsDescendants(
                 determineRoutesClassName(),
                 "views/html/index.class",
                 "views/html/main.class",
                 "controllers/Application.class",
                 "application.conf")
 
-        jar("build/distributionJars/main/${playApp.name}.jar").isManifestPresentAndFirstEntry()
+        // Verify that the Class-Path attribute contains the correct runtime classpath
+        def classpath = mainJar.manifest.mainAttributes.getValue("Class-Path")
+        def classpathAsFilenames = Arrays.asList(classpath.split(" "))
+        def dependencies = file("build/stage/main/lib/").listFiles().collect { it.name } - [ mainJar.file.name ]
+        assert dependencies.size() == classpathAsFilenames.size()
+        assert classpathAsFilenames.containsAll(dependencies)
     }
 
     String[] getBuildTasks() {

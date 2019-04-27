@@ -3,6 +3,7 @@ package org.gradle.playframework.fixtures.archive
 import org.apache.tools.zip.ZipFile
 
 import java.util.jar.JarFile
+import java.util.jar.Manifest
 
 class JarTestFixture extends ZipTestFixture {
     File file
@@ -38,5 +39,10 @@ class JarTestFixture extends ZipTestFixture {
     def hasDescendants(String... relativePaths) {
         String[] allDescendants = relativePaths + JarFile.MANIFEST_NAME
         return super.hasDescendants(allDescendants)
+    }
+
+    Manifest getManifest() {
+        InputStream stream = new ByteArrayInputStream( content(JarFile.MANIFEST_NAME).bytes )
+        new Manifest(stream)
     }
 }
