@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "org.gradle.playframework"
-version = "0.6"
+version = "0.7"
 
 repositories {
     jcenter()
