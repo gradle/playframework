@@ -3,7 +3,7 @@
 [discrete]
 === v0.6 (TBD)
 
-* TBD
+* Generate a proper Class-Path manifest entry with runtime classpath
 
 [discrete]
 === v0.5 (2019-04-10)
