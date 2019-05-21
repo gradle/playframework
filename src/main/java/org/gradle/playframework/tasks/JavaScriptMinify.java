@@ -41,7 +41,7 @@ public class JavaScriptMinify extends SourceTask {
         this.workerExecutor = workerExecutor;
         this.include("**/*.js");
         destinationDir = getProject().getObjects().directoryProperty();
-        compilerClasspath = getProject().getLayout().configurableFiles();
+        compilerClasspath = getProject().getObjects().fileCollection();
     }
 
     /**
