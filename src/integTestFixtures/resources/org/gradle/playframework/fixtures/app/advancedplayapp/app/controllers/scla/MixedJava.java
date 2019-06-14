@@ -22,7 +22,7 @@ import views.html.*;
 
 public class MixedJava extends Controller {
 
-    public static Result index() {
+    public Result index() {
         System.out.println(new models.ScalaClass("Java can also reference Scala files"));
         return ok(index.render("Your new mixed application is ready."));
     }

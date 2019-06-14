@@ -34,8 +34,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME;
-import static org.gradle.api.plugins.JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME;
+import static org.gradle.api.plugins.JavaPlugin.*;
 
 public class PlayDistributionPlugin implements Plugin<Project> {
 
@@ -129,6 +128,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             case PLAY_2_4_X:
             case PLAY_2_5_X:
             case PLAY_2_6_X:
+            case PLAY_2_7_X:
                 return "play.core.server.ProdServerStart";
             default:
                 throw new RuntimeException("Could not determine main class for Play version:" + playVersion);

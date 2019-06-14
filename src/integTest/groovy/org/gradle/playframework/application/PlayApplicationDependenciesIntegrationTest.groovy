@@ -3,6 +3,7 @@ package org.gradle.playframework.application
 import org.gradle.playframework.AbstractIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 
+import static org.gradle.playframework.extensions.PlayPlatform.DEFAULT_PLAY_VERSION;
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 
 class PlayApplicationDependenciesIntegrationTest extends AbstractIntegrationTest {
@@ -23,7 +24,7 @@ class PlayApplicationDependenciesIntegrationTest extends AbstractIntegrationTest
 
         then:
         result.output.contains("""play
-+--- com.typesafe.play:play_2.12:2.6.15""")
++--- com.typesafe.play:play_2.12:$DEFAULT_PLAY_VERSION""")
     }
 
     def "can resolve dependencies for Play platform configured by extension"() {

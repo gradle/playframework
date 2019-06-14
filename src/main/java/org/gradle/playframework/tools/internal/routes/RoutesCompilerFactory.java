@@ -29,6 +29,8 @@ public class RoutesCompilerFactory {
             case PLAY_2_5_X:
             case PLAY_2_6_X:
                 return new RoutesCompilerAdapterV24X(playVersion, scalaVersion);
+            case PLAY_2_7_X:
+                return new RoutesCompilerAdapterV27X(playVersion, scalaVersion);
             default:
                 throw new RuntimeException("Could not create routes compile spec for Play version: " + playVersion);
         }

@@ -4,6 +4,6 @@ plugins {
 
 dependencies {
     implementation project(":util")
-    implementation "com.typesafe.play:play-guice_2.12:2.6.15"
+    implementation "com.typesafe.play:play-guice_2.12:2.7.1"
     implementation "ch.qos.logback:logback-classic:1.2.3"
 }

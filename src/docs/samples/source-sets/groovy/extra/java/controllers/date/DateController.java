@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class DateController extends Controller {
 
-    public static Result index() {
+    public Result index() {
         return ok(String.format("The current date is %s!", new Date()));
     }
 }

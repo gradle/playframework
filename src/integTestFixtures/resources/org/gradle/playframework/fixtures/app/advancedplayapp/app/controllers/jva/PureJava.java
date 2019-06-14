@@ -21,7 +21,7 @@ import jva.html.*;
 
 public class PureJava extends Controller {
 
-    public static Result index() {
+    public Result index() {
         return ok(index.render("Your new application is ready."));
     }
 

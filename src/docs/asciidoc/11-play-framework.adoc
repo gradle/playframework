@@ -1,6 +1,6 @@
 === Play framework
 
-By default, Gradle uses Play 2.6.15, Scala 2.12 and the version of Java used to start the build. A Play application can select a different version by <<targeting-play-version,configuring the plugin extension>>.
+By default, Gradle uses Play 2.7.2, Scala 2.12 and the version of Java used to start the build. A Play application can select a different version by <<targeting-play-version,configuring the plugin extension>>.
 
 The following versions of Play and Scala are supported:
 
@@ -8,6 +8,10 @@ The following versions of Play and Scala are supported:
 [%header%autowidth,compact]
 |===
 | Play | Scala | Java
+
+| 2.7.x
+| 2.11 and 2.12
+| 1.8
 
 | 2.6.x
 | 2.11 and 2.12
