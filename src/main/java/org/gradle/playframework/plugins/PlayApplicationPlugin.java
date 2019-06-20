@@ -162,7 +162,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             playRun.setApplicationJar(mainJarTask.get().getArchivePath());
             playRun.setAssetsJar(assetsJarTask.get().getArchivePath());
             playRun.setAssetsDirs(new HashSet<>(Arrays.asList(project.file("public"))));
-            playRun.dependsOn(project.getTasks().named(BUILD_TASK_NAME));
+            playRun.dependsOn(mainJarTask, assetsJarTask);
         });
     }
 
