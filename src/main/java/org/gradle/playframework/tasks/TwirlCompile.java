@@ -95,7 +95,6 @@ public class TwirlCompile extends SourceTask {
     }
 
     @Classpath
-    @PathSensitive(PathSensitivity.RELATIVE)
     public ConfigurableFileCollection getTwirlCompilerClasspath() {
         return twirlCompilerClasspath;
     }

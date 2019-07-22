@@ -92,7 +92,6 @@ public class RoutesCompile extends SourceTask {
     }
 
     @Classpath
-    @PathSensitive(PathSensitivity.RELATIVE)
     public ConfigurableFileCollection getRoutesCompilerClasspath() {
         return routesCompilerClasspath;
     }

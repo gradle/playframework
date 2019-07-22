@@ -64,7 +64,6 @@ public class JavaScriptMinify extends SourceTask {
     }
 
     @Classpath
-    @PathSensitive(PathSensitivity.RELATIVE)
     public ConfigurableFileCollection getCompilerClasspath() {
         return compilerClasspath;
     }
