@@ -38,7 +38,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
-import static org.gradle.api.plugins.JavaBasePlugin.BUILD_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.*;
 
 /**
@@ -46,12 +45,9 @@ import static org.gradle.api.plugins.JavaPlugin.*;
  */
 public class PlayApplicationPlugin implements Plugin<Project> {
 
-    public static final String PLAY_EXTENSION_NAME = "play";
-    public static final String PLATFORM_CONFIGURATION = "play";
+    static final String PLAY_EXTENSION_NAME = "play";
+    static final String PLATFORM_CONFIGURATION = "play";
     public static final String ASSETS_JAR_TASK_NAME = "createPlayAssetsJar";
-    public static final String RUN_TASK_NAME = "runPlay";
-    public static final int DEFAULT_HTTP_PORT = 9000;
-    public static final String RUN_GROUP = "Run";
 
     @Override
     public void apply(Project project) {
@@ -153,23 +149,21 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private TaskProvider<PlayRun> createRunTask(Project project, PlayExtension playExtension, TaskProvider<Jar> mainJarTask, TaskProvider<Jar> assetsJarTask) {
-        return project.getTasks().register(RUN_TASK_NAME, PlayRun.class, playRun -> {
+        return project.getTasks().register("runPlay", PlayRun.class, playRun -> {
             playRun.setDescription("Runs the Play application for local development.");
-            playRun.setGroup(RUN_GROUP);
-            playRun.setHttpPort(DEFAULT_HTTP_PORT);
-            playRun.getWorkingDir().set(project.getProjectDir());
-            playRun.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
-            playRun.setApplicationJar(mainJarTask.get().getArchivePath());
-            playRun.setAssetsJar(assetsJarTask.get().getArchivePath());
-            playRun.setAssetsDirs(new HashSet<>(Arrays.asList(project.file("public"))));
-            playRun.dependsOn(project.getTasks().named(BUILD_TASK_NAME));
+            playRun.setGroup("Run");
+            playRun.getWorkingDir().convention(project.getLayout().getProjectDirectory());
+            playRun.getPlatform().convention(project.provider(() -> playExtension.getPlatform()));
+            playRun.getApplicationJar().convention(mainJarTask.get().getArchiveFile());
+            playRun.getAssetsJar().convention(assetsJarTask.get().getArchiveFile());
+            playRun.getAssetsDirs().from(project.file("public"));
         });
     }
 
     private void configureRunTask(TaskProvider<PlayRun> playRun, PlayConfiguration filteredRuntime) {
         playRun.configure(task -> {
-            task.setRuntimeClasspath(filteredRuntime.getNonChangingArtifacts());
-            task.setChangingClasspath(filteredRuntime.getChangingArtifacts());
+            task.getRuntimeClasspath().from(filteredRuntime.getNonChangingArtifacts());
+            task.getChangingClasspath().from(filteredRuntime.getChangingArtifacts());
         });
     }
 

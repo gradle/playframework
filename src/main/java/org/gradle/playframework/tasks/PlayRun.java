@@ -1,5 +1,8 @@
 package org.gradle.playframework.tasks;
 
+import org.gradle.api.file.ConfigurableFileCollection;
+import org.gradle.api.file.RegularFileProperty;
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.playframework.tools.internal.run.DefaultPlayRunSpec;
 import org.gradle.playframework.tools.internal.run.PlayApplicationDeploymentHandle;
@@ -34,41 +37,32 @@ import java.util.Set;
  * Task to run a Play application.
  */
 public class PlayRun extends ConventionTask {
+    public static final int DEFAULT_HTTP_PORT = 9000;
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayRun.class);
 
-    private int httpPort;
+    private final BaseForkOptions forkOptions;
 
-    private final DirectoryProperty workingDir = getProject().getObjects().directoryProperty();
-
-    private File applicationJar;
-
-    private File assetsJar;
-
-    private Set<File> assetsDirs;
-
-    private FileCollection runtimeClasspath;
-
-    private FileCollection changingClasspath;
-
-    private BaseForkOptions forkOptions;
-
+    private final Property<Integer> httpPort;
+    private final DirectoryProperty workingDir;
+    private final RegularFileProperty applicationJar;
+    private final RegularFileProperty assetsJar;
+    private final ConfigurableFileCollection assetsDirs;
+    private final ConfigurableFileCollection runtimeClasspath;
+    private final ConfigurableFileCollection changingClasspath;
     private final Property<PlayPlatform> platform;
 
     public PlayRun() {
-        platform = getProject().getObjects().property(PlayPlatform.class);
-    }
+        ObjectFactory objects = getProject().getObjects();
 
-    /**
-     * fork options for the running a Play application.
-     *
-     * @return Fork options
-     */
-    @Nested
-    public BaseForkOptions getForkOptions() {
-        if (forkOptions == null) {
-            forkOptions = new BaseForkOptions();
-        }
-        return forkOptions;
+        httpPort = objects.property(Integer.class).value(DEFAULT_HTTP_PORT);
+        workingDir = objects.directoryProperty();
+        applicationJar = objects.fileProperty();
+        assetsJar = objects.fileProperty();
+        assetsDirs = objects.fileCollection();
+        runtimeClasspath = objects.fileCollection();
+        changingClasspath = objects.fileCollection();
+        platform = objects.property(PlayPlatform.class);
+        forkOptions = new BaseForkOptions();
     }
 
     @TaskAction
@@ -78,7 +72,7 @@ public class PlayRun extends ConventionTask {
         PlayApplicationDeploymentHandle deploymentHandle = deploymentRegistry.get(deploymentId, PlayApplicationDeploymentHandle.class);
 
         if (deploymentHandle == null) {
-            PlayRunSpec spec = new DefaultPlayRunSpec(runtimeClasspath, changingClasspath, applicationJar, assetsJar, assetsDirs, workingDir.get().getAsFile(), getForkOptions(), getHttpPort());
+            PlayRunSpec spec = new DefaultPlayRunSpec(runtimeClasspath, changingClasspath, applicationJar.getAsFile().get(), assetsJar.getAsFile().get(), assetsDirs, workingDir.get().getAsFile(), getForkOptions(), getHttpPort().get());
             PlayApplicationRunner playApplicationRunner = PlayApplicationRunnerFactory.create(platform.get(), getWorkerProcessFactory(), getClasspathFingerprinter());
             deploymentHandle = deploymentRegistry.start(deploymentId, DeploymentRegistry.ChangeBehavior.BLOCK, PlayApplicationDeploymentHandle.class, spec, playApplicationRunner);
 
@@ -89,6 +83,16 @@ public class PlayRun extends ConventionTask {
     }
 
     /**
+     * fork options for the running a Play application.
+     *
+     * @return Fork options
+     */
+    @Nested
+    public BaseForkOptions getForkOptions() {
+        return forkOptions;
+    }
+
+    /**
      * The HTTP port listened to by the Play application.
      *
      * This port should be available.  The Play application will fail to start if the port is already in use.
@@ -96,12 +100,8 @@ public class PlayRun extends ConventionTask {
      * @return HTTP port
      */
     @Internal
-    public int getHttpPort() {
+    public Property<Integer> getHttpPort() {
         return httpPort;
-    }
-
-    public void setHttpPort(int httpPort) {
-        this.httpPort = httpPort;
     }
 
     /**
@@ -120,12 +120,8 @@ public class PlayRun extends ConventionTask {
      * @return The Play application jar
      */
     @Classpath
-    public File getApplicationJar() {
+    public RegularFileProperty getApplicationJar() {
         return applicationJar;
-    }
-
-    public void setApplicationJar(File applicationJar) {
-        this.applicationJar = applicationJar;
     }
 
     /**
@@ -134,12 +130,8 @@ public class PlayRun extends ConventionTask {
      * @return The assets jar
      */
     @Classpath
-    public File getAssetsJar() {
+    public RegularFileProperty getAssetsJar() {
         return assetsJar;
-    }
-
-    public void setAssetsJar(File assetsJar) {
-        this.assetsJar = assetsJar;
     }
 
     /**
@@ -149,12 +141,8 @@ public class PlayRun extends ConventionTask {
      */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
-    public Set<File> getAssetsDirs() {
+    public ConfigurableFileCollection getAssetsDirs() {
         return assetsDirs;
-    }
-
-    public void setAssetsDirs(Set<File> assetsDirs) {
-        this.assetsDirs = assetsDirs;
     }
 
     /**
@@ -163,12 +151,8 @@ public class PlayRun extends ConventionTask {
      * @return The runtime classpath
      */
     @Classpath
-    public FileCollection getRuntimeClasspath() {
+    public ConfigurableFileCollection getRuntimeClasspath() {
         return runtimeClasspath;
-    }
-
-    public void setRuntimeClasspath(FileCollection runtimeClasspath) {
-        this.runtimeClasspath = runtimeClasspath;
     }
 
     /**
@@ -177,15 +161,11 @@ public class PlayRun extends ConventionTask {
      * @return The changing classpath
      */
     @Classpath
-    public FileCollection getChangingClasspath() {
+    public ConfigurableFileCollection getChangingClasspath() {
         return changingClasspath;
     }
 
-    public void setChangingClasspath(FileCollection changingClasspath) {
-        this.changingClasspath = changingClasspath;
-    }
-
-    @Input
+    @Nested
     public Property<PlayPlatform> getPlatform() {
         return platform;
     }
