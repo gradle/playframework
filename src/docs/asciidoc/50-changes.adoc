@@ -1,10 +1,12 @@
 == Change Log
 
 [discrete]
-=== v0.7 (TBD)
+=== v0.7 (2019-08-02)
 
-* TBD
+* Update to build with Gradle 5.5.1
+* Use the `Provider`-API to carry dependencies for `PlayRun` instead of explicit dependencies.  Previously, `PlayRun` depended on `build` explicitly, which required tests to run before `PlayRun` could run.
 
+[discrete]
 === v0.6 (2019-04-29)
 
 * Generate a proper Class-Path manifest entry with runtime classpath
