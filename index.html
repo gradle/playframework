@@ -558,7 +558,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-    id 'org.gradle.playframework' version '0.6'
+    id 'org.gradle.playframework' version '0.7'
 }
 
 repositories {
@@ -931,7 +931,7 @@ repositories {
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-    id 'org.gradle.playframework' version '0.6'
+    id 'org.gradle.playframework' version '0.7'
     id 'idea'
 }</code></pre>
 </div>
@@ -1086,7 +1086,18 @@ repositories {
 <div class="sect1">
 <h2 id="change_log"><a class="anchor" href="#change_log"></a>6. Change Log</h2>
 <div class="sectionbody">
-<h3 id="v0_6_tbd" class="discrete">v0.6 (TBD)</h3>
+<h3 id="v0_7_2019_08_02" class="discrete">v0.7 (2019-08-02)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Update to build with Gradle 5.5.1</p>
+</li>
+<li>
+<p>Use the <code>Provider</code>-API to carry dependencies for <code>PlayRun</code> instead of explicit dependencies.  Previously, <code>PlayRun</code> depended on <code>build</code> explicitly, which required tests to run before <code>PlayRun</code> could run.</p>
+</li>
+</ul>
+</div>
+<h3 id="v0_6_2019_04_29" class="discrete">v0.6 (2019-04-29)</h3>
 <div class="ulist">
 <ul>
 <li>
