@@ -24,7 +24,7 @@ public class DefaultPlayRunSpec implements PlayRunSpec, Serializable {
         this.changingClasspath = changingClasspath != null ? toLinkedHashSet(changingClasspath) : Collections.emptySet();
         this.applicationJar = applicationJar;
         this.assetsJar = assetsJar;
-        this.assetsDirs = assetsDirs;
+        this.assetsDirs = toLinkedHashSet(assetsDirs);
         this.projectPath = projectPath;
         this.forkOptions = forkOptions;
         this.httpPort = httpPort;

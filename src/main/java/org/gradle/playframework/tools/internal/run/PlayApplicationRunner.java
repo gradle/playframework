@@ -1,6 +1,5 @@
 package org.gradle.playframework.tools.internal.run;
 
-import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.file.collections.ImmutableFileCollection;
 import org.gradle.deployment.internal.Deployment;
 import org.gradle.internal.fingerprint.classpath.ClasspathFingerprinter;
@@ -39,7 +38,7 @@ public class PlayApplicationRunner {
 
     private class PlayClassloaderMonitorDeploymentDecorator implements Deployment {
         private final Deployment delegate;
-        private final FileCollection applicationClasspath;
+        private final Iterable<File> applicationClasspath;
         private HashCode classpathHash;
 
         private PlayClassloaderMonitorDeploymentDecorator(Deployment delegate, PlayRunSpec runSpec) {
@@ -47,13 +46,13 @@ public class PlayApplicationRunner {
             this.applicationClasspath = collectApplicationClasspath(runSpec);
         }
 
-        private FileCollection collectApplicationClasspath(PlayRunSpec runSpec) {
+        private Iterable<File> collectApplicationClasspath(PlayRunSpec runSpec) {
             Set<File> applicationClasspath = new HashSet<>();
             Set<File> changingClasspath = new HashSet<>();
             runSpec.getChangingClasspath().forEach(changingClasspath::add);
             applicationClasspath.addAll(changingClasspath);
             applicationClasspath.add(runSpec.getApplicationJar());
-            return ImmutableFileCollection.of(applicationClasspath);
+            return applicationClasspath;
         }
 
         @Override
@@ -83,7 +82,7 @@ public class PlayApplicationRunner {
 
         private boolean applicationClasspathChanged() {
             HashCode oldClasspathHash = classpathHash;
-            classpathHash = fingerprinter.fingerprint(applicationClasspath).getHash();
+            classpathHash = fingerprinter.fingerprint(ImmutableFileCollection.of(applicationClasspath)).getHash();
             return !classpathHash.equals(oldClasspathHash);
         }
     }
