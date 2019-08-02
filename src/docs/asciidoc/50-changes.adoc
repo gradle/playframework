@@ -1,6 +1,11 @@
 == Change Log
 
 [discrete]
+=== v0.8 (TBD)
+
+* TBD
+
+[discrete]
 === v0.7 (2019-08-02)
 
 * Update to build with Gradle 5.5.1
