@@ -58,9 +58,9 @@ public class PlayRun extends ConventionTask {
         workingDir = objects.directoryProperty();
         applicationJar = objects.fileProperty();
         assetsJar = objects.fileProperty();
-        assetsDirs = objects.fileCollection();
-        runtimeClasspath = objects.fileCollection();
-        changingClasspath = objects.fileCollection();
+        assetsDirs = getProject().files();
+        runtimeClasspath = getProject().files();
+        changingClasspath = getProject().files();
         platform = objects.property(PlayPlatform.class);
         forkOptions = new BaseForkOptions();
     }
