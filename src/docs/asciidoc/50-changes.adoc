@@ -1,6 +1,11 @@
 == Change Log
 
 [discrete]
+=== v0.9 (TBD)
+
+* TBD
+
+[discrete]
 === v0.8 (2019-08-07)
 
 * Restore compatibility with Gradle 5.1.1 and added test coverage for Gradle 5.1.1-5.5.1
