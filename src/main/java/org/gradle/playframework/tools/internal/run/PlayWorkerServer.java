@@ -1,13 +1,13 @@
 package org.gradle.playframework.tools.internal.run;
 
 import org.gradle.api.Action;
-import org.gradle.api.logging.Logger;
-import org.gradle.api.logging.Logging;
 import org.gradle.internal.UncheckedException;
 import org.gradle.internal.classloader.ClassLoaderUtils;
 import org.gradle.internal.classpath.DefaultClassPath;
 import org.gradle.internal.concurrent.Stoppable;
 import org.gradle.process.internal.worker.WorkerProcessContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;
@@ -19,7 +19,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PlayWorkerServer implements Action<WorkerProcessContext>, PlayRunWorkerServerProtocol, Reloader, Serializable, Stoppable {
-    private static final Logger LOGGER = Logging.getLogger(PlayWorkerServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayWorkerServer.class);
 
     private final PlayRunSpec runSpec;
     private final VersionedPlayRunAdapter runAdapter;
@@ -63,7 +63,7 @@ public class PlayWorkerServer implements Action<WorkerProcessContext>, PlayRunWo
             InetSocketAddress address = startServer();
             return PlayAppLifecycleUpdate.running(address);
         } catch (Exception e) {
-            Logging.getLogger(this.getClass()).error("Failed to run Play", e);
+            LOGGER.error("Failed to run Play", e);
             return PlayAppLifecycleUpdate.failed(e);
         }
     }

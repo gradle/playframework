@@ -1,7 +1,5 @@
 package org.gradle.playframework.tools.internal.run;
 
-import org.gradle.api.logging.Logger;
-import org.gradle.api.logging.Logging;
 import org.gradle.internal.Cast;
 import org.gradle.internal.UncheckedException;
 import org.gradle.internal.classpath.ClassPath;
@@ -10,6 +8,8 @@ import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
 import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.File;
@@ -31,7 +31,7 @@ import java.util.jar.JarFile;
 public abstract class DefaultVersionedPlayRunAdapter implements VersionedPlayRunAdapter, Serializable {
 
     private static final String PLAY_EXCEPTION_CLASSNAME = "play.api.PlayException";
-    private static final Logger LOGGER = Logging.getLogger(DefaultVersionedPlayRunAdapter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultVersionedPlayRunAdapter.class);
 
     private final AtomicReference<ClassLoader> currentClassloader = new AtomicReference<ClassLoader>();
     private final Queue<SoftReference<Closeable>> loadersToClose = new ConcurrentLinkedQueue<SoftReference<Closeable>>();

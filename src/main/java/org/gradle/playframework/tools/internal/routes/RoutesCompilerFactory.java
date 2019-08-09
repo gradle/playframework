@@ -2,12 +2,12 @@ package org.gradle.playframework.tools.internal.routes;
 
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.playframework.extensions.internal.PlayMajorVersion;
-import org.gradle.api.logging.Logger;
-import org.gradle.api.logging.Logging;
 import org.gradle.util.VersionNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RoutesCompilerFactory {
-    private static final Logger LOGGER = Logging.getLogger(RoutesCompilerFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoutesCompilerFactory.class);
 
     public static RoutesCompiler create(PlayPlatform playPlatform) {
         return new RoutesCompiler(createAdapter(playPlatform));

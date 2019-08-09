@@ -1,5 +1,6 @@
 package org.gradle.playframework.tasks;
 
+import org.gradle.api.DefaultTask;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.model.ObjectFactory;
@@ -10,11 +11,8 @@ import org.gradle.playframework.tools.internal.run.PlayApplicationRunner;
 import org.gradle.playframework.tools.internal.run.PlayApplicationRunnerFactory;
 import org.gradle.playframework.tools.internal.run.PlayRunSpec;
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.file.FileCollection;
-import org.gradle.api.internal.ConventionTask;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Classpath;
-import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.Nested;
@@ -29,14 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.net.InetSocketAddress;
-import java.util.Set;
 
 /**
  * Task to run a Play application.
  */
-public class PlayRun extends ConventionTask {
+public class PlayRun extends DefaultTask {
     public static final int DEFAULT_HTTP_PORT = 9000;
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayRun.class);
 

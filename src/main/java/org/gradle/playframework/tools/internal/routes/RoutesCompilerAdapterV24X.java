@@ -1,7 +1,5 @@
 package org.gradle.playframework.tools.internal.routes;
 
-import org.gradle.api.logging.Logger;
-import org.gradle.api.logging.Logging;
 import org.gradle.internal.Cast;
 import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaMethod;
@@ -10,6 +8,8 @@ import org.gradle.playframework.tools.internal.scala.ScalaListBuffer;
 import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 import org.gradle.playframework.tools.internal.scala.ScalaObject;
 import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAdapter {
-    private static final Logger LOGGER = Logging.getLogger(RoutesCompilerAdapterV24X.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoutesCompilerAdapterV24X.class);
 
     private static final String PLAY_ROUTES_COMPILER_STATIC_ROUTES_GENERATOR = "play.routes.compiler.StaticRoutesGenerator";
     private static final String PLAY_ROUTES_COMPILER_INJECTED_ROUTES_GENERATOR = "play.routes.compiler.InjectedRoutesGenerator";
