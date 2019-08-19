@@ -19,7 +19,7 @@ import spock.lang.Unroll
  */
 @Unroll
 class InDepthUserGuideSamplesIntegrationTest extends Specification {
-    private static final String[] VERSIONS_UNDER_TEST = ["5.1.1", "5.2.1", "5.5.1"]
+    private static final String[] VERSIONS_UNDER_TEST = ["5.1.1", "5.2.1", "5.5.1", "5.6"]
 
     @Rule
     Sample sample = Sample.from("src/docs/samples")
