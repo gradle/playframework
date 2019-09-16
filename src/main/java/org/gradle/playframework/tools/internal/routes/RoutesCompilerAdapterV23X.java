@@ -51,6 +51,6 @@ class RoutesCompilerAdapterV23X extends DefaultVersionedRoutesCompilerAdapter {
 
     @Override
     public Boolean interpretResult(Object result) {
-        return Cast.cast(Boolean.class, result);
+        return true;
     }
 }
