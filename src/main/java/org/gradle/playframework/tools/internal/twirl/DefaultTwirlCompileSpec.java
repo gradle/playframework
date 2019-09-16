@@ -13,14 +13,16 @@ public class DefaultTwirlCompileSpec implements TwirlCompileSpec {
     private final File destinationDir;
     private final Collection<TwirlTemplateFormat> userTemplateFormats;
     private final List<String> additionalImports;
+    private final List<String> constructorAnnotations;
     private TwirlImports defaultImports;
 
-    public DefaultTwirlCompileSpec(Iterable<RelativeFile> sources, File destinationDir, TwirlImports defaultImports, Collection<TwirlTemplateFormat> userTemplateFormats, List<String> additionalImports) {
+    public DefaultTwirlCompileSpec(Iterable<RelativeFile> sources, File destinationDir, TwirlImports defaultImports, Collection<TwirlTemplateFormat> userTemplateFormats, List<String> additionalImports, List<String> constructorAnnotations) {
         this.sources = sources;
         this.destinationDir = destinationDir;
         this.defaultImports = defaultImports;
         this.userTemplateFormats = userTemplateFormats;
         this.additionalImports = additionalImports;
+        this.constructorAnnotations = constructorAnnotations;
     }
 
     @Override
@@ -46,5 +48,10 @@ public class DefaultTwirlCompileSpec implements TwirlCompileSpec {
     @Override
     public List<String> getAdditionalImports() {
         return additionalImports;
+    }
+
+    @Override
+    public List<String> getConstructorAnnotations() {
+        return constructorAnnotations;
     }
 }

@@ -46,7 +46,8 @@ class TwirlCompilerAdapterV10X extends VersionedTwirlCompilerAdapter {
     }
 
     @Override
-    public Object[] createCompileParameters(ClassLoader cl, File file, File sourceDirectory, File destinationDirectory, TwirlImports defaultPlayImports, TwirlTemplateFormat templateFormat, List<String> additionalImports) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Object[] createCompileParameters(ClassLoader cl, File file, File sourceDirectory, File destinationDirectory, TwirlImports defaultPlayImports, TwirlTemplateFormat templateFormat, List<String> additionalImports, List<String> constructorAnnotations) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        assert constructorAnnotations.isEmpty();
         final Collection<String> defaultImports = playTwirlAdapter.getDefaultImports(defaultPlayImports);
         return new Object[] {
                 file,

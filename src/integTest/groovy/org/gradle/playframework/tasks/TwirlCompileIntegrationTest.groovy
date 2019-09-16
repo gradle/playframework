@@ -1,6 +1,8 @@
 package org.gradle.playframework.tasks
 
+import org.gradle.internal.impldep.aQute.bnd.make.coverage.Coverage
 import org.gradle.playframework.PlayMultiVersionIntegrationTest
+import org.gradle.playframework.fixtures.multiversion.TargetCoverage
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
@@ -65,7 +67,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         when:
         build(SCALA_COMPILE_TASK_NAME)
         then:
-        def generatedFile = new File(destinationDir,"csv/test.template.scala")
+        def generatedFile = new File(destinationDir, "csv/test.template.scala")
         generatedFile.isFile()
         generatedFile.text.contains("import views.formats.csv._")
         generatedFile.text.contains("CsvFormat")
@@ -134,6 +136,60 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         generatedFile.text.contains("import my.pkg.MyClass")
     }
 
+    def "can specify constructor annotations for a Twirl template"() {
+        if (playVersion >= VersionNumber.parse("2.6.0")) {
+            given:
+            buildFile << """
+            sourceSets {
+                main {
+                    twirl{
+                        constructorAnnotations = [ '@javax.inject.Inject()']
+                    }
+                }
+            }
+        """
+            temporaryFolder.newFolder('app', 'views')
+            file("app/views/IndexTemplate.scala.html") << """
+            @this(summarizer: models.Summarizer)
+            @(item: String)
+
+            @{summarizer.summarize(item)}
+        """
+            temporaryFolder.newFolder('app', 'models')
+            file("app/models/Summarizer.scala") << """
+            package models
+            trait Summarizer {
+                /** Provide short form of string if over a certain length */
+                def summarize(item: String)
+            }
+        """
+            temporaryFolder.newFolder('app', 'controllers')
+            file("app/controllers/MyController.scala") << """
+
+            import play.api.mvc.{AbstractController, Action, BaseController, ControllerComponents}
+            import play.mvc.Results._
+            import javax.inject.Inject
+            
+            class MyController @Inject()(template: views.html.IndexTemplate, cc: ControllerComponents) extends AbstractController(cc) {
+  
+                def index = Action { implicit request =>
+                    val item = "some extremely long text"
+                    Ok(template(item))
+                }
+            }
+        """
+
+            when:
+            BuildResult result = build(TWIRL_COMPILE_TASK_PATH)
+            then:
+            result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
+            def generatedFile = new File(destinationDir, "html/IndexTemplate.template.scala")
+            generatedFile.isFile()
+            generatedFile.text.contains("class IndexTemplate @javax.inject.Inject()")
+        }
+
+    }
+
     @Ignore("does not support incrementality anymore")
     def "runs compiler incrementally"() {
         when:
@@ -157,18 +213,18 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         new File(destinationDir, "html/input1.template.scala").isFile()
         new File(destinationDir, "html/input2.template.scala").isFile()
         and:
-        assertHasNotChangedSince(input1FirstCompileSnapshot, new File(destinationDir,"html/input1.template.scala"))
+        assertHasNotChangedSince(input1FirstCompileSnapshot, new File(destinationDir, "html/input1.template.scala"))
 
         when:
         file("app/views/input2.scala.html").delete()
         then:
         build(TWIRL_COMPILE_TASK_NAME)
         and:
-        new File(destinationDir,"html/input1.template.scala").isFile()
+        new File(destinationDir, "html/input1.template.scala").isFile()
     }
 
     @Ignore("does not support incrementality anymore")
-    def "removes stale output files in incremental compile"(){
+    def "removes stale output files in incremental compile"() {
         given:
         withTwirlTemplate("input1.scala.html")
         withTwirlTemplate("input2.scala.html")
@@ -190,7 +246,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         !new File(destinationDir, "html/input2.template.scala").isFile()
     }
 
-    def "can build twirl source set with default Java imports" () {
+    def "can build twirl source set with default Java imports"() {
         withTwirlJavaSourceSets()
         File twirlJavaDir = temporaryFolder.newFolder("twirlJava")
         withTemplateSourceExpectingJavaImports(new File(twirlJavaDir, "javaTemplate.scala.html"))
@@ -207,7 +263,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 .containsDescendants("html/javaTemplate.class")
     }
 
-    def "twirl source sets default to Scala imports" () {
+    def "twirl source sets default to Scala imports"() {
         File appViewsDir = temporaryFolder.newFolder('app', 'views')
         withTemplateSource(new File(appViewsDir, "index.scala.html"))
         validateThatPlayJavaDependencyIsNotAdded()
@@ -240,10 +296,10 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         result.output.contains(errorMessage)
 
         where:
-        template                      | errorMessage
-        "null, 'CustomFormat'"        | "Custom template extension cannot be null."
-        "'.ext', 'CustomFormat'"      | "Custom template extension should not start with a dot."
-        "'ext', null"                 | "Custom template format type cannot be null."
+        template                 | errorMessage
+        "null, 'CustomFormat'"   | "Custom template extension cannot be null."
+        "'.ext', 'CustomFormat'" | "Custom template extension should not start with a dot."
+        "'ext', null"            | "Custom template format type cannot be null."
     }
 
     def "has reasonable error if Twirl template cannot be found"() {

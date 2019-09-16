@@ -67,4 +67,11 @@ public interface TwirlSourceSet {
      * @return List of additional imports
      */
     ListProperty<String> getAdditionalImports();
+
+    /**
+     * Gets the list of construtor annotations to support dependency injection
+     *
+     * @return the list of annotations included in the template constructor
+     */
+    ListProperty<String> getConstructorAnnotations();
 }
