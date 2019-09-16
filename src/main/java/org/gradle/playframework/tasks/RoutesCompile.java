@@ -59,7 +59,7 @@ public class RoutesCompile extends SourceTask {
         platform = getProject().getObjects().property(PlayPlatform.class);
         injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
         injectedRoutesGenerator.set(false);
-        routesCompilerClasspath = getProject().getLayout().configurableFiles();
+        routesCompilerClasspath = getProject().getObjects().fileCollection();
     }
 
     /**

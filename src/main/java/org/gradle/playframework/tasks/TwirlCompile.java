@@ -63,7 +63,7 @@ public class TwirlCompile extends SourceTask {
         defaultImports = getProject().getObjects().property(TwirlImports.class);
         userTemplateFormats = getProject().getObjects().listProperty(TwirlTemplateFormat.class).empty();
         additionalImports = getProject().getObjects().listProperty(String.class);
-        twirlCompilerClasspath = getProject().getLayout().configurableFiles();
+        twirlCompilerClasspath = getProject().getObjects().fileCollection();
     }
 
     /**
