@@ -4,6 +4,8 @@ import org.gradle.api.JavaVersion;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Internal;
 import org.gradle.util.VersionNumber;
 
 import javax.inject.Inject;
@@ -36,6 +38,7 @@ public class PlayPlatform {
      *
      * @return The Play version
      */
+    @Input
     public Property<String> getPlayVersion() {
         return playVersion;
     }
@@ -47,6 +50,7 @@ public class PlayPlatform {
      *
      * @return The Scala version
      */
+    @Input
     public Property<String> getScalaVersion() {
         return scalaVersion;
     }
@@ -60,6 +64,7 @@ public class PlayPlatform {
      * @return The Scala compatibility version
      * @see #getScalaVersion()
      */
+    @Internal
     public Provider<String> getScalaCompatibilityVersion() {
         return scalaVersion.map(s -> {
             VersionNumber versionNumber = VersionNumber.parse(s);
@@ -74,6 +79,7 @@ public class PlayPlatform {
      *
      * @return The Java version
      */
+    @Input
     public Property<JavaVersion> getJavaVersion() {
         return javaVersion;
     }
