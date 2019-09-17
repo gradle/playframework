@@ -35,7 +35,7 @@ public class PlayExtension {
         this.platform.getPlayVersion().convention(DEFAULT_PLAY_VERSION);
         this.platform.getJavaVersion().convention(JavaVersion.current());
         this.platform.getScalaVersion().convention(platform.getPlayVersion().map(playVersion -> PlayMajorVersion.forPlayVersion(playVersion).getDefaultScalaPlatform()));
-        this.injectedRoutesGenerator = objectFactory.property(Boolean.class).convention(true);
+        this.injectedRoutesGenerator = objectFactory.property(Boolean.class).convention(false);
     }
 
     /**
