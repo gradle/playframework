@@ -5,12 +5,9 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
 import org.junit.Assume
-import spock.lang.Ignore
 import spock.lang.Unroll
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
-import static org.gradle.playframework.fixtures.file.FileFixtures.assertHasNotChangedSince
-import static org.gradle.playframework.fixtures.file.FileFixtures.snapshot
 import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
 class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
@@ -187,7 +184,6 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         generatedFile.text.contains("class IndexTemplate @javax.inject.Inject()")
     }
 
-    @Ignore("does not support incrementality anymore")
     def "runs compiler incrementally"() {
         when:
         withTwirlTemplate("input1.scala.html")
@@ -195,7 +191,6 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         build(TWIRL_COMPILE_TASK_NAME)
         and:
         new File(destinationDir, "html/input1.template.scala").isFile()
-        def input1FirstCompileSnapshot = snapshot(new File(destinationDir, "html/input1.template.scala"))
 
         when:
         BuildResult result = build(TWIRL_COMPILE_TASK_NAME)
@@ -209,18 +204,8 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         then:
         new File(destinationDir, "html/input1.template.scala").isFile()
         new File(destinationDir, "html/input2.template.scala").isFile()
-        and:
-        assertHasNotChangedSince(input1FirstCompileSnapshot, new File(destinationDir, "html/input1.template.scala"))
-
-        when:
-        file("app/views/input2.scala.html").delete()
-        then:
-        build(TWIRL_COMPILE_TASK_NAME)
-        and:
-        new File(destinationDir, "html/input1.template.scala").isFile()
     }
 
-    @Ignore("does not support incrementality anymore")
     def "removes stale output files in incremental compile"() {
         given:
         withTwirlTemplate("input1.scala.html")
@@ -230,7 +215,6 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         and:
         new File(destinationDir, "html/input1.template.scala").isFile()
         new File(destinationDir, "html/input2.template.scala").isFile()
-        def input1FirstCompileSnapshot = snapshot(new File(destinationDir, "html/input1.template.scala"))
 
         when:
         file("app/views/input2.scala.html").delete()
@@ -239,7 +223,6 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         build(TWIRL_COMPILE_TASK_PATH)
         and:
         new File(destinationDir, "html/input1.template.scala")
-        assertHasNotChangedSince(input1FirstCompileSnapshot, new File(destinationDir, "html/input1.template.scala"))
         !new File(destinationDir, "html/input2.template.scala").isFile()
     }
 
