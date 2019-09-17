@@ -9,5 +9,5 @@ final class PlayCoverage {
     private PlayCoverage() {}
 
     public static final VersionNumber DEFAULT = VersionNumber.parse(DEFAULT_PLAY_VERSION)
-    public static final List<VersionNumber> ALL = [VersionNumber.parse('2.4.11'), VersionNumber.parse('2.5.18'), DEFAULT]
+    public static final List<VersionNumber> ALL = [VersionNumber.parse('2.4.11'), VersionNumber.parse('2.5.18'), DEFAULT, "2.7.0"]
 }
