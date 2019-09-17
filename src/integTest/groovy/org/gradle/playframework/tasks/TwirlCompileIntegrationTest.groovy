@@ -1,11 +1,10 @@
 package org.gradle.playframework.tasks
 
-import org.gradle.internal.impldep.aQute.bnd.make.coverage.Coverage
 import org.gradle.playframework.PlayMultiVersionIntegrationTest
-import org.gradle.playframework.fixtures.multiversion.TargetCoverage
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
+import org.junit.Assume
 import spock.lang.Ignore
 import spock.lang.Unroll
 
@@ -137,34 +136,34 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     }
 
     def "can specify constructor annotations for a Twirl template"() {
-        if (playVersion >= VersionNumber.parse("2.6.0")) {
-            given:
-            buildFile << """
+        Assume.assumeTrue(playVersion >= VersionNumber.parse("2.6.0"))
+        given:
+        buildFile << """
             sourceSets {
                 main {
-                    twirl{
+                    twirl {
                         constructorAnnotations = [ '@javax.inject.Inject()']
                     }
                 }
             }
         """
-            temporaryFolder.newFolder('app', 'views')
-            file("app/views/IndexTemplate.scala.html") << """
+        temporaryFolder.newFolder('app', 'views')
+        file("app/views/IndexTemplate.scala.html") << """
             @this(summarizer: models.Summarizer)
             @(item: String)
 
             @{summarizer.summarize(item)}
         """
-            temporaryFolder.newFolder('app', 'models')
-            file("app/models/Summarizer.scala") << """
+        temporaryFolder.newFolder('app', 'models')
+        file("app/models/Summarizer.scala") << """
             package models
             trait Summarizer {
                 /** Provide short form of string if over a certain length */
                 def summarize(item: String)
             }
         """
-            temporaryFolder.newFolder('app', 'controllers')
-            file("app/controllers/MyController.scala") << """
+        temporaryFolder.newFolder('app', 'controllers')
+        file("app/controllers/MyController.scala") << """
 
             import play.api.mvc.{AbstractController, Action, BaseController, ControllerComponents}
             import play.mvc.Results._
@@ -179,15 +178,13 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
             }
         """
 
-            when:
-            BuildResult result = build(TWIRL_COMPILE_TASK_PATH)
-            then:
-            result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
-            def generatedFile = new File(destinationDir, "html/IndexTemplate.template.scala")
-            generatedFile.isFile()
-            generatedFile.text.contains("class IndexTemplate @javax.inject.Inject()")
-        }
-
+        when:
+        BuildResult result = build(TWIRL_COMPILE_TASK_PATH)
+        then:
+        result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
+        def generatedFile = new File(destinationDir, "html/IndexTemplate.template.scala")
+        generatedFile.isFile()
+        generatedFile.text.contains("class IndexTemplate @javax.inject.Inject()")
     }
 
     @Ignore("does not support incrementality anymore")
@@ -502,4 +499,5 @@ object CsvFormat extends Format[Csv] {
         """
         }
     }
+
 }
