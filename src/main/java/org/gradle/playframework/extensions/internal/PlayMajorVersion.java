@@ -9,17 +9,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum PlayMajorVersion {
-    PLAY_2_3_X("2.3.x", "2.11", "2.10"),
-    PLAY_2_4_X("2.4.x", "2.11", "2.10"),
-    PLAY_2_5_X("2.5.x", "2.11"),
-    PLAY_2_6_X("2.6.x", "2.12", "2.11"),
-    PLAY_2_7_X("2.7.x", "2.12", "2.11");
+    PLAY_2_3_X("2.3.x", true, "2.11", "2.10"),
+    PLAY_2_4_X("2.4.x", true, "2.11", "2.10"),
+    PLAY_2_5_X("2.5.x", true,"2.11"),
+    PLAY_2_6_X("2.6.x", true, "2.12", "2.11"),
+    PLAY_2_7_X("2.7.x", false, "2.13", "2.12", "2.11");
 
     private final String name;
+    private final boolean supportForStaticRoutes;
     private final List<String> compatibleScalaVersions;
 
-    PlayMajorVersion(String name, String... compatibleScalaVersions) {
+    PlayMajorVersion(String name, boolean supportForStaticRoutes, String... compatibleScalaVersions) {
         this.name = name;
+        this.supportForStaticRoutes = supportForStaticRoutes;
         this.compatibleScalaVersions = Arrays.asList(compatibleScalaVersions);
     }
 
@@ -55,5 +57,9 @@ public enum PlayMajorVersion {
     private static InvalidUserDataException invalidVersion(String playVersion) {
         return new InvalidUserDataException(String.format("Not a supported Play version: %s. This plugin is compatible with: [%s].",
                 playVersion, Arrays.stream(values()).map(Object::toString).collect(Collectors.joining(", "))));
+    }
+
+    public boolean hasSupportForStaticRoutesGenerator() {
+        return supportForStaticRoutes;
     }
 }
