@@ -10,7 +10,7 @@ matrix:
     - env: GRADLE_TASK=docTest
 
 script:
-  - ./gradlew $GRADLE_TASK -s
+  - ./gradlew $GRADLE_TASK -s --continue
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
