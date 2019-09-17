@@ -3,7 +3,11 @@
 [discrete]
 === v0.10 (TBD)
 
-* TBD
+* Thank you to our community contributors:
+* https://github.com/cmsr[cmsr] - TwirlCompiler support for dependency injection
+* https://github.com/novokrest[novokrest] - NPE when compiling routes with Play 2.3.X 
+* https://github.com/clemstoquart[clemstoquart] - Fix deprecated code relying on ProjectLayout.configurableFiles()
+* https://github.com/arjunchhabra[arjunchhabra] - Add preliminary support for Play 2.7.X
 
 [discrete]
 === v0.9 (2018-08-09)
