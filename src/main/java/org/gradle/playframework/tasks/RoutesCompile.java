@@ -50,16 +50,16 @@ public class RoutesCompile extends SourceTask {
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
-        outputDirectory = getProject().getObjects().directoryProperty();
-        additionalImports = getProject().getObjects().listProperty(String.class).empty();
-        namespaceReverseRouter = getProject().getObjects().property(Boolean.class);
-        namespaceReverseRouter.set(false);
-        generateReverseRoutes = getProject().getObjects().property(Boolean.class);
-        generateReverseRoutes.set(true);
-        platform = getProject().getObjects().property(PlayPlatform.class);
-        injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
-        injectedRoutesGenerator.set(false);
-        routesCompilerClasspath = getProject().getObjects().fileCollection();
+        this.outputDirectory = getProject().getObjects().directoryProperty();
+        this.additionalImports = getProject().getObjects().listProperty(String.class).empty();
+        this.namespaceReverseRouter = getProject().getObjects().property(Boolean.class);
+        this.namespaceReverseRouter.set(false);
+        this.generateReverseRoutes = getProject().getObjects().property(Boolean.class);
+        this.generateReverseRoutes.set(true);
+        this.platform = getProject().getObjects().property(PlayPlatform.class);
+        this.injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
+        this.injectedRoutesGenerator.set(false);
+        this.routesCompilerClasspath = getProject().files();
     }
 
     /**

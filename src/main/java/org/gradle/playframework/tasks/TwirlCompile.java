@@ -59,13 +59,13 @@ public class TwirlCompile extends SourceTask {
     @Inject
     public TwirlCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
-        outputDirectory = getProject().getObjects().directoryProperty();
-        platform = getProject().getObjects().property(PlayPlatform.class);
-        defaultImports = getProject().getObjects().property(TwirlImports.class);
-        userTemplateFormats = getProject().getObjects().listProperty(TwirlTemplateFormat.class).empty();
-        additionalImports = getProject().getObjects().listProperty(String.class);
-        twirlCompilerClasspath = getProject().getObjects().fileCollection();
-        constructorAnnotations = getProject().getObjects().listProperty(String.class).empty();
+        this.outputDirectory = getProject().getObjects().directoryProperty();
+        this.platform = getProject().getObjects().property(PlayPlatform.class);
+        this.defaultImports = getProject().getObjects().property(TwirlImports.class);
+        this.userTemplateFormats = getProject().getObjects().listProperty(TwirlTemplateFormat.class).empty();
+        this.additionalImports = getProject().getObjects().listProperty(String.class);
+        this.twirlCompilerClasspath = getProject().files();
+        this.constructorAnnotations = getProject().getObjects().listProperty(String.class).empty();
     }
 
     /**
