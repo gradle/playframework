@@ -15,7 +15,6 @@ class TestSetupPlugin : Plugin<Project> {
             }
 
             maxParallelForks = determineMaxParallelForks()
-            failFast = true
         }
     }
 
