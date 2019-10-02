@@ -49,7 +49,7 @@ class PlayMultiVersionRunner extends AbstractMultiTestRunner {
                 return PlayCoverage.ALL
             }
 
-            return [PlayMajorVersion.forPlayVersion(USER_PROVIDED_PLAY_VERSION_SYS_PROP)]
+            return [VersionNumber.parse(USER_PROVIDED_PLAY_VERSION_SYS_PROP)]
         }
     }
 
