@@ -12,7 +12,7 @@ final class PlayCoverage {
     public static final List<VersionNumber> ALL = [
             VersionNumber.parse('2.4.11'),
             VersionNumber.parse('2.5.18'),
-            VersionNumber.parse('2.7.1'),
+            VersionNumber.parse('2.7.3'),
             DEFAULT
     ]
 }
