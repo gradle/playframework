@@ -87,7 +87,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.dependsOn(mainJarTask, assetsJarTask);
             jar.from(project.zipTree(mainJarTask.get().getArchivePath()));
             jar.setDestinationDir(distJarDir);
-            jar.setBaseName(mainJarTask.get().getBaseName());
+            jar.getArchiveBaseName().set(mainJarTask.get().getArchiveBaseName());
 
             Map<String, Object> classpath = new HashMap<>();
             classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath()));
@@ -152,7 +152,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         final String distributionZipTaskName = "create" + capitalizedDistName + "ZipDist";
         TaskProvider<Zip> distZipTask = project.getTasks().register(distributionZipTaskName, Zip.class, zip -> {
             zip.setDescription("Packages the '" + distribution.getName() + "' distribution as a zip file.");
-            zip.setBaseName(baseName);
+            zip.getArchiveBaseName().set(baseName);
             zip.setDestinationDir(new File(project.getBuildDir(), "distributions"));
             zip.from(stageSyncTask);
         });
@@ -160,7 +160,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         final String distributionTarTaskName = "create" + capitalizedDistName + "TarDist";
         TaskProvider<Tar> distTarTask = project.getTasks().register(distributionTarTaskName, Tar.class, tar -> {
             tar.setDescription("Packages the '" + distribution.getName() + "' distribution as a tar file.");
-            tar.setBaseName(baseName);
+            tar.getArchiveBaseName().set(baseName);
             tar.setDestinationDir(new File(project.getBuildDir(), "distributions"));
             tar.from(stageSyncTask);
         });
