@@ -138,7 +138,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         final String capitalizedDistName = capitalizeDistributionName(distribution.getName());
         final String stageTaskName = "stage" + capitalizedDistName + "Dist";
         final File stageDir = new File(project.getBuildDir(), "stage");
-        final String baseName = (distribution.getBaseName() != null && "".equals(distribution.getBaseName())) ? distribution.getBaseName() : distribution.getName();
+        final String baseName = (distribution.getDistributionBaseName().isPresent() && "".equals(distribution.getDistributionBaseName().get())) ? distribution.getDistributionBaseName().get() : distribution.getName();
 
         TaskProvider<Sync> stageSyncTask = project.getTasks().register(stageTaskName, Sync.class, sync -> {
             sync.setDescription("Copies the '" + distribution.getName() + "' distribution to a staging directory.");
