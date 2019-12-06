@@ -126,7 +126,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     private TaskProvider<Jar> createAssetsJarTask(Project project) {
         TaskProvider<Jar> assetsJarTask = project.getTasks().register(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the assets jar for the application.");
-            jar.setClassifier("assets");
+            jar.getArchiveClassifier().set("assets");
             jar.from(project.file("public"), copySpec -> copySpec.into("public"));
         });
 
