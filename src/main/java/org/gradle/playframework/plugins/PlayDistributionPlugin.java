@@ -85,12 +85,12 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         TaskProvider<Jar> distributionJarTask = project.getTasks().register(jarTaskName, Jar.class, jar -> {
             jar.setDescription("Assembles an application jar suitable for deployment.");
             jar.dependsOn(mainJarTask, assetsJarTask);
-            jar.from(project.zipTree(mainJarTask.get().getArchivePath()));
+            jar.from(project.zipTree(mainJarTask.get().getArchiveFile().get().getAsFile()));
             jar.setDestinationDir(distJarDir);
             jar.setBaseName(mainJarTask.get().getBaseName());
 
             Map<String, Object> classpath = new HashMap<>();
-            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath()));
+            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchiveFile().get().getAsFile()));
             jar.getManifest().attributes(classpath);
         });
 
@@ -107,7 +107,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         CopySpec distSpec = distribution.getContents();
         distSpec.into("lib", copySpec -> {
             copySpec.from(distributionJarTask);
-            copySpec.from(assetsJarTask.get().getArchivePath());
+            copySpec.from(assetsJarTask.get().getArchiveFile().get().getAsFile());
             copySpec.from(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME));
             copySpec.eachFile(new PrefixArtifactFileNames(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME)));
         });
