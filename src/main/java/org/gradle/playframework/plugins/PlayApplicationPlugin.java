@@ -52,8 +52,9 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         project.getPluginManager().apply(ScalaPlugin.class);
+        project.getPluginManager().apply(PlayConventionPlugin.class);
 
-        PlayExtension playExtension = project.getExtensions().create(PLAY_EXTENSION_NAME, PlayExtension.class, project.getObjects());
+        PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME);
         Configuration playConfiguration = project.getConfigurations().create(PLATFORM_CONFIGURATION);
         project.getConfigurations().getByName(COMPILE_CLASSPATH_CONFIGURATION_NAME).extendsFrom(playConfiguration);
 

@@ -60,6 +60,13 @@ gradlePlugin {
             implementationClass = "org.gradle.playframework.plugins.PlayApplicationPlugin"
         }
 
+        register("play-dependencies-plugin") {
+            id = "org.gradle.playframework-dependencies"
+            displayName = "Play Dependencies Plugin"
+            description = "Plugin for adding Play dependencies."
+            implementationClass = "org.gradle.playframework.plugins.PlayDependenciesPlugin"
+        }
+
         register("play-javascript-plugin") {
             id = "org.gradle.playframework-javascript"
             displayName = "Play JavaScript Plugin"

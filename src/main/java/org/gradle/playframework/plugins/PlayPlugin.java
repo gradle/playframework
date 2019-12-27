@@ -17,7 +17,9 @@ public class PlayPlugin implements Plugin<Project> {
     }
 
     private static void applyPlugins(Project project) {
+        project.getPluginManager().apply(PlayConventionPlugin.class);
         project.getPluginManager().apply(PlayApplicationPlugin.class);
+        project.getPluginManager().apply(PlayDependenciesPlugin.class);
         project.getPluginManager().apply(PlayJavaScriptPlugin.class);
         project.getPluginManager().apply(PlayDistributionPlugin.class);
         project.getPluginManager().apply(PlayIdePlugin.class);
