@@ -1,9 +1,11 @@
-name: "gradle-wrapper-verification"
+name: "Validate Gradle Wrapper"
 on: [push, pull_request]
 
 jobs:
-    verify:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - uses: eskatos/gradle-wrapper-check@releases/v1
+  validation:
+    name: "Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: eskatos/gradle-wrapper-check@releases/v1
+
