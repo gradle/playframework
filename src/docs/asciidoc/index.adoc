@@ -3,7 +3,10 @@
 :uri-gradle-dsl-reference: https://docs.gradle.org/current/dsl
 :uri-ghpages: https://gradle.github.io/playframework
 :uri-plugin-api: {uri-ghpages}/api
-:uri-github-issues: https://github.com/gradle/playframework/issues
+:uri-github: https://github.com/gradle/playframework
+:uri-github-issues: {uri-github}/issues
+
+{uri-github}[Gradle Play Framework Github Repository]
 
 include::00-intro.adoc[]
 
