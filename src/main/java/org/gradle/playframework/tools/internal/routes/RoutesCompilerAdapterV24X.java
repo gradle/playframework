@@ -20,8 +20,8 @@ import java.util.List;
 public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(RoutesCompilerAdapterV24X.class);
 
-    private static final String PLAY_ROUTES_COMPILER_STATIC_ROUTES_GENERATOR = "play.routes.compiler.StaticRoutesGenerator";
-    private static final String PLAY_ROUTES_COMPILER_INJECTED_ROUTES_GENERATOR = "play.routes.compiler.InjectedRoutesGenerator";
+    protected static final String PLAY_ROUTES_COMPILER_STATIC_ROUTES_GENERATOR = "play.routes.compiler.StaticRoutesGenerator";
+    protected static final String PLAY_ROUTES_COMPILER_INJECTED_ROUTES_GENERATOR = "play.routes.compiler.InjectedRoutesGenerator";
 
     private final List<String> defaultScalaImports = new ArrayList<>(Arrays.asList("controllers.Assets.Asset"));
     private final List<String> defaultJavaImports = new ArrayList<>(Arrays.asList("controllers.Assets.Asset", "play.libs.F"));
@@ -45,7 +45,7 @@ public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAda
 
     @Override
     public Object[] createCompileParameters(ClassLoader cl, File file, File destinationDir, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports) throws ClassNotFoundException {
-        List<String> defaultImports = javaProject ? defaultJavaImports : defaultScalaImports;
+        List<String> defaultImports = getDefaultImports(javaProject);
         defaultImports.addAll(additionalImports);
 
         Object routesCompilerTask = DirectInstantiator.instantiate(cl.loadClass("play.routes.compiler.RoutesCompiler$RoutesCompilerTask"),
@@ -67,6 +67,10 @@ public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAda
                 new ScalaObject(cl, routeGenerator).getInstance(),
                 destinationDir
         };
+    }
+
+    protected List<String> getDefaultImports(boolean javaProject) {
+        return javaProject ? defaultJavaImports : defaultScalaImports;
     }
 
     protected boolean isGenerateForwardsRouter() {
@@ -112,7 +116,7 @@ public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAda
 
             // Convert Scala Seq[RoutesCompilationError] -> Java List<RoutesCompilationError>
             ClassLoader resultCl = result.getClass().getClassLoader();
-            ScalaMethod seqAsJavaList = ScalaReflectionUtil.scalaMethod(resultCl, "scala.collection.JavaConversions", "seqAsJavaList", resultCl.loadClass("scala.collection.Seq"));
+            ScalaMethod seqAsJavaList = ScalaReflectionUtil.scalaMethod(resultCl, getScalaToJavaConverterClassName(), "seqAsJavaList", resultCl.loadClass("scala.collection.Seq"));
             List<Object> errors = Cast.uncheckedCast(seqAsJavaList.invoke(errorSeq));
 
             RoutesCompilationErrorAdapter errorAdapter = new RoutesCompilationErrorAdapter(
@@ -126,6 +130,10 @@ public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAda
             }
             throw new RuntimeException("route compilation failed with errors");
         }
+    }
+
+    protected String getScalaToJavaConverterClassName() {
+        return "scala.collection.JavaConversions";
     }
 
     private static class RoutesCompilationErrorAdapter {

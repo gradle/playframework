@@ -122,7 +122,6 @@ public class PlayDistributionPlugin implements Plugin<Project> {
     }
 
     private String getMainClass(PlayPlatform playPlatform) {
-        String playVersion = playPlatform.getPlayVersion().get();
         switch (PlayMajorVersion.forPlatform(playPlatform)) {
             case PLAY_2_3_X:
                 return "play.core.server.NettyServer";
@@ -130,9 +129,8 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             case PLAY_2_5_X:
             case PLAY_2_6_X:
             case PLAY_2_7_X:
-                return "play.core.server.ProdServerStart";
             default:
-                throw new RuntimeException("Could not determine main class for Play version:" + playVersion);
+                return "play.core.server.ProdServerStart";
         }
     }
 

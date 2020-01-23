@@ -12,6 +12,8 @@ public class PlayApplicationRunnerFactory {
 
     public static VersionedPlayRunAdapter createPlayRunAdapter(PlayPlatform playPlatform) {
         switch (PlayMajorVersion.forPlatform(playPlatform)) {
+            case PLAY_2_3_X:
+                return new PlayRunAdapterV23X();
             case PLAY_2_4_X:
                 return new PlayRunAdapterV24X();
             case PLAY_2_5_X:
@@ -19,10 +21,8 @@ public class PlayApplicationRunnerFactory {
             case PLAY_2_6_X:
                 return new PlayRunAdapterV26X();
             case PLAY_2_7_X:
+            default: // assume unknown versions are like the latest one known
                 return new PlayRunAdapterV27X();
-            case PLAY_2_3_X:
-            default:
-                return new PlayRunAdapterV23X();
         }
     }
 }

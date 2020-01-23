@@ -2,6 +2,8 @@ package org.gradle.playframework.tasks
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.util.VersionNumber
+import org.junit.Assume
 
 class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegrationTest {
 
@@ -46,6 +48,8 @@ play {
     }
 
     def "recompiles when route compiler type is changed"() {
+        // Play 2.7+ only has a single route compiler type.
+        Assume.assumeTrue(playVersion < VersionNumber.parse("2.7"))
         when:
         withRoutesTemplate()
         then:

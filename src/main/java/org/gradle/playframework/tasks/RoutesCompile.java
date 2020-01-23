@@ -107,7 +107,6 @@ public class RoutesCompile extends SourceTask {
             workerConfiguration.classpath(routesCompilerClasspath);
             workerConfiguration.setDisplayName("Generating Scala source from routes templates");
         });
-        workerExecutor.await();
     }
 
     private Compiler<RoutesCompileSpec> getCompiler() {
