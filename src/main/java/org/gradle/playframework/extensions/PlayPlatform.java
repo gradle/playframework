@@ -18,7 +18,7 @@ public class PlayPlatform {
     /**
      * The default Play version used if no Play version was configured.
      */
-    public static final String DEFAULT_PLAY_VERSION = "2.6.15";
+    public static final String DEFAULT_PLAY_VERSION = "2.6.25";
 
     private final Property<String> playVersion;
     private final Property<String> scalaVersion;
