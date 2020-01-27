@@ -3,9 +3,12 @@ package org.gradle.playframework.tools.internal.twirl;
 import org.gradle.playframework.sourcesets.TwirlImports;
 import org.gradle.playframework.sourcesets.TwirlTemplateFormat;
 import org.gradle.playframework.tools.internal.scala.ScalaCodecMapper;
+import org.gradle.playframework.tools.internal.scala.ScalaListBuffer;
 import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
+import org.gradle.playframework.tools.internal.scala.ScalaSeq;
 import org.gradle.util.CollectionUtils;
+import org.gradle.util.VersionNumber;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -71,8 +74,7 @@ class TwirlCompilerAdapterV13X extends TwirlCompilerAdapterV10X {
     }
 
     private Object toScalaSeq(Collection<?> list, ClassLoader classLoader) {
-        ScalaMethod method = ScalaReflectionUtil.scalaMethod(classLoader, "scala.collection.JavaConversions", "asScalaBuffer", List.class);
-        return method.invoke(list);
+        return ScalaSeq.fromList(classLoader, list);
     }
 
     @Override
@@ -83,9 +85,10 @@ class TwirlCompilerAdapterV13X extends TwirlCompilerAdapterV10X {
     @Override
     @SuppressWarnings("unchecked")
     public List<String> getDependencyNotation() {
-        if (scalaVersion.startsWith("2.12")) {
+        VersionNumber scalaAsVersion = VersionNumber.parse(scalaVersion);
+        if (scalaAsVersion.compareTo(VersionNumber.parse("2.12")) >= 0) {
             // We need scala.util.parsing.input.Positional
-            return (List<String>) CollectionUtils.flattenCollections(super.getDependencyNotation(), "org.scala-lang.modules:scala-parser-combinators_2.12:1.0.6");
+            return (List<String>) CollectionUtils.flattenCollections(super.getDependencyNotation(), "org.scala-lang.modules:scala-parser-combinators_" + scalaVersion + ":1.1.2");
         } else {
             return super.getDependencyNotation();
         }

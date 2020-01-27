@@ -1,13 +1,13 @@
 plugins {
     groovy
     `java-gradle-plugin`
-    `build-scan`
     org.gradle.playframework.`test-setup`
     org.gradle.playframework.`integration-test-fixtures`
     org.gradle.playframework.`integration-test`
     org.gradle.playframework.`user-guide`
     org.gradle.playframework.`github-pages`
     org.gradle.playframework.`documentation-test`
+    id("com.gradle.build-scan") version "3.1.1"
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
@@ -87,16 +87,6 @@ gradlePlugin {
             description = "Plugin that supports building, testing and running Play applications with Gradle."
             implementationClass = "org.gradle.playframework.plugins.PlayPlugin"
         }
-    }
-}
-
-buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
-
-    if (!System.getenv("CI").isNullOrEmpty()) {
-        publishAlways()
-        tag("CI")
     }
 }
 

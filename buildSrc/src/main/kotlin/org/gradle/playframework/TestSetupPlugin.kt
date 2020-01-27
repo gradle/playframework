@@ -10,8 +10,10 @@ class TestSetupPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         tasks.withType<Test>().configureEach {
             // Log test execution so that Travis CI doesn't time out
-            testLogging {
-                events("started")
+            if (System.getenv("CI") != null) {
+                testLogging {
+                    events("started")
+                }
             }
 
             maxParallelForks = determineMaxParallelForks()

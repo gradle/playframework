@@ -5,6 +5,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationPublications;
+import org.gradle.api.artifacts.ModuleVersionSelector;
 import org.gradle.api.artifacts.PublishArtifact;
 import org.gradle.api.artifacts.ResolvedArtifact;
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier;
@@ -94,14 +95,14 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         dependencies.add(RUNTIME_CLASSPATH_CONFIGURATION_NAME, playPlatform.getDependencyNotation("play-docs").get());
 
         PlayMajorVersion playMajorVersion = PlayMajorVersion.forPlatform(playPlatform);
-        switch  (playMajorVersion) {
+        switch (playMajorVersion) {
             // This has the downside of adding play-java-forms for all kind of play projects
             // including Scala based projects. Still, users can exclude the dependency if they
             // want/need. Maybe in the future we can enable users to have some flag to specify
             // if the project is Java or Scala based.
             case PLAY_2_6_X:
             case PLAY_2_7_X:
-            dependencies.add(PLATFORM_CONFIGURATION, playPlatform.getDependencyNotation("play-java-forms").get());
+                dependencies.add(PLATFORM_CONFIGURATION, playPlatform.getDependencyNotation("play-java-forms").get());
         }
     }
 

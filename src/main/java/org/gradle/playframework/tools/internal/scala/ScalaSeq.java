@@ -3,10 +3,10 @@ package org.gradle.playframework.tools.internal.scala;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.Collection;
 
 public class ScalaSeq {
-    public static <T> Object fromList(ClassLoader cl, List<T> list) {
+    public static <T> Object fromList(ClassLoader cl, Collection<T> list) {
         try {
             Class<?> bufferClass = cl.loadClass("scala.collection.mutable.ListBuffer");
             Object buffer = JavaReflectionUtil.newInstance(bufferClass);
