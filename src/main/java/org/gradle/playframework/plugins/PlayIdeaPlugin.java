@@ -1,5 +1,8 @@
 package org.gradle.playframework.plugins;
 
+import groovy.util.Node;
+import groovy.util.NodeList;
+import groovy.xml.QName;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -67,6 +70,16 @@ public class PlayIdeaPlugin implements Plugin<Project> {
 
             conventionMapping.map("targetBytecodeVersion", (Callable<JavaVersion>) () -> getTargetJavaVersion(playExtension.getPlatform()));
             conventionMapping.map("languageLevel", (Callable<IdeaLanguageLevel>) () -> new IdeaLanguageLevel(getTargetJavaVersion(playExtension.getPlatform())));
+
+            module.getIml().withXml(xml -> {
+                NodeList sourceFolders = xml.asNode().getAt(QName.valueOf("component")).getAt(QName.valueOf("content")).getAt(QName.valueOf("sourceFolder"));
+                sourceFolders.forEach(sourceFolder -> {
+                    Node node = (Node) sourceFolder;
+                    if (node.get("@url").equals("file://$MODULE_DIR$/conf")) {
+                        node.attributes().put("type", "java-resource");
+                    }
+                });
+            });
 
             ideaModuleTask.dependsOn(classesTask);
             ideaModuleTask.dependsOn(javaScriptMinifyTask);
