@@ -9,3 +9,5 @@ include::23-package-distribution.adoc[]
 include::24-multi-project.adoc[]
 
 include::25-ide.adoc[]
+
+include::26-asset-pipelines.adoc[]

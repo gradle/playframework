@@ -1,0 +1,67 @@
+=== Adding asset pipelines
+
+The Play plugin's `createPlayAssetsJar` task (on which `runPlay` and `dist` tasks depend) bundles all assets into a single jar file. This jar file is included in the distribution package to be served by the Play application.
+
+The following asset pipelines are supported.
+
+==== Public assets
+
+Files in the `public/` directory will be included in the assets JAR without any processing.
+
+==== JavaScript minification
+
+Files in the `javaScript` source set (the default one is `app/assets` with `\**/*.js` filter), will be minified using Google Closure compiler and then included in the assets jar.
+
+==== WebJars
+
+WebJar libraries will be extracted and then included in the assets jar, under the `lib/` subdirectory.
+
+To apply this pipeline, apply the `org.gradle.playframework-webjars` plugin as well:
+
+[source,groovy]
+.build.gradle
+----
+plugins {
+    id 'org.gradle.playframework' version '0.10'
+    id 'org.gradle.playframework-webjars' version '0.10'
+}
+----
+
+To add a WebJar library, add it to the dependency list using `webJar` configuration, e.g.:
+
+[source,groovy]
+.build.gradle
+----
+dependencies {
+    webJar 'org.webjars:requirejs:2.3.6'
+}
+----
+
+==== LESS compilation
+
+Files in the `less` source set (the default one is `app/assets` with `\**/*.less` filter) will be compiled into CSS and then included in the assets jar.
+
+To apply this pipeline, apply the `org.gradle.playframework-less` plugin as well:
+
+[source,groovy]
+.build.gradle
+----
+plugins {
+    id 'org.gradle.playframework' version '0.10'
+    id 'org.gradle.playframework-less' version '0.10'
+}
+----
+
+The following `\@import`s in LESS files are supported:
+
+- Partial LESS files (ones with start with underscores, such ass `_common.less`).
+- WebJar extracted files (using the WebJar pipeline described above), with `lib/` subdirectory prefix.
+
+Example:
+
+[source,less]
+.main.css
+----
+@import "./_common.less";
+@import "lib/css-reset/reset.css";
+----

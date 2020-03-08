@@ -54,6 +54,20 @@ gradlePlugin {
             implementationClass = "org.gradle.playframework.plugins.PlayRoutesPlugin"
         }
 
+        register("play-less-plugin") {
+            id = "org.gradle.playframework-less"
+            displayName = "Play LESS Plugin"
+            description = "Plugin for compiling LESS stylesheets in a Play application."
+            implementationClass = "org.gradle.playframework.plugins.PlayLessPlugin"
+        }
+
+        register("play-webjars-plugin") {
+            id = "org.gradle.playframework-webjars"
+            displayName = "Play WebJars Plugin"
+            description = "Plugin for extracting WebJars in a Play application."
+            implementationClass = "org.gradle.playframework.plugins.PlayWebJarsPlugin"
+        }
+
         register("play-application-plugin") {
             id = "org.gradle.playframework-application"
             displayName = "Play Application Plugin"

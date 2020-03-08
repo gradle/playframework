@@ -14,6 +14,10 @@ _Depends on_: `stageMainDist`
 +
 Stages the Play distribution.
 
+`createPlayAssetsJar` — {uri-gradle-dsl-reference}/org.gradle.api.Task.html[Task]::
++
+Bundles asset files into a jar file.
+
 ==== Running and testing tasks
 
 The plugin also provides tasks for running, testing and packaging your Play application.

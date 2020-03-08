@@ -4,11 +4,7 @@ import org.gradle.playframework.application.PlayApplicationPluginIntegrationTest
 import org.gradle.playframework.fixtures.app.AdvancedPlayApp
 import org.gradle.playframework.fixtures.app.PlayApp
 
-import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
-
 class PlayBinaryAdvancedAppIntegrationTest extends PlayApplicationPluginIntegrationTest {
-
-    private static final TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
 
     @Override
     PlayApp getPlayApp() {
@@ -32,12 +28,10 @@ class PlayBinaryAdvancedAppIntegrationTest extends PlayApplicationPluginIntegrat
 
         jar("build/libs/${playApp.name}-assets.jar").containsDescendants(
                 "public/javascripts/sample.js",
-                "public/javascripts/sample.min.js"
+                "public/javascripts/sample.min.js",
+                "public/stylesheets/main.css",
+                "public/stylesheets/extra.css",
+                "public/lib/css-reset/reset.css",
         )
-    }
-
-    @Override
-    String[] getBuildTasks() {
-        return super.getBuildTasks() + TWIRL_COMPILE_TASK_PATH
     }
 }

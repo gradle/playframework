@@ -1,10 +1,9 @@
 package org.gradle.playframework.tasks
 
-import org.gradle.playframework.AbstractIntegrationTest
 import org.gradle.playframework.fixtures.archive.JarTestFixture
 import org.gradle.util.TextUtil
 
-abstract class AbstractJavaScriptMinifyIntegrationTest extends AbstractIntegrationTest {
+abstract class AbstractJavaScriptMinifyIntegrationTest extends AbstractAssetsTaskIntegrationTest {
 
     def setup() {
         settingsFile << """ rootProject.name = 'js-play-app' """
@@ -14,20 +13,6 @@ abstract class AbstractJavaScriptMinifyIntegrationTest extends AbstractIntegrati
 
     JarTestFixture getAssetsJar() {
         jar("build/libs/js-play-app-assets.jar")
-    }
-
-    JarTestFixture jar(String fileName) {
-        new JarTestFixture(file(fileName))
-    }
-
-    File assets(String fileName) {
-        File assetsDir = file('app/assets')
-
-        if (!assetsDir.isDirectory()) {
-            temporaryFolder.newFolder('app', 'assets')
-        }
-
-        new File(assetsDir, fileName)
     }
 
     File processedJavaScript(String fileName) {
@@ -42,14 +27,6 @@ abstract class AbstractJavaScriptMinifyIntegrationTest extends AbstractIntegrati
     void hasExpectedJavaScript(File file) {
         assert file.exists()
         assert compareWithoutWhiteSpace(file.text, expectedJavaScript())
-    }
-
-    boolean compareWithoutWhiteSpace(String string1, String string2) {
-        return withoutWhiteSpace(string1) == withoutWhiteSpace(string2)
-    }
-
-    def withoutWhiteSpace(String string) {
-        return string.replaceAll("\\s+", " ");
     }
 
     def withJavaScriptSource(String path) {

@@ -4,15 +4,11 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
-import static org.gradle.playframework.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
 import static org.gradle.playframework.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
-import static org.gradle.api.plugins.JavaPlugin.JAR_TASK_NAME
 
 class JavaScriptMinifyIntegrationTest extends AbstractJavaScriptMinifyIntegrationTest {
 
     private static final JS_MINIFY_TASK_PATH = ":$JS_MINIFY_TASK_NAME".toString()
-    private static final JAR_TASK_PATH = ":$JAR_TASK_NAME".toString()
-    private static final ASSETS_JAR_TASK_PATH = ":$ASSETS_JAR_TASK_NAME".toString()
 
     File getProcessedJavaScriptDir() {
         file("build/src/play/javaScript")

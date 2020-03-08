@@ -57,6 +57,8 @@ class UserGuidePlugin : Plugin<Project> {
                     val htmlUserGuideFile = file("$outputDir/html5/index.html")
                     var text = htmlUserGuideFile.readText()
                     text = text.replace(Regex("id 'org.gradle.playframework' version '.+'"), "id 'org.gradle.playframework' version '${project.version}'")
+                    text = text.replace(Regex("id 'org.gradle.playframework-less' version '.+'"), "id 'org.gradle.playframework-less' version '${project.version}'")
+                    text = text.replace(Regex("id 'org.gradle.playframework-webjars' version '.+'"), "id 'org.gradle.playframework-webjars' version '${project.version}'")
                     htmlUserGuideFile.writeText(text)
                 }
             }

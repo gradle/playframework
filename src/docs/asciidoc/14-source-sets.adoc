@@ -5,32 +5,43 @@ One type of element that describes the application are the source sets that defi
 .Default Play source sets
 [%header%autowidth,compact]
 |===
-| Source Set | Type | Directory | Filters
+| Source Set | Type | Directory | Filters | Plugin extension
 
 | java
 | {uri-gradle-dsl-reference}/org.gradle.api.tasks.SourceSet.html[SourceSet]
 | app
 | \**/*.java
+| (built-in)
 
 | scala
 | {uri-gradle-dsl-reference}/org.gradle.api.tasks.SourceSet.html[SourceSet]
 | app
 | \**/*.scala
+| (built-in)
 
 | routes
 | link:{uri-plugin-api}/org/gradle/playframework/sourcesets/RoutesSourceSet.html[RoutesSourceSet]
 | conf
 | routes, *.routes
+| (built-in)
 
 | twirl
 | link:{uri-plugin-api}/org/gradle/playframework/sourcesets/TwirlSourceSet.html[TwirlSourceSet]
 | app
 | \**/*.scala.*
+| (built-in)
 
 | javaScript
 | link:{uri-plugin-api}/org/gradle/playframework/sourcesets/JavaScriptSourceSet.html[JavaScriptSourceSet]
 | app/assets
 | \**/*.js
+| (built-in)
+
+| less
+| link:{uri-plugin-api}/org/gradle/playframework/sourcesets/LessSourceSet.html[LessSourceSet]
+| app/assets
+| \**/*.less
+| org.gradle.playframework-less
 |===
 
 These <<adding-source-directories,source sets can be configured>>.

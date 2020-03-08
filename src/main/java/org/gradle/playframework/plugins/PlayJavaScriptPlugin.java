@@ -1,13 +1,17 @@
 package org.gradle.playframework.plugins;
 
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.sourcesets.JavaScriptSourceSet;
 import org.gradle.playframework.sourcesets.internal.DefaultJavaScriptSourceSet;
 import org.gradle.playframework.tasks.JavaScriptMinify;
+import org.gradle.playframework.tasks.PlayRun;
 import org.gradle.playframework.tools.internal.javascript.GoogleClosureCompiler;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.SourceDirectorySet;
+
+import static org.gradle.playframework.plugins.PlayApplicationPlugin.PLAY_RUN_TASK_NAME;
 
 /**
  * Plugin for adding javascript processing to a Play application.
@@ -38,12 +42,15 @@ public class PlayJavaScriptPlugin implements PlayGeneratedSourcePlugin {
     }
 
     private void createDefaultJavaScriptMinifyTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration) {
-        project.getTasks().register(JS_MINIFY_TASK_NAME, JavaScriptMinify.class, javaScriptMinify -> {
+        TaskProvider<JavaScriptMinify> javaScriptMinifyTask = project.getTasks().register(JS_MINIFY_TASK_NAME, JavaScriptMinify.class, javaScriptMinify -> {
             javaScriptMinify.setDescription("Minifies javascript for the " + sourceDirectory.getDisplayName() + ".");
             javaScriptMinify.getDestinationDir().set(getOutputDir(project, sourceDirectory));
             javaScriptMinify.setSource(sourceDirectory);
             javaScriptMinify.getCompilerClasspath().setFrom(compilerConfiguration);
             javaScriptMinify.dependsOn(sourceDirectory);
+        });
+        project.getTasks().named(PLAY_RUN_TASK_NAME, PlayRun.class, task -> {
+            task.getAssetsDirs().from(javaScriptMinifyTask.get().getDestinationDir());
         });
     }
 }

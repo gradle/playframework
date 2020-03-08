@@ -49,6 +49,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     static final String PLAY_EXTENSION_NAME = "play";
     static final String PLATFORM_CONFIGURATION = "play";
+    public static final String PLAY_RUN_TASK_NAME = "runPlay";
     public static final String ASSETS_JAR_TASK_NAME = "createPlayAssetsJar";
 
     @Override
@@ -155,7 +156,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     }
 
     private TaskProvider<PlayRun> createRunTask(Project project, PlayExtension playExtension, TaskProvider<Jar> mainJarTask, TaskProvider<Jar> assetsJarTask) {
-        return project.getTasks().register("runPlay", PlayRun.class, playRun -> {
+        return project.getTasks().register(PLAY_RUN_TASK_NAME, PlayRun.class, playRun -> {
             playRun.setDescription("Runs the Play application for local development.");
             playRun.setGroup("Run");
             playRun.getWorkingDir().convention(project.getLayout().getProjectDirectory());

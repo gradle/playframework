@@ -1,5 +1,6 @@
 plugins {
     id 'org.gradle.playframework' version '0.10'
+    id 'org.gradle.playframework-less' version '0.10'
 }
 
 repositories {
@@ -29,6 +30,10 @@ sourceSets {
         javaScript {
             srcDir 'additional/javascript'
             exclude '**/old_*.js'
+        }
+        less {
+            srcDir 'additional/less'
+            exclude '**/old_*.less'
         }
     }
 }

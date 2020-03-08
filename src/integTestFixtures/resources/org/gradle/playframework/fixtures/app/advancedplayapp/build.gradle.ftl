@@ -1,5 +1,7 @@
 plugins {
     id 'org.gradle.playframework'
+    id 'org.gradle.playframework-less'
+    id 'org.gradle.playframework-webjars'
 }
 
 // repositories added in PlayApp class
@@ -12,6 +14,10 @@ sourceSets {
             include "jva/**/*"
         }
     }
+}
+
+dependencies {
+    webJar 'org.webjars.bower:css-reset:2.5.1'
 }
 
 <#if playVersion == "2.7" || playVersion == "2.6">
