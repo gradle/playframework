@@ -14,8 +14,7 @@ final class PlayCoverage {
             VersionNumber.parse('2.4.11'),
             VersionNumber.parse('2.5.19'),
             VersionNumber.parse('2.7.3'),
-            // Not supported yet
-            // VersionNumber.parse('2.8.0'),
+            VersionNumber.parse('2.8.1'),
             DEFAULT
     ]
 }

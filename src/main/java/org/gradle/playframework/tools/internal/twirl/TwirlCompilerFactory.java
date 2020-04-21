@@ -21,8 +21,10 @@ public class TwirlCompilerFactory {
             case PLAY_2_6_X:
                 return new TwirlCompilerAdapterV13X("1.3.13", scalaCompatibilityVersion, playTwirlAdapter);
             case PLAY_2_7_X:
-            default:
                 return new TwirlCompilerAdapterV13X("1.4.2", scalaCompatibilityVersion, playTwirlAdapter);
+            case PLAY_2_8_X:
+            default:
+                return new TwirlCompilerAdapterV13X("1.5.0", scalaCompatibilityVersion, playTwirlAdapter);
         }
     }
 
@@ -32,8 +34,6 @@ public class TwirlCompilerFactory {
             case PLAY_2_4_X:
             case PLAY_2_5_X:
                 return new PlayTwirlAdapterV23X();
-            case PLAY_2_6_X:
-            case PLAY_2_7_X:
             default:
                 return new PlayTwirlAdapterV26X();
         }

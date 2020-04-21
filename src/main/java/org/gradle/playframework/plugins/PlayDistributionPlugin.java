@@ -125,10 +125,6 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         switch (PlayMajorVersion.forPlatform(playPlatform)) {
             case PLAY_2_3_X:
                 return "play.core.server.NettyServer";
-            case PLAY_2_4_X:
-            case PLAY_2_5_X:
-            case PLAY_2_6_X:
-            case PLAY_2_7_X:
             default:
                 return "play.core.server.ProdServerStart";
         }
