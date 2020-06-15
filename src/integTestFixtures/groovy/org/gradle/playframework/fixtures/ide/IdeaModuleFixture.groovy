@@ -24,7 +24,7 @@ class IdeaModuleFixture extends IdeProjectFixture {
     IdeaContentRoot getContent() {
         def contentRoot = iml.component.content
         def sourceFolders = contentRoot.sourceFolder.collect {
-            new SourceFolder(url: it.@url, isTestSource: "true" == it.@isTestSource)
+            new SourceFolder(url: it.@url, type: it.@type, isTestSource: "true" == it.@isTestSource)
         }
         def excludeFolders = contentRoot.excludeFolder.collect {
             new ExcludeFolder(url: it.@url)
@@ -35,6 +35,7 @@ class IdeaModuleFixture extends IdeProjectFixture {
     @ToString
     class SourceFolder {
         String url
+        String type
         boolean isTestSource = false
     }
 
@@ -55,6 +56,16 @@ class IdeaModuleFixture extends IdeProjectFixture {
             } as Set
 
             def setDiff = CollectionUtils.diffSetsBy(sourceRoots, CollectionUtils.toSet(paths as List), Transformers.noOpTransformer())
+            assert setDiff.leftOnly.empty
+            assert setDiff.rightOnly.empty
+        }
+
+        void assertContainsResourcePaths(String... paths) {
+            def resourceRoots = sources.findAll { it.type == "java-resource" }.collect {
+                it.url - 'file://$MODULE_DIR$/'
+            } as Set
+
+            def setDiff = CollectionUtils.diffSetsBy(resourceRoots, CollectionUtils.toSet(paths as List), Transformers.noOpTransformer())
             assert setDiff.leftOnly.empty
             assert setDiff.rightOnly.empty
         }

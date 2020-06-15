@@ -47,6 +47,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         then:
         def content = parseIml(moduleFile).content
         content.assertContainsSourcePaths(sourcePaths)
+        content.assertContainsResourcePaths("conf")
         content.assertContainsExcludes("build", ".gradle")
     }
 
