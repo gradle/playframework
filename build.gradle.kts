@@ -7,7 +7,6 @@ plugins {
     org.gradle.playframework.`user-guide`
     org.gradle.playframework.`github-pages`
     org.gradle.playframework.`documentation-test`
-    id("com.gradle.build-scan") version "3.1.1"
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
