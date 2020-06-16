@@ -1,0 +1,17 @@
+# .github/workflows/gradle-build-pr.yml
+name: Run Gradle on PRs
+on: push, pull_request
+jobs:
+  gradle:
+    strategy:
+      matrix:
+        task: [integrationTest, docTest]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: eskatos/gradle-command-action@v1
+      with:
+        arguments: ${{ matrix.task }}
