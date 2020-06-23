@@ -34,67 +34,81 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-gradlePlugin {
-    testSourceSets(sourceSets.integTest.get(), sourceSets.docTest.get())
-
-    plugins {
-        register("play-twirl-plugin") {
-            id = "org.gradle.playframework-twirl"
-            displayName = "Play Twirl Plugin"
-            description = "Plugin for compiling Twirl sources in a Play application."
-            implementationClass = "org.gradle.playframework.plugins.PlayTwirlPlugin"
-        }
-
-        register("play-routes-plugin") {
-            id = "org.gradle.playframework-routes"
-            displayName = "Play Routes Plugin"
-            description = "Plugin for compiling Play routes sources in a Play application."
-            implementationClass = "org.gradle.playframework.plugins.PlayRoutesPlugin"
-        }
-
-        register("play-application-plugin") {
-            id = "org.gradle.playframework-application"
-            displayName = "Play Application Plugin"
-            description = "Plugin for building a Play application."
-            implementationClass = "org.gradle.playframework.plugins.PlayApplicationPlugin"
-        }
-
-        register("play-javascript-plugin") {
-            id = "org.gradle.playframework-javascript"
-            displayName = "Play JavaScript Plugin"
-            description = "Plugin for adding JavaScript processing to a Play application."
-            implementationClass = "org.gradle.playframework.plugins.PlayJavaScriptPlugin"
-        }
-
-        register("play-distribution-plugin") {
-            id = "org.gradle.playframework-distribution"
-            displayName = "Play Distribution Plugin"
-            description = "Plugin for generating distributions for Play applications."
-            implementationClass = "org.gradle.playframework.plugins.PlayDistributionPlugin"
-        }
-
-        register("play-ide-plugin") {
-            id = "org.gradle.playframework-ide"
-            displayName = "Play IDE Plugin"
-            description = "Plugin for generating IDE project files for Play applications."
-            implementationClass = "org.gradle.playframework.plugins.PlayIdePlugin"
-        }
-
-        register("play-plugin") {
-            id = "org.gradle.playframework"
-            displayName = "Play Plugin"
-            description = "Plugin that supports building, testing and running Play applications with Gradle."
-            implementationClass = "org.gradle.playframework.plugins.PlayPlugin"
-        }
-    }
+tasks.named<Test>("integrationTest") {
+    maxParallelForks = 1
 }
 
-pluginBundle {
-    website = "https://gradle.github.io/playframework/"
-    vcsUrl = "https://github.com/gradle/playframework"
-    tags = listOf("playframework", "web", "java", "scala")
-    mavenCoordinates {
-        groupId = project.group.toString()
-        artifactId = base.archivesBaseName
-    }
+tasks.named<Test>("docTest") {
+    maxParallelForks = 1
 }
+
+
+tasks.named("javadoc") {
+    enabled = true
+}
+
+    gradlePlugin {
+        testSourceSets(sourceSets.integTest.get(), sourceSets.docTest.get())
+
+        plugins {
+            register("play-twirl-plugin") {
+                id = "org.gradle.playframework-twirl"
+                displayName = "Play Twirl Plugin"
+                description = "Plugin for compiling Twirl sources in a Play application."
+                implementationClass = "org.gradle.playframework.plugins.PlayTwirlPlugin"
+            }
+
+            register("play-routes-plugin") {
+                id = "org.gradle.playframework-routes"
+                displayName = "Play Routes Plugin"
+                description = "Plugin for compiling Play routes sources in a Play application."
+                implementationClass = "org.gradle.playframework.plugins.PlayRoutesPlugin"
+            }
+
+            register("play-application-plugin") {
+                id = "org.gradle.playframework-application"
+                displayName = "Play Application Plugin"
+                description = "Plugin for building a Play application."
+                implementationClass = "org.gradle.playframework.plugins.PlayApplicationPlugin"
+            }
+
+            register("play-javascript-plugin") {
+                id = "org.gradle.playframework-javascript"
+                displayName = "Play JavaScript Plugin"
+                description = "Plugin for adding JavaScript processing to a Play application."
+                implementationClass = "org.gradle.playframework.plugins.PlayJavaScriptPlugin"
+            }
+
+            register("play-distribution-plugin") {
+                id = "org.gradle.playframework-distribution"
+                displayName = "Play Distribution Plugin"
+                description = "Plugin for generating distributions for Play applications."
+                implementationClass = "org.gradle.playframework.plugins.PlayDistributionPlugin"
+            }
+
+            register("play-ide-plugin") {
+                id = "org.gradle.playframework-ide"
+                displayName = "Play IDE Plugin"
+                description = "Plugin for generating IDE project files for Play applications."
+                implementationClass = "org.gradle.playframework.plugins.PlayIdePlugin"
+            }
+
+            register("play-plugin") {
+                id = "org.gradle.playframework"
+                displayName = "Play Plugin"
+                description = "Plugin that supports building, testing and running Play applications with Gradle."
+                implementationClass = "org.gradle.playframework.plugins.PlayPlugin"
+            }
+        }
+    }
+
+    pluginBundle {
+        website = "https://gradle.github.io/playframework/"
+        vcsUrl = "https://github.com/gradle/playframework"
+        tags = listOf("playframework", "web", "java", "scala")
+        mavenCoordinates {
+            groupId = project.group.toString()
+            artifactId = base.archivesBaseName
+        }
+    }
+
