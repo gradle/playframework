@@ -18,7 +18,7 @@ jobs:
       with:
         arguments: integrationTest --tests org.gradle.playframework.application.advanced.PlayIdeaPluginAdvancedIntegrationTest
       # upload build reports for later inspection, if the build failed
-    #  N.B only applies to the last task in the matrix
+      #  N.B only applies to the last task in the matrix
     - uses: actions/upload-artifact@v2
       if: failure()
       with:
