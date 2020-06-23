@@ -22,5 +22,5 @@ jobs:
     - uses: actions/upload-artifact@v2
       if: failure()
       with:
-        name: testreports
-        path: build/reports/tests
+        name: wholebuild #testreports
+        path: build #build/reports/tests
