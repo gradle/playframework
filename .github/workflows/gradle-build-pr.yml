@@ -5,7 +5,8 @@ jobs:
   gradle:
     strategy:
       matrix:
-        task: [integrationTest, docTest]
+        # task: [integrationTest, docTest]
+        task: [integrationTest]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,6 +19,7 @@ jobs:
         arguments: ${{ matrix.task }}
     # upload build reports for later inspection
     - uses: actions/upload-artifact@v2
+      if: failure()
       with:
         name: testreports
         path: build/reports/tests
