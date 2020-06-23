@@ -5,7 +5,8 @@ jobs:
   gradle:
     strategy:
       matrix:
-        task: [docTest, integrationTest]
+        #task: [docTest, integrationTest]
+        task: [integrationTest]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
