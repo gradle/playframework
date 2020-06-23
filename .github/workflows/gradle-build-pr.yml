@@ -12,11 +12,13 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 8
+    #run the build
     - uses: eskatos/gradle-command-action@v1
       with:
         arguments: ${{ matrix.task }}
+    #upload build reports for later inspection
     - uses: actions/upload-artifact@v2
        if: failure()
        with:
         name: testreports
-        path: build/reports/tests # or path/to/artifact
+        path: build/reports/tests
