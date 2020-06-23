@@ -18,7 +18,7 @@ jobs:
         arguments: ${{ matrix.task }}
     #upload build reports for later inspection
     - uses: actions/upload-artifact@v2
-       if: failure()
+      # if: failure()
        with:
         name: testreports
         path: build/reports/tests
