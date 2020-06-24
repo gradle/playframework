@@ -5,8 +5,7 @@ jobs:
   gradle:
     strategy:
       matrix:
-        #task: [docTest, integrationTest]
-        task: [integrationTest]
+        task: [docTest, integrationTest]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -16,9 +15,9 @@ jobs:
     # run the build
     - uses: eskatos/gradle-command-action@v1
       with:
-        arguments: integrationTest --tests org.gradle.playframework.application.advanced.PlayIdeaPluginAdvancedIntegrationTest
-      # upload build reports for later inspection, if the build failed
-      #  N.B only applies to the last task in the matrix
+        arguments: ${{ matrix.task }}
+    # upload build output for later inspection, if the build failed
+    #  N.B only applies to the last task in the matrix
     - uses: actions/upload-artifact@v2
       if: failure()
       with:
