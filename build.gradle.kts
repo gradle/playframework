@@ -34,19 +34,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-tasks.named<Test>("integrationTest") {
-    maxParallelForks = 1
-}
-
-tasks.named<Test>("docTest") {
-    maxParallelForks = 1
-}
-
-
-tasks.named("javadoc") {
-    enabled = true
-}
-
     gradlePlugin {
         testSourceSets(sourceSets.integTest.get(), sourceSets.docTest.get())
 
