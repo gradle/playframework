@@ -13,7 +13,7 @@ jobs:
       with:
         java-version: 8
     # run the build
-    - uses: eskatos/gradle-command-action@v1.2
+    - uses: eskatos/gradle-command-action@v1.2.0
       with:
         arguments: ${{ matrix.task }}
     # upload build output for later inspection, if the build failed
