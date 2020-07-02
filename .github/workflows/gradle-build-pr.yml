@@ -5,13 +5,21 @@ jobs:
   gradle:
     strategy:
       matrix:
-        task: [integrationTest, docTest]
+        task: [docTest, integrationTest]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-java@v1
       with:
         java-version: 8
-    - uses: eskatos/gradle-command-action@v1
+    # run the build
+    - uses: eskatos/gradle-command-action@v1.2.0
       with:
         arguments: ${{ matrix.task }}
+    # upload build output for later inspection, if the build failed
+    #  N.B only applies to the last task in the matrix
+    - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: wholebuild #testreports
+        path: build #build/reports/tests
