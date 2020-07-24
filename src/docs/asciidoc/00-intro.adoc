@@ -12,7 +12,7 @@ This plugin is different from the {uri-gradle-userguide}/play_plugin.html[Play p
 The Play plugin defines the following requirements for a consuming build.
 
 * The build has to be run with Java 8 or higher.
-* The build has to use Gradle 5.0 or higher.
+* The build has to use Gradle 6.0 or higher.
 * The supported Play versions are 2.4.x, 2.5.x and 2.6.x.
 
 === Limitations
