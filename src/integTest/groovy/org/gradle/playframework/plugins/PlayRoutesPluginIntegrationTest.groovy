@@ -120,24 +120,6 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
         findFile(compiledRouterFiles, 'Routes.scala')
     }
 
-    def "fails build if injected routes generator was configured for Play version < 2.4.0"() {
-        given:
-        buildFile << """
-            play {
-                platform {
-                    playVersion = '2.3.0'
-                }
-                injectedRoutesGenerator = true
-            }
-        """
-
-        when:
-        BuildResult result = buildAndFail(ROUTES_COMPILE_TASK_NAME)
-
-        then:
-        result.output.contains('Injected routers are only supported in Play 2.4 or newer.')
-    }
-
     static String getRoutes() {
         """
             GET     /                           controllers.HomeController.index
