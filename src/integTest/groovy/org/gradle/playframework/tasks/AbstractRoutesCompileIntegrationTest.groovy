@@ -4,6 +4,7 @@ import org.gradle.playframework.PlayMultiVersionIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
+import org.junit.Assume
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 import static org.gradle.playframework.fixtures.file.FileFixtures.assertContentsHaveChangedSince
@@ -81,6 +82,8 @@ object Application extends Controller {
     }
 
     def "can run RoutesCompile"() {
+        // Play version 2.3 not supported
+        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         given:
         withRoutesTemplate()
         expect:
@@ -92,6 +95,8 @@ object Application extends Controller {
     }
 
     def "recompiles on changed routes file input"() {
+        // Play version 2.3 not supported
+        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         given:
         File templateFile = withRoutesTemplate()
         build(ROUTES_COMPILE_TASK_NAME)
@@ -143,6 +148,8 @@ GET     /newroute                          ${controllers()}.Application.index()
     }
 
     def "compiles additional routes file and cleans up output on removal"() {
+        // Play version 2.3 does not support injected routers
+        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         when:
         withRoutesTemplate()
         then:
@@ -173,6 +180,8 @@ GET     /newroute                          ${controllers()}.Application.index()
     }
 
     def "can run RoutesCompile with namespaceReverseRouter set"() {
+        // Play version 2.3 not supported
+        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         given:
         withRoutesTemplate("org.gradle.test")
         buildFile << """
@@ -242,6 +251,8 @@ GET     /                          ${controllers()}${packageId}.Application.inde
     }
 
     def "can add additional imports"() {
+        // Play version 2.3 not supported
+        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         given:
         withRoutesTemplate()
         and:
