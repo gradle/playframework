@@ -14,20 +14,32 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
 
     @Override
     def getReverseRoutesFileName(String packageName, String namespace) {
-        return "${namespace ? namespace + '/' :''}controllers/${packageName ? packageName + '/' :''}ReverseRoutes.scala"
+        if (playVersion < VersionNumber.parse("2.4")) {
+            return "routes_reverseRouting.scala"
+        } else {
+            return "${namespace ? namespace + '/' : ''}controllers/${packageName ? packageName + '/' : ''}ReverseRoutes.scala"
+        }
     }
 
     @Override
     def getScalaRoutesFileName(String packageName, String namespace) {
-        return "${packageName?:'router'}/Routes.scala"
+        if (playVersion < VersionNumber.parse("2.4")) {
+            return "routes_routing.scala"
+        } else {
+            return "${packageName ?: 'router'}/Routes.scala"
+        }
     }
 
     @Override
     def getOtherRoutesFileNames() {
-        return [
-                {packageName, namespace -> "${namespace ? namespace + '/' :''}controllers/${packageName ? packageName + '/' :''}javascript/JavaScriptReverseRoutes.scala" },
-                {packageName, namespace -> "${packageName?:'router'}/RoutesPrefix.scala" }
-        ]
+        if (playVersion < VersionNumber.parse("2.4")) {
+            return []
+        } else {
+            return [
+                    { packageName, namespace -> "${namespace ? namespace + '/' : ''}controllers/${packageName ? packageName + '/' : ''}javascript/JavaScriptReverseRoutes.scala" },
+                    { packageName, namespace -> "${packageName ?: 'router'}/RoutesPrefix.scala" }
+            ]
+        }
     }
 
     def "can specify route compiler type as injected"() {

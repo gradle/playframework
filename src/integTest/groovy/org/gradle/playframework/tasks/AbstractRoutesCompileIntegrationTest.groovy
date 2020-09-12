@@ -82,8 +82,6 @@ object Application extends Controller {
     }
 
     def "can run RoutesCompile"() {
-        // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         given:
         withRoutesTemplate()
         expect:
@@ -95,8 +93,6 @@ object Application extends Controller {
     }
 
     def "recompiles on changed routes file input"() {
-        // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         given:
         File templateFile = withRoutesTemplate()
         build(ROUTES_COMPILE_TASK_NAME)
