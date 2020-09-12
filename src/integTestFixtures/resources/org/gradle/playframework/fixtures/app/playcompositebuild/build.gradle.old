@@ -1,7 +1,0 @@
-plugins {
-    id 'org.gradle.playframework'
-}
-
-dependencies {
-    implementation "org.my:java-lib:1.0"
-}
