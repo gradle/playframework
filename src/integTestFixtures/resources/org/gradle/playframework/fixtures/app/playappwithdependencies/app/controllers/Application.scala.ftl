@@ -50,4 +50,4 @@ object Application extends Controller {
     Ok("shutdown")
   }
 }
-<#/if>
+</#if>
