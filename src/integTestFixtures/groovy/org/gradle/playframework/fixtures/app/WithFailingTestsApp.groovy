@@ -12,7 +12,7 @@ class WithFailingTestsApp extends PlayApp {
 
     @Override
     SourceFile getGradleBuild() {
-        def gradleBuild = sourceFile("", "build.gradle", "basicplayapp")
+        def gradleBuild = sourceFile("", "build.gradle.ftl", "basicplayapp")
         def gradleBuildWithRepositories = gradleBuild.content.concat """
             allprojects {
                 ${playRepositories()}

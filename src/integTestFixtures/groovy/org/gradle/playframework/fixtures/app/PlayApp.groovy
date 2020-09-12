@@ -99,9 +99,20 @@ abstract class PlayApp {
 
 
     protected SourceFile sourceFile(String path, String name, String baseDir = getName()) {
-        URL resource = getClass().getResource("$baseDir/$path/$name")
-        File file = new File(resource.toURI())
-        return new SourceFile(path, name, file.text)
+        String resourcePath = getResourcePath("$baseDir/$path/$name")
+        URL resource = getClass().getClassLoader().getResource(resourcePath)
+
+        if(resource == null) {
+            throw new IllegalStateException("Could not find resource on the classpath: $resourcePath")
+        }
+
+        File source = new File(resource.toURI())
+        if(isTemplate(source)) {
+            String content = renderTemplate(resourcePath)
+            return new SourceFile(path, source.name[0..<-4], content)
+        } else {
+            return new SourceFile(path, source.name, source.text)
+        }
     }
 
     void writeSources(File sourceDir) {
