@@ -4,13 +4,23 @@ install: true
 jdk:
   - openjdk8
 
-matrix:
+jobs:
   include:
-    - env: GRADLE_TASK=integrationTest
-    - env: GRADLE_TASK=docTest
+    - name: "Play 2.3.10 Integration Tests"
+      env: GRADLE_TASK=integrationTest PLAY_VERSION=2.3.10
+    - name: "Play 2.4.11 Integration Tests"
+      env: GRADLE_TASK=integrationTest PLAY_VERSION=2.4.11
+    - name: "Play 2.5.19 Integration Tests"
+      env: GRADLE_TASK=integrationTest PLAY_VERSION=2.5.19
+    - name: "Play 2.6.25 Integration Tests"
+      env: GRADLE_TASK=integrationTest PLAY_VERSION=2.6.25
+    - name: "Play 2.7.3 Integration Tests"
+      env: GRADLE_TASK=integrationTest PLAY_VERSION=2.7.3
+    - name: "Documentation Tests"
+      env: GRADLE_TASK=docTest PLAY_VERSION=not_used
 
 script:
-  - ./gradlew $GRADLE_TASK -s --continue
+  - ./gradlew -Pplayframework.int-test.target.version=$PLAY_VERSION $GRADLE_TASK -s --continue
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
