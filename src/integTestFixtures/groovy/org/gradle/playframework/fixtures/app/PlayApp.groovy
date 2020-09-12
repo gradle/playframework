@@ -54,7 +54,7 @@ abstract class PlayApp {
 
     String getResourcePath(String relativePath) {
         String basePath = this.getClass().getCanonicalName().split("\\.").dropRight(1).join("/")
-        return basePath + "/" + getName() + "/" + relativePath
+        return basePath + "/" + relativePath
     }
 
     List<SourceFile> getAllFiles() {
@@ -62,7 +62,7 @@ abstract class PlayApp {
     }
 
     SourceFile getGradleBuild() {
-        String gradleBuildContent = renderTemplate(getResourcePath("build.gradle.ftl"))
+        String gradleBuildContent = renderTemplate(getResourcePath(getName() + "/build.gradle.ftl"))
         def gradleBuildWithRepositories = gradleBuildContent.concat """
             allprojects {
                 ${playRepositories()}
@@ -130,7 +130,7 @@ abstract class PlayApp {
                 def subpath = RelativePathUtil.relativePath(baseDirFile, source.parentFile)
 
                 if(isTemplate(source)) {
-                    String content = renderTemplate(getResourcePath(baseDir + "/" + subpath + "/" + source.name))
+                    String content = renderTemplate(getResourcePath(resourcePath + "/" + subpath + "/" + source.name))
                     SourceFile file = new SourceFile("$baseDir/$subpath", source.name[0..<-4], content)
                     sourceFiles.add(file)
                 } else {
@@ -148,9 +148,13 @@ abstract class PlayApp {
     }
 
     String renderTemplate(String templatePath) {
-        Template tmpl = cfg.getTemplate(templatePath)
-        StringWriter sw = new StringWriter()
-        tmpl.process(model, sw)
-        return sw.toString()
+        try {
+            Template tmpl = cfg.getTemplate(templatePath)
+            StringWriter sw = new StringWriter()
+            tmpl.process(model, sw)
+            return sw.toString()
+        } catch(Exception e) {
+            throw e
+        }
     }
 }
