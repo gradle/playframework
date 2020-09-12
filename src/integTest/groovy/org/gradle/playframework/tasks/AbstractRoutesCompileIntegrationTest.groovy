@@ -144,8 +144,6 @@ GET     /newroute                          ${controllers()}.Application.index()
     }
 
     def "compiles additional routes file and cleans up output on removal"() {
-        // Play version 2.3 does not support injected routers
-        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         when:
         withRoutesTemplate()
         then:
