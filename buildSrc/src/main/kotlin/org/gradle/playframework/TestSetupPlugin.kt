@@ -28,7 +28,6 @@ class TestSetupPlugin : Plugin<Project> {
 
     private
     fun determineMaxParallelForks(): Int {
-        // return if ((Runtime.getRuntime().availableProcessors() / 2) < 1) 1 else (Runtime.getRuntime().availableProcessors() / 2)
-        return 1
+        return if ((Runtime.getRuntime().availableProcessors() / 2) < 1) 1 else (Runtime.getRuntime().availableProcessors() / 2)
     }
 }
