@@ -16,6 +16,7 @@
 
 package controllers
 
+<#if playVersion == "2.7" || playVersion == "2.6">
 import javax.inject._
 import com.google.common.base.Strings
 import play.api._
@@ -33,3 +34,20 @@ class Application @Inject() extends InjectedController {
     Ok("shutdown")
   }
 }
+<#else>
+import com.google.common.base.Strings
+import play.api._
+import play.api.mvc._
+
+object Application extends Controller {
+
+  def index = Action {
+    Ok(views.html.index(Strings.nullToEmpty("Your new application is ready.")))
+  }
+
+  def shutdown = Action {
+    System.exit(0)
+    Ok("shutdown")
+  }
+}
+<#/if>
