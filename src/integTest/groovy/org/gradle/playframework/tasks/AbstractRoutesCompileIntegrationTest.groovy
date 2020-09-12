@@ -174,8 +174,6 @@ GET     /newroute                          ${controllers()}.Application.index()
     }
 
     def "can run RoutesCompile with namespaceReverseRouter set"() {
-        // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
         given:
         withRoutesTemplate("org.gradle.test")
         buildFile << """

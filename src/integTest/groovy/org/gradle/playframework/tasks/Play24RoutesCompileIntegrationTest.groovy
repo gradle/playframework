@@ -10,7 +10,7 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
     @Override
     def getJavaRoutesFileName(String packageName, String namespace) {
         if (playVersion < VersionNumber.parse("2.4")) {
-            return "controllers/${packageName ? packageName + "/" : ''}/routes.java"
+            return "${namespace ? namespace + '/' : ''}controllers/${packageName ? packageName + "/" : ''}/routes.java"
         } else {
             return "${namespace ? namespace + '/' : ''}controllers/${packageName ? packageName + '/' : ''}routes.java"
         }
@@ -19,7 +19,11 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
     @Override
     def getReverseRoutesFileName(String packageName, String namespace) {
         if (playVersion < VersionNumber.parse("2.4")) {
-            return "${packageName ? packageName + '/' : ''}routes_reverseRouting.scala"
+            if (namespace) {
+                return "${namespace ? namespace + '/' : ''}routes_reverseRouting.scala"
+            } else {
+                return "${packageName ? packageName + '/' : ''}routes_reverseRouting.scala"
+            }
         } else {
             return "${namespace ? namespace + '/' : ''}controllers/${packageName ? packageName + '/' : ''}ReverseRoutes.scala"
         }
@@ -28,7 +32,11 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
     @Override
     def getScalaRoutesFileName(String packageName, String namespace) {
         if (playVersion < VersionNumber.parse("2.4")) {
-            return "${packageName ? packageName + '/' : ''}routes_routing.scala"
+            if (namespace) {
+                return "${namespace ? namespace + '/' : ''}routes_routing.scala"
+            } else {
+                return "${packageName ? packageName + '/' : ''}routes_routing.scala"
+            }
         } else {
             return "${packageName ?: 'router'}/Routes.scala"
         }
