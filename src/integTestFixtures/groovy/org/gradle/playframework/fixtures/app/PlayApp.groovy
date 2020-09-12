@@ -16,23 +16,45 @@
 
 package org.gradle.playframework.fixtures.app
 
+import freemarker.cache.ClassTemplateLoader
+import freemarker.template.Configuration
+import freemarker.template.Template
+import freemarker.template.TemplateExceptionHandler
+import org.gradle.playframework.extensions.PlayPlatform
 import org.gradle.util.RelativePathUtil
 import org.gradle.util.VersionNumber
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 
 abstract class PlayApp {
-    boolean oldVersion
+    final VersionNumber playVersion
+    final Configuration cfg
+    final Map<String, String> model
 
     PlayApp() {
+        this(VersionNumber.parse(PlayPlatform.DEFAULT_PLAY_VERSION))
     }
 
     PlayApp(VersionNumber version) {
-        this.oldVersion = version < VersionNumber.parse('2.6.0')
+        playVersion = version
+        cfg = new Configuration(Configuration.VERSION_2_3_29)
+        cfg.setTemplateLoader(new ClassTemplateLoader())
+        cfg.setDefaultEncoding("UTF-8")
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER)
+        cfg.setLogTemplateExceptions(false)
+        cfg.setWrapUncheckedExceptions(true)
+        cfg.setFallbackOnNullLoopVariable(false)
+        model = new HashMap<>()
+        model.put("playVersion", playVersion.major + "." + playVersion.minor)
     }
 
     String getName() {
         getClass().getSimpleName().toLowerCase()
+    }
+
+    String getResourcePath(String relativePath) {
+        String basePath = this.getClass().getCanonicalName().split("\\.").dropRight(1).join("/")
+        return basePath + "/" + getName() + "/" + relativePath
     }
 
     List<SourceFile> getAllFiles() {
@@ -40,14 +62,13 @@ abstract class PlayApp {
     }
 
     SourceFile getGradleBuild() {
-        def buildFileName = oldVersion ? "build.gradle.old" : "build.gradle"
-        def gradleBuild = sourceFile("", buildFileName)
-        def gradleBuildWithRepositories = gradleBuild.content.concat """
+        String gradleBuildContent = renderTemplate(getResourcePath("build.gradle.ftl"))
+        def gradleBuildWithRepositories = gradleBuildContent.concat """
             allprojects {
                 ${playRepositories()}
             }
         """
-        return new SourceFile(gradleBuild.path, "build.gradle", gradleBuildWithRepositories)
+        return new SourceFile("", "build.gradle", gradleBuildWithRepositories)
     }
 
     List<SourceFile> getAssetSources() {
@@ -90,10 +111,15 @@ abstract class PlayApp {
         }
     }
 
+    /**
+     * Generate a list of source files for this app, based on existing files
+     * in the project.
+     */
     List<SourceFile> sourceFiles(String baseDir, String rootDir = getName()) {
         List sourceFiles = new ArrayList()
 
-        URL resource = getClass().getResource("$rootDir/$baseDir")
+        String resourcePath = "$rootDir/$baseDir"
+        URL resource = getClass().getResource(resourcePath)
         if(resource != null){
             File baseDirFile = new File(resource.toURI())
             baseDirFile.eachFileRecurse { File source ->
@@ -103,16 +129,13 @@ abstract class PlayApp {
 
                 def subpath = RelativePathUtil.relativePath(baseDirFile, source.parentFile)
 
-                if(oldVersion) {
-                    if(isOldVersionFile(source)) {
-                        sourceFiles.add(new SourceFile("$baseDir/$subpath", source.name[0..<-4], source.text))
-                    } else if (!oldVersionFileExists(source)) {
-                        sourceFiles.add(new SourceFile("$baseDir/$subpath", source.name, source.text))
-                    }
+                if(isTemplate(source)) {
+                    String content = renderTemplate(getResourcePath(baseDir + "/" + subpath + "/" + source.name))
+                    SourceFile file = new SourceFile("$baseDir/$subpath", source.name[0..<-4], content)
+                    sourceFiles.add(file)
                 } else {
-                    if(!isOldVersionFile(source)) {
-                        sourceFiles.add(new SourceFile("$baseDir/$subpath", source.name, source.text))
-                    }
+                    SourceFile file = new SourceFile("$baseDir/$subpath", source.name, source.text)
+                    sourceFiles.add(file)
                 }
             }
         }
@@ -120,11 +143,14 @@ abstract class PlayApp {
         return sourceFiles
     }
 
-    static boolean isOldVersionFile(File file) {
-        return file.name.endsWith('.old')
+    static boolean isTemplate(File file) {
+        return file.name.endsWith('.ftl')
     }
 
-    static boolean oldVersionFileExists(File file) {
-        return new File(file.parentFile, "${file.name}.old").exists()
+    String renderTemplate(String templatePath) {
+        Template tmpl = cfg.getTemplate(templatePath)
+        StringWriter sw = new StringWriter()
+        tmpl.process(model, sw)
+        return sw.toString()
     }
 }

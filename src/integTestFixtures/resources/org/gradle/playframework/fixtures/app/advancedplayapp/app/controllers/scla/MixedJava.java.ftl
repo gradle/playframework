@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package special.strangename
-import play.api._
-import play.api.mvc._
-object Application extends Controller {
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
-  }
+package controllers.scla;
+
+import play.*;
+import play.mvc.*;
+import views.html.*;
+
+public class MixedJava extends Controller {
+
+<#if playVersion == "2.7">
+    public Result index() {
+<#else>
+    public static Result index() {
+</#if>
+        System.out.println(new models.ScalaClass("Java can also reference Scala files"));
+        return ok(index.render("Your new mixed application is ready."));
+    }
+
 }

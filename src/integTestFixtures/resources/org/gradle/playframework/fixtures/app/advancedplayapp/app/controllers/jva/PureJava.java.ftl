@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package controllers.scla;
+package controllers.jva;
 
 import play.*;
 import play.mvc.*;
-import views.html.*;
+import jva.html.*;
 
-public class MixedJava extends Controller {
+public class PureJava extends Controller {
 
+<#if playVersion == "2.7">
     public Result index() {
-        System.out.println(new models.ScalaClass("Java can also reference Scala files"));
-        return ok(index.render("Your new mixed application is ready."));
+<#else>
+    public static Result index() {
+</#if>
+        return ok(index.render("Your new application is ready."));
     }
 
 }

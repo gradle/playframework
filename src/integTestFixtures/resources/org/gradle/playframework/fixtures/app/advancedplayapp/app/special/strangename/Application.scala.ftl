@@ -15,6 +15,8 @@
  */
 
 package special.strangename
+
+<#if playVersion == "2.7" || playVersion == "2.6">
 import javax.inject._
 import play.api._
 import play.api.mvc._
@@ -25,3 +27,12 @@ class Application @Inject() extends InjectedController {
     Ok(views.html.index("Your new application is ready."))
   }
 }
+<#else>
+import play.api._
+import play.api.mvc._
+object Application extends Controller {
+  def index = Action {
+    Ok(views.html.index("Your new application is ready."))
+  }
+}
+</#if>
