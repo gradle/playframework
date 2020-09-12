@@ -55,12 +55,8 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
     }
 
     def "can specify route compiler type as injected"() {
-        // Play version 2.3 does not support injected routers
-        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
-        // Play before version 2.6 does not support Java 1.9+
-        if (playVersion.compareTo(VersionNumber.parse("2.6")) < 0) {
-            Assume.assumeTrue(System.getProperty("java.version").startsWith("1.8"))
-        }
+        // Play version 2.3 not supported
+        Assume.assumeTrue(playVersion > VersionNumber.parse("2.3.99"))
         given:
         withRoutesTemplate()
         withInjectedRoutesController()
@@ -79,7 +75,7 @@ play {
 
     def "recompiles when route compiler type is changed"() {
         // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
+        Assume.assumeTrue(playVersion > VersionNumber.parse("2.3.99"))
         // Play 2.7+ only has a single route compiler type.
         Assume.assumeTrue(playVersion < VersionNumber.parse("2.7"))
         when:

@@ -244,7 +244,7 @@ GET     /                          ${controllers()}${packageId}.Application.inde
 
     def "can add additional imports"() {
         // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion.compareTo(VersionNumber.parse("2.4")) >= 0)
+        Assume.assumeTrue(playVersion > VersionNumber.parse("2.3.99"))
         given:
         withRoutesTemplate()
         and:
