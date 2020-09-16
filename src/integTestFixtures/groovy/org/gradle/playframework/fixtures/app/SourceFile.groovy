@@ -49,4 +49,9 @@ class SourceFile {
         }
         file.write(content)
     }
+
+    @Override
+    String toString() {
+        return path + File.separator + name
+    }
 }

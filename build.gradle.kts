@@ -25,6 +25,7 @@ dependencies {
     integTestFixturesImplementation("com.google.guava:guava:23.0")
     integTestFixturesImplementation("org.hamcrest:hamcrest-library:1.3")
     integTestFixturesImplementation("org.apache.ant:ant:1.9.3")
+    integTestFixturesImplementation("org.freemarker:freemarker:2.3.30")
     docTestImplementation("org.gradle:sample-check:0.7.0")
     docTestRuntimeOnly("org.slf4j:slf4j-simple:1.7.16")
 }

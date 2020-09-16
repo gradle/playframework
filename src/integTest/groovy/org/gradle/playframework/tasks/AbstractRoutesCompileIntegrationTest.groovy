@@ -4,6 +4,7 @@ import org.gradle.playframework.PlayMultiVersionIntegrationTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
+import org.junit.Assume
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 import static org.gradle.playframework.fixtures.file.FileFixtures.assertContentsHaveChangedSince
@@ -242,6 +243,8 @@ GET     /                          ${controllers()}${packageId}.Application.inde
     }
 
     def "can add additional imports"() {
+        // Play version 2.3 not supported
+        Assume.assumeTrue(playVersion > VersionNumber.parse("2.3.99"))
         given:
         withRoutesTemplate()
         and:
