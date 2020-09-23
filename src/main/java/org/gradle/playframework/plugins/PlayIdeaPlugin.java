@@ -6,7 +6,6 @@ import groovy.xml.QName;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.plugins.DslObject;
@@ -16,6 +15,8 @@ import org.gradle.language.scala.internal.DefaultScalaPlatform;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.playframework.tasks.JavaScriptMinify;
+import org.gradle.playframework.tasks.RoutesCompile;
+import org.gradle.playframework.tasks.TwirlCompile;
 import org.gradle.plugins.ide.idea.GenerateIdeaModule;
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel;
 import org.gradle.plugins.ide.idea.model.IdeaModule;
@@ -28,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME;
 import static org.gradle.playframework.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
 import static org.gradle.playframework.plugins.internal.PlayPluginHelper.*;
 
@@ -40,8 +40,11 @@ public class PlayIdeaPlugin implements Plugin<Project> {
             IdeaModule module = ideaModuleTask.getModule();
             ConventionMapping conventionMapping = conventionMappingFor(module);
 
-            TaskProvider<Task> classesTask = project.getTasks().named(CLASSES_TASK_NAME);
             TaskProvider<JavaScriptMinify> javaScriptMinifyTask = project.getTasks().named(PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME, JavaScriptMinify.class);
+            TaskProvider<RoutesCompile> routesCompileTask =
+                    project.getTasks().named(PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME, RoutesCompile.class);
+            TaskProvider<TwirlCompile> twirlCompileTask =
+                    project.getTasks().named(PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME, TwirlCompile.class);
 
             conventionMapping.map("sourceDirs", (Callable<Set<File>>) () -> {
                 // TODO: Assets should probably be a source set too
@@ -81,8 +84,9 @@ public class PlayIdeaPlugin implements Plugin<Project> {
                 });
             });
 
-            ideaModuleTask.dependsOn(classesTask);
             ideaModuleTask.dependsOn(javaScriptMinifyTask);
+            ideaModuleTask.dependsOn(routesCompileTask);
+            ideaModuleTask.dependsOn(twirlCompileTask);
         });
     }
 
