@@ -7,11 +7,15 @@ import org.gradle.playframework.fixtures.app.PlayApp
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
+import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME
 import static org.gradle.playframework.fixtures.ide.IdeaFixtures.parseIml
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
 class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
+    private static final String CLASSES_TASK_PATH = ":$CLASSES_TASK_NAME".toString()
+    private static final String SCALA_COMPILE_TASK_NAME = 'compileScala'
+    private static final String SCALA_COMPILE_TASK_PATH = ":$SCALA_COMPILE_TASK_NAME".toString()
     private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
     private static final String TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
     static final Map PLAY_VERSION_TO_CLASSPATH_SIZE = [(PlayMajorVersion.PLAY_2_4_X): 96,
@@ -42,6 +46,13 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
             ":ideaModule",
             ":ideaWorkspace",
             ":idea"
+        ]
+    }
+
+    String[] getUnexecutedTasks() {
+        [
+            SCALA_COMPILE_TASK_PATH,
+            CLASSES_TASK_PATH
         ]
     }
 
