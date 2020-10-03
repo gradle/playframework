@@ -5,6 +5,7 @@ import org.gradle.playframework.application.PlayIdeaPluginIntegrationTest
 import org.gradle.playframework.fixtures.app.PlayApp
 import org.gradle.playframework.fixtures.app.PlayMultiProject
 
+import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME
 import static org.gradle.playframework.application.basic.PlayIdeaPluginBasicIntegrationTest.PLAY_VERSION_TO_CLASSPATH_SIZE
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
@@ -46,6 +47,13 @@ class PlayIdeaPluginMultiprojectIntegrationTest extends PlayIdeaPluginIntegratio
             ":primary:idea",
             ":submodule:ideaModule",
             ":submodule:idea"
+        ]
+    }
+
+    String[] getUnexecutedTasks() {
+        [
+            ":primary:$CLASSES_TASK_NAME".toString(),
+            ":primary:compileScala".toString()
         ]
     }
 

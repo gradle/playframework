@@ -5,11 +5,15 @@ import org.gradle.playframework.application.PlayIdeaPluginIntegrationTest
 import org.gradle.playframework.fixtures.app.AdvancedPlayApp
 import org.gradle.playframework.fixtures.app.PlayApp
 
+import static org.gradle.api.plugins.JavaPlugin.CLASSES_TASK_NAME
 import static org.gradle.playframework.plugins.PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
 
 class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTest {
+    private static final String CLASSES_TASK_PATH = ":$CLASSES_TASK_NAME".toString()
+    private static final String SCALA_COMPILE_TASK_NAME = 'compileScala'
+    private static final String SCALA_COMPILE_TASK_PATH = ":$SCALA_COMPILE_TASK_NAME".toString()
     private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
     private static final String TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
     private static final String JS_MINIFY_TASK_PATH = ":$JS_MINIFY_TASK_NAME".toString()
@@ -44,6 +48,13 @@ class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTes
             ":ideaModule",
             ":ideaWorkspace",
             ":idea"
+        ]
+    }
+
+    String[] getUnexecutedTasks() {
+        [
+            CLASSES_TASK_PATH,
+            SCALA_COMPILE_TASK_PATH
         ]
     }
 

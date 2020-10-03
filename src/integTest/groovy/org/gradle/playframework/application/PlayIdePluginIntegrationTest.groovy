@@ -10,6 +10,7 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
     abstract String getIdeTask()
     abstract List<File> getIdeFiles()
     abstract String[] getBuildTasks()
+    abstract String[] getUnexecutedTasks()
 
     def "generates IDE configuration"() {
         applyIdePlugin()
@@ -18,6 +19,9 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
         then:
         buildTasks.each {
             assert result.task(it).outcome == TaskOutcome.SUCCESS
+        }
+        unexecutedTasks.each {
+            assert !result.task(it)
         }
         ideFiles.each {
             assert it.exists()
