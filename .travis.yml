@@ -14,8 +14,8 @@ jobs:
       env: GRADLE_TASK=integrationTest PLAY_VERSION=2.5.19
     - name: "Play 2.6.25 Integration Tests"
       env: GRADLE_TASK=integrationTest PLAY_VERSION=2.6.25
-    - name: "Play 2.7.3 Integration Tests"
-      env: GRADLE_TASK=integrationTest PLAY_VERSION=2.7.3
+    - name: "Play 2.7.5 Integration Tests"
+      env: GRADLE_TASK=integrationTest PLAY_VERSION=2.7.5
     - name: "Documentation Tests"
       env: GRADLE_TASK=docTest PLAY_VERSION=not_used
 

@@ -18,6 +18,11 @@ abstract class DefaultVersionedRoutesCompilerAdapter implements VersionedRoutesC
 
     @Override
     public String getDependencyNotation() {
+        if (playVersion.equals("2.7.4") || playVersion.equals("2.7.5")) {
+            // this is a hack because of a Play Framework issue
+            // See: https://github.com/playframework/playframework/issues/10333
+            return "com.typesafe.play:routes-compiler_" + scalaVersion + ":2.7.3";
+        }
         return "com.typesafe.play:routes-compiler_" + scalaVersion + ":" + playVersion;
     }
 
