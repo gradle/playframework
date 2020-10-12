@@ -13,6 +13,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
+
       - name: Publish plugin
         uses: eskatos/gradle-command-action@v1.2.0
         env:
@@ -20,10 +21,35 @@ jobs:
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
         with:
           arguments: publishPlugins -Pgradle.publish.key=${GRADLE_PUBLISH_KEY} -Pgradle.publish.secret=${GRADLE_PUBLISH_SECRET}
+
       - name: Publish Javadocs
         uses: eskatos/gradle-command-action@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           arguments: gitPublishPush -Dorg.ajoberstar.grgit.auth.username=${GITHUB_TOKEN}
+
+      - name: Get release version
+        run: |
+            RELEASE_VERSION=$(./gradlew properties -q | grep 'version:' | awk '{print $2}')
+            [[ ! -z "${RELEASE_VERSION}" ]] || (echo "Get empty release version, RELEASE_VERSION='${RELEASE_VERSION}'" && exit 1)
+            echo "RELEASE_VERSION=${RELEASE_VERSION}" >> ${GITHUB_ENV}
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          ref: master
+      - name: Modify samples version
+        run: |
+            PLAY_PLUGIN_LINE="id 'org\.gradle\.playframework' version"
+            find src/docs/samples -name 'build.gradle*' -type f -exec sed -i "s/${PLAY_PLUGIN_LINE} '\(.*\)'/${PLAY_PLUGIN_LINE} '${RELEASE_VERSION}'/g" {} +
+        env:
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update sample version to ${{ env.RELEASE_VERSION }}
+          branch: master
+          file_pattern: src/docs/samples
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
