@@ -51,20 +51,20 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
     }
 
     List<ArchiveTestFixture> archives() {
-        [ zip("build/distributions/main.zip"), tar("build/distributions/main.tar") ]
+        [ zip("build/distributions/${playApp.name}.zip"), tar("build/distributions/${playApp.name}.tar") ]
     }
     void verifyArchives() {
         archives()*.containsDescendants(
-                "main/lib/${playApp.name}.jar",
-                "main/lib/${playApp.name}-assets.jar",
-                "main/bin/main",
-                "main/bin/main.bat",
-                "main/conf/application.conf",
-                "main/README")
+                "${playApp.name}/lib/${playApp.name}.jar",
+                "${playApp.name}/lib/${playApp.name}-assets.jar",
+                "${playApp.name}/bin/main",
+                "${playApp.name}/bin/main.bat",
+                "${playApp.name}/conf/application.conf",
+                "${playApp.name}/README")
     }
 
     void verifyStagedFiles() {
-        File stageMainDir = file("build/stage/main")
+        File stageMainDir = file("build/stage/${playApp.name}")
         [
             "lib/${playApp.name}.jar",
             "lib/${playApp.name}-assets.jar",
@@ -89,7 +89,7 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
         // Verify that the Class-Path attribute contains the correct runtime classpath
         def classpath = mainJar.manifest.mainAttributes.getValue("Class-Path")
         def classpathAsFilenames = Arrays.asList(classpath.split(" "))
-        def dependencies = file("build/stage/main/lib/").listFiles().collect { it.name } - [ mainJar.file.name ]
+        def dependencies = file("build/stage/${playApp.name}/lib/").listFiles().collect { it.name } - [ mainJar.file.name ]
         assert dependencies.size() == classpathAsFilenames.size()
         assert classpathAsFilenames.containsAll(dependencies)
     }

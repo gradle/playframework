@@ -73,8 +73,8 @@ class MiscUserGuideIntegrationTest extends InDepthUserGuideSamplesIntegrationTes
 
         then:
         distributionArchives(sample.dir)*.containsDescendants(
-                "main/README.md",
-                "main/bin/runPlayBinaryAsUser.sh"
+                "custom-distribution/README.md",
+                "custom-distribution/bin/runPlayBinaryAsUser.sh"
         )
 
         where:
