@@ -22,13 +22,6 @@ jobs:
         with:
           arguments: publishPlugins
 
-      - name: Publish Javadocs
-        uses: eskatos/gradle-command-action@v1.2.0
-        env:
-          GRGIT_USER: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          arguments: gitPublishPush
-
       - name: Get release version
         run: |
             echo "RELEASE_VERSION=${{ github.ref }}" | sed 's,refs/tags/v,,' >> ${GITHUB_ENV}
