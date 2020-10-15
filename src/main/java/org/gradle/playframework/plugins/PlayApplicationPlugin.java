@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.*;
@@ -92,7 +93,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     private void addAutomaticDependencies(DependencyHandler dependencies, PlayPlatform playPlatform) {
         dependencies.add(PLATFORM_CONFIGURATION, playPlatform.getDependencyNotation("play").get());
         dependencies.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, playPlatform.getDependencyNotation("play-test").get());
-        dependencies.add(RUNTIME_CLASSPATH_CONFIGURATION_NAME, playPlatform.getDependencyNotation("play-docs").get());
+        dependencies.add(RUNTIME_ONLY_CONFIGURATION_NAME, playPlatform.getDependencyNotation("play-docs").get());
 
         PlayMajorVersion playMajorVersion = PlayMajorVersion.forPlatform(playPlatform);
         switch (playMajorVersion) {
@@ -126,7 +127,9 @@ public class PlayApplicationPlugin implements Plugin<Project> {
     private TaskProvider<Jar> createAssetsJarTask(Project project) {
         TaskProvider<Jar> assetsJarTask = project.getTasks().register(ASSETS_JAR_TASK_NAME, Jar.class, jar -> {
             jar.setDescription("Assembles the assets jar for the application.");
-            jar.setClassifier("assets");
+            // TODO: This should be using .convention, but in old versions of Gradle
+            // This wasn't properly set and wouldn't take effect
+            jar.getArchiveClassifier().set("assets");
             jar.from(project.file("public"), copySpec -> copySpec.into("public"));
         });
 
