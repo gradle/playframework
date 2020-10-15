@@ -31,7 +31,7 @@ jobs:
 
       - name: Get release version
         run: |
-            echo "RELEASE_VERSION=${{ github.ref }}" | tr -d 'v' >> ${GITHUB_ENV}
+            echo "RELEASE_VERSION=${{ github.ref }}" | sed 's,refs/tags/v,,' >> ${GITHUB_ENV}
       - name: Checkout master
         uses: actions/checkout@v2
         with:
