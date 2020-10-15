@@ -98,7 +98,7 @@ setFromEnvOrGradleProperty("gradle.publish.secret", "GRADLE_PUBLISH_SECRET")
 fun Project.setFromEnvOrGradleProperty(gradleProperty: String, environmentVariable: String) {
     val envVar = providers.environmentVariable(environmentVariable).forUseAtConfigurationTime()
     val gradleProp = providers.gradleProperty(gradleProperty).forUseAtConfigurationTime()
-    setProperty(gradleProperty, envVar.orElse(gradleProp).getOrNull())
+    ext[gradleProperty] = envVar.orElse(gradleProp).getOrNull()
 }
 
 pluginBundle {
