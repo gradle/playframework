@@ -45,12 +45,9 @@ Importing the project into IntelliJ is straight forward. From the menu select _F
 The project currently doesn't define a release process that can be triggered by running a single task. Following the process below.
 
 1. Update the release notes and release date in link:./src/docs/asciidoc/50-changes.adoc[changelog file].
-2. Create and push a tag for the source code.
-3. Build the binary artifact and publish it to the Gradle Plugin Portal by running the task `publishPlugins`.
-4. Build and publish the Javadocs and the user guide by running the task `gitPublishPush`.
-5. Manually update the plugin version for all samples in the directory `src/docs/samples`. Commit and push the changes to GitHub.
-
-The following paragraphs explain some of the steps in more detail.
+2. Create a release on GitHub with the appropriate tag.
+3. Build and publish the Javadocs and the user guide by running the task `gitPublishPush`.
+4. Check that the [Create Release](https://github.com/gradle/playframework/actions?query=workflow%3A%22Create+Release%22) GitHub action is successful.
 
 === Generating documentation
 
