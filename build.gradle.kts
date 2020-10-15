@@ -91,6 +91,16 @@ gradlePlugin {
     }
 }
 
+// Wire in the publishing credentials from the environment or as a project property
+setFromEnvOrGradleProperty("gradle.publish.key", "GRADLE_PUBLISH_KEY")
+setFromEnvOrGradleProperty("gradle.publish.secret", "GRADLE_PUBLISH_SECRET")
+
+fun Project.setFromEnvOrGradleProperty(gradleProperty: String, environmentVariable: String) {
+    val envVar = providers.environmentVariable(environmentVariable).forUseAtConfigurationTime()
+    val gradleProp = providers.gradleProperty(gradleProperty).forUseAtConfigurationTime()
+    setProperty(gradleProperty, envVar.orElse(gradleProp).getOrNull())
+}
+
 pluginBundle {
     website = "https://gradle.github.io/playframework/"
     vcsUrl = "https://github.com/gradle/playframework"
