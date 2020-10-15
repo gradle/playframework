@@ -1,4 +1,4 @@
-= Gradle Play Plugin image:https://travis-ci.org/gradle/playframework.svg?branch=master["Build Status", link="https://travis-ci.org/gradle/playframework"]
+= Gradle Play Plugin image:https://travis-ci.org/gradle/playframework.svg?branch=master["Build Status", link="https://travis-ci.org/gradle/playframework"]  image:https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/org/gradle/playframework/org.gradle.playframework.gradle.plugin/maven-metadata.xml.svg?label=latest%20release["Latest release", link="https://plugins.gradle.org/plugin/org.gradle.playframework"]
 
 == Documentation 
 
