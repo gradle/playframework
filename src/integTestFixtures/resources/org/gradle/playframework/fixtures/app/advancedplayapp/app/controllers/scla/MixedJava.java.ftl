@@ -22,7 +22,7 @@ import views.html.*;
 
 public class MixedJava extends Controller {
 
-<#if playVersion == "2.7">
+<#if playVersion == "2.8" || playVersion == "2.7">
     public Result index() {
 <#else>
     public static Result index() {

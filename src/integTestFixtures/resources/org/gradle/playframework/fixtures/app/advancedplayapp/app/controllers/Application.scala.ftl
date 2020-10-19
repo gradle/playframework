@@ -16,7 +16,7 @@
 
 package controllers
 
-<#if playVersion == "2.7" || playVersion == "2.6">
+<#if playVersion == "2.8" || playVersion == "2.7" || playVersion == "2.6">
 import javax.inject._
 import play.api._
 import play.api.mvc._

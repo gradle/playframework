@@ -1,4 +1,4 @@
-<#if playVersion == "2.7" || playVersion == "2.6">
+<#if playVersion == "2.8" || playVersion == "2.7" || playVersion == "2.6">
 # Routes
 GET /          @controllers.Application.index
 GET /root      @controllers.Application.root

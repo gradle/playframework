@@ -13,9 +13,8 @@ public enum PlayMajorVersion {
     PLAY_2_4_X("2.4.x", true, "2.11", "2.10"),
     PLAY_2_5_X("2.5.x", true,"2.11"),
     PLAY_2_6_X("2.6.x", true, "2.12", "2.11"),
-    PLAY_2_7_X("2.7.x", false, "2.13", "2.12", "2.11");
-    // Not supported yet
-    // PLAY_2_8_X("2.8.x", false, "2.13", "2.12");
+    PLAY_2_7_X("2.7.x", false, "2.13", "2.12", "2.11"),
+    PLAY_2_8_X("2.8.x", false, "2.13", "2.12");
 
     private final String name;
     private final boolean supportForStaticRoutes;

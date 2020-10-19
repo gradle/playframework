@@ -1,4 +1,4 @@
-<#if playVersion == "2.7" || playVersion == "2.6">
+<#if playVersion == "2.8" || playVersion == "2.7" || playVersion == "2.6">
 play.http.secret.key="TY9[b`xw2MeXUt;M<i_B0kUKm8/?PD1cS1WhFYyZ[1^6`Apew34q6DyNL=UqG/1l"
 
 <#else>

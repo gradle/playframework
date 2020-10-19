@@ -1,4 +1,4 @@
-<#if playVersion == "2.7" || playVersion == "2.6">
+<#if playVersion == "2.8" || playVersion == "2.7" || playVersion == "2.6">
 # https://www.playframework.com/documentation/2.6.x/ApplicationSecret
 play.http.secret.key="somethingsecret"
 
