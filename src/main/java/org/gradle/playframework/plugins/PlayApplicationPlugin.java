@@ -5,9 +5,8 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationPublications;
-import org.gradle.api.artifacts.ModuleVersionSelector;
 import org.gradle.api.artifacts.PublishArtifact;
-import org.gradle.api.artifacts.ResolvedArtifact;
+import org.gradle.api.artifacts.component.ComponentIdentifier;
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.type.ArtifactTypeDefinition;
@@ -15,10 +14,6 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.artifacts.ArtifactAttributes;
 import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact;
-import org.gradle.api.internal.file.FileCollectionInternal;
-import org.gradle.api.internal.file.collections.ImmutableFileCollection;
-import org.gradle.api.internal.file.collections.LazilyInitializedFileCollection;
-import org.gradle.api.internal.tasks.TaskDependencyResolveContext;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskProvider;
@@ -32,12 +27,7 @@ import org.gradle.playframework.tasks.RoutesCompile;
 import org.gradle.playframework.tasks.TwirlCompile;
 import org.gradle.util.VersionNumber;
 
-import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.Callable;
 
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.*;
@@ -187,43 +177,16 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             this.configuration = configuration;
         }
 
+        private boolean isChangingArtifact(ComponentIdentifier componentIdentifier) {
+            return componentIdentifier instanceof ProjectComponentIdentifier;
+        }
+
         FileCollection getChangingArtifacts() {
-            return new FilterByProjectComponentTypeFileCollection(configuration, true);
+            return configuration.getIncoming().artifactView(view -> view.componentFilter(this::isChangingArtifact)).getFiles();
         }
 
         FileCollection getNonChangingArtifacts() {
-            return new FilterByProjectComponentTypeFileCollection(configuration, false);
-        }
-    }
-
-    private static class FilterByProjectComponentTypeFileCollection extends LazilyInitializedFileCollection {
-        private final Configuration configuration;
-        private final boolean matchProjectComponents;
-
-        private FilterByProjectComponentTypeFileCollection(Configuration configuration, boolean matchProjectComponents) {
-            this.configuration = configuration;
-            this.matchProjectComponents = matchProjectComponents;
-        }
-
-        @Override
-        public String getDisplayName() {
-            return configuration.toString();
-        }
-
-        @Override
-        public FileCollectionInternal createDelegate() {
-            Set<File> files = new HashSet<>();
-            for (ResolvedArtifact artifact : configuration.getResolvedConfiguration().getResolvedArtifacts()) {
-                if ((artifact.getId().getComponentIdentifier() instanceof ProjectComponentIdentifier) == matchProjectComponents) {
-                    files.add(artifact.getFile());
-                }
-            }
-            return ImmutableFileCollection.of(Collections.unmodifiableSet(files));
-        }
-
-        @Override
-        public void visitDependencies(TaskDependencyResolveContext context) {
-            context.add(configuration);
+            return configuration.getIncoming().artifactView(view -> view.componentFilter(componentId -> !isChangingArtifact(componentId))).getFiles();
         }
     }
 
