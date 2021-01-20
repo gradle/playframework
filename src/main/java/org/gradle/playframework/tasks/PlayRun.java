@@ -3,6 +3,7 @@ package org.gradle.playframework.tasks;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.RegularFileProperty;
+import org.gradle.api.internal.file.FileCollectionFactory;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.playframework.tools.internal.run.DefaultPlayRunSpec;
@@ -69,7 +70,7 @@ public class PlayRun extends DefaultTask {
 
         if (deploymentHandle == null) {
             PlayRunSpec spec = new DefaultPlayRunSpec(runtimeClasspath, changingClasspath, applicationJar.getAsFile().get(), assetsJar.getAsFile().get(), assetsDirs, workingDir.get().getAsFile(), getForkOptions(), getHttpPort().get());
-            PlayApplicationRunner playApplicationRunner = PlayApplicationRunnerFactory.create(platform.get(), getWorkerProcessFactory(), getClasspathFingerprinter());
+            PlayApplicationRunner playApplicationRunner = PlayApplicationRunnerFactory.create(platform.get(), getWorkerProcessFactory(), getClasspathFingerprinter(), getFileCollectionFactory());
             deploymentHandle = deploymentRegistry.start(deploymentId, DeploymentRegistry.ChangeBehavior.BLOCK, PlayApplicationDeploymentHandle.class, spec, playApplicationRunner);
 
             InetSocketAddress playAppAddress = deploymentHandle.getPlayAppAddress();
@@ -178,6 +179,11 @@ public class PlayRun extends DefaultTask {
 
     @Inject
     public ClasspathFingerprinter getClasspathFingerprinter() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Inject
+    public FileCollectionFactory getFileCollectionFactory() {
         throw new UnsupportedOperationException();
     }
 }

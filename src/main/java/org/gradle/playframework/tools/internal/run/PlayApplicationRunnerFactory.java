@@ -1,13 +1,14 @@
 package org.gradle.playframework.tools.internal.run;
 
+import org.gradle.api.internal.file.FileCollectionFactory;
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.playframework.extensions.internal.PlayMajorVersion;
 import org.gradle.internal.fingerprint.classpath.ClasspathFingerprinter;
 import org.gradle.process.internal.worker.WorkerProcessFactory;
 
 public class PlayApplicationRunnerFactory {
-    public static PlayApplicationRunner create(PlayPlatform playPlatform, WorkerProcessFactory workerFactory, ClasspathFingerprinter fingerprinter) {
-        return new PlayApplicationRunner(workerFactory, createPlayRunAdapter(playPlatform), fingerprinter);
+    public static PlayApplicationRunner create(PlayPlatform playPlatform, WorkerProcessFactory workerFactory, ClasspathFingerprinter fingerprinter, FileCollectionFactory fileCollectionFactory) {
+        return new PlayApplicationRunner(workerFactory, createPlayRunAdapter(playPlatform), fingerprinter, fileCollectionFactory);
     }
 
     public static VersionedPlayRunAdapter createPlayRunAdapter(PlayPlatform playPlatform) {
