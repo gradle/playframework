@@ -1,7 +1,7 @@
 package org.gradle.playframework.application.multiproject
 
-import org.gradle.play.internal.platform.PlayMajorVersion
 import org.gradle.playframework.application.PlayIdeaPluginIntegrationTest
+import org.gradle.playframework.extensions.internal.PlayMajorVersion
 import org.gradle.playframework.fixtures.app.PlayApp
 import org.gradle.playframework.fixtures.app.PlayMultiProject
 

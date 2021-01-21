@@ -1,7 +1,7 @@
 package org.gradle.playframework.application.basic
 
-import org.gradle.play.internal.platform.PlayMajorVersion
 import org.gradle.playframework.application.PlayIdeaPluginIntegrationTest
+import org.gradle.playframework.extensions.internal.PlayMajorVersion
 import org.gradle.playframework.fixtures.app.BasicPlayApp
 import org.gradle.playframework.fixtures.app.PlayApp
 import org.gradle.testkit.runner.BuildResult

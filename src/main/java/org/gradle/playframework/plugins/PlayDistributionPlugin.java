@@ -182,7 +182,8 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             return providers.provider(new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    return (distribution.getBaseName() != null && "".equals(distribution.getBaseName())) ? distribution.getBaseName() : distribution.getName();
+                    String baseName = (String) Distribution.class.getMethod("getBaseName").invoke(distribution);
+                    return "".equals(baseName) ? "" : distribution.getName();
                 }
             });
         } else {

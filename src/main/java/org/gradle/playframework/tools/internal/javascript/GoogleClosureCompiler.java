@@ -1,5 +1,6 @@
 package org.gradle.playframework.tools.internal.javascript;
 
+import org.gradle.api.GradleException;
 import org.gradle.api.UncheckedIOException;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.tasks.WorkResult;
@@ -9,7 +10,6 @@ import org.gradle.playframework.tools.internal.reflection.DirectInstantiator;
 import org.gradle.playframework.tools.internal.reflection.JavaMethod;
 import org.gradle.playframework.tools.internal.reflection.JavaReflectionUtil;
 import org.gradle.playframework.tools.internal.reflection.PropertyAccessor;
-import org.gradle.plugins.javascript.base.SourceTransformationException;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class GoogleClosureCompiler implements Compiler<JavaScriptCompileSpec>, S
         if (allErrors.isEmpty()) {
             return WorkResults.didWork(true);
         } else {
-            throw new SourceTransformationException(String.format("Minification failed with the following errors:\n\t%s", String.join( "\n\t", allErrors)), null);
+            throw new GradleException(String.format("Minification failed with the following errors:\n\t%s", String.join( "\n\t", allErrors)));
         }
     }
 
