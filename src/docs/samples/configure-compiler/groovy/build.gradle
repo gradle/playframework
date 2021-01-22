@@ -1,6 +1,6 @@
 // tag::plugin-definition[]
 plugins {
-    id 'org.gradle.playframework' version '0.10'
+    id 'org.gradle.playframework' version '0.11'
     id 'idea'
 }
 // end::plugin-definition[]
