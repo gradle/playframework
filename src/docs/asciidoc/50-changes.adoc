@@ -1,6 +1,11 @@
 == Change Log
 
 [discrete]
+=== v0.11 (2021-01-22)
+
+* Fix compatibility with upcoming Gradle 7.0
+
+[discrete]
 === v0.10 (2020-10-15)
 
 * Thank you to our community contributors:
