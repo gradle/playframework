@@ -7,7 +7,7 @@ final class Repositories {
     static String playRepositories() {
         """
             repositories {
-                jcenter()
+                mavenCentral()
                 maven {
                     name "lightbend-maven-release"
                     url "https://repo.lightbend.com/lightbend/maven-releases"
