@@ -14,7 +14,7 @@ group = "org.gradle.playframework"
 version = "0.11"
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven(url = "https://repo.gradle.org/gradle/libs")
 }
 
