@@ -24,6 +24,7 @@ public class RoutesCompilerFactory {
             case PLAY_2_6_X:
                 return new RoutesCompilerAdapterV24X(playVersion, scalaVersion);
             case PLAY_2_7_X:
+            case PLAY_2_8_X:
             default:
                 return new RoutesCompilerAdapterV27X(playVersion, scalaVersion);
         }

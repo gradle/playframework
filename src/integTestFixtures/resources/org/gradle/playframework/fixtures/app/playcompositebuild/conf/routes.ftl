@@ -1,4 +1,4 @@
-<#if playVersion == "2.7" || playVersion == "2.6">
+<#if playVersion == "2.8" || playVersion == "2.7" || playVersion == "2.6">
 GET     /                          @controllers.Application.index
 GET     /shutdown                  @controllers.Application.shutdown
 GET     /assets/*file              @controllers.Assets.at(path="/public", file)

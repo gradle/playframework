@@ -34,8 +34,10 @@ public class TwirlCompilerFactory {
                 return new PlayTwirlAdapterV23X();
             case PLAY_2_6_X:
             case PLAY_2_7_X:
-            default:
                 return new PlayTwirlAdapterV26X();
+            case PLAY_2_8_X:
+            default:
+                return new PlayTwirlAdapterV28X();
         }
     }
 
