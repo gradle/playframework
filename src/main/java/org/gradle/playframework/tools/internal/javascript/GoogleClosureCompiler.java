@@ -23,7 +23,7 @@ import java.util.List;
 
 public class GoogleClosureCompiler implements Compiler<JavaScriptCompileSpec>, Serializable {
     private static final Iterable<String> SHARED_PACKAGES = Arrays.asList("com.google.javascript");
-    private static final String DEFAULT_GOOGLE_CLOSURE_VERSION = "v20141215";
+    private static final String DEFAULT_GOOGLE_CLOSURE_VERSION = "v20210302";
     private Class<?> sourceFileClass;
     private Class<?> compilerOptionsClass;
     private Class<Enum> compilationLevelClass;
