@@ -33,3 +33,9 @@ play {
     injectedRoutesGenerator = true
 }
 // end::injected-routes-compiler[]
+
+// tag::prefix-dependencies-off[]
+play {
+    prefixDependencies = false
+}
+// end::prefix-dependencies-off[]

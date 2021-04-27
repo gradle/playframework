@@ -1,9 +1,12 @@
 package org.gradle.playframework.extensions;
 
+import javax.inject.Inject;
+
 import org.gradle.api.Action;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.playframework.extensions.internal.PlayMajorVersion;
 
 import static org.gradle.playframework.extensions.PlayPlatform.DEFAULT_PLAY_VERSION;
@@ -22,6 +25,7 @@ import static org.gradle.playframework.extensions.PlayPlatform.DEFAULT_PLAY_VERS
  *         javaVersion = JavaVersion.VERSION_1_9
  *     }
  *     injectedRoutesGenerator = true
+ *     prefixDependencies = false
  * }
  * </pre>
  */
@@ -29,14 +33,17 @@ public class PlayExtension {
 
     private final PlayPlatform platform;
     private final Property<Boolean> injectedRoutesGenerator;
+    private final Property<Boolean> prefixDependencies;
 
+    @Inject
     public PlayExtension(ObjectFactory objectFactory) {
         this.platform = objectFactory.newInstance(PlayPlatform.class, objectFactory);
         this.platform.getPlayVersion().convention(DEFAULT_PLAY_VERSION);
         this.platform.getJavaVersion().convention(JavaVersion.current());
         this.platform.getScalaVersion().convention(platform.getPlayVersion().map(playVersion -> PlayMajorVersion.forPlayVersion(playVersion).getDefaultScalaPlatform()));
-        this.injectedRoutesGenerator = objectFactory.property(Boolean.class);
-        injectedRoutesGenerator.convention(platform.getPlayVersion().map(playVersion -> !PlayMajorVersion.forPlayVersion(playVersion).hasSupportForStaticRoutesGenerator()));
+        this.injectedRoutesGenerator = objectFactory.property(Boolean.class)
+                .convention(platform.getPlayVersion().map(playVersion -> !PlayMajorVersion.forPlayVersion(playVersion).hasSupportForStaticRoutesGenerator()));
+        this.prefixDependencies = objectFactory.property(Boolean.class).convention(true);
     }
 
     /**
@@ -65,5 +72,14 @@ public class PlayExtension {
      */
     public Property<Boolean> getInjectedRoutesGenerator() {
         return injectedRoutesGenerator;
+    }
+
+    /**
+     * Returns the property configuring if the dependencies for the distribution should be prefixed.
+     *
+     * @return Property configuring the renaming of dependencies
+     */
+    public Property<Boolean> getPrefixDependencies() {
+        return prefixDependencies;
     }
 }

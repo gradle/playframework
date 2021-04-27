@@ -1,0 +1,14 @@
+=== Prefixing dependencies
+
+By default, your project's distribution task will prefix all your dependencies as follows:
+
+* Each jar will be prefixed with the library's group name - e.g. `com.typesafe.play-play_2.12-2.6.25.jar`
+* Each sub-module's jar, in a multi-module project, will be prefixed with the module's name
+
+The default behavior can be turned off using the `prefixDependencies` configuration.
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/play-2.4/groovy/build.gradle[tag=prefix-dependencies-off]
+----

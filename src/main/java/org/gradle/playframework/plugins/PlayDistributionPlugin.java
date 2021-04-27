@@ -15,6 +15,7 @@ import org.gradle.api.distribution.DistributionContainer;
 import org.gradle.api.distribution.plugins.DistributionPlugin;
 import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.FileCopyDetails;
+import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.provider.ProviderFactory;
 import org.gradle.api.tasks.Sync;
@@ -94,7 +95,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.getArchiveBaseName().convention(mainJarTask.flatMap(AbstractArchiveTask::getArchiveBaseName));
 
             Map<String, Object> classpath = new HashMap<>();
-            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath()));
+            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath(), playExtension.getPrefixDependencies()));
             jar.getManifest().attributes(classpath);
         });
 
@@ -113,7 +114,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             copySpec.from(distributionJarTask);
             copySpec.from(assetsJarTask.flatMap(AbstractArchiveTask::getArchiveFile));
             copySpec.from(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME));
-            copySpec.eachFile(new PrefixArtifactFileNames(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME)));
+            copySpec.eachFile(new PrefixArtifactFileNames(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), playExtension.getPrefixDependencies()));
         });
 
         distSpec.into("bin", copySpec -> {
@@ -201,16 +202,18 @@ public class PlayDistributionPlugin implements Plugin<Project> {
     static class PlayManifestClasspath {
         final Configuration configuration;
         final File assetsJarFile;
+        final Property<Boolean> prefixDependencies;
 
-        public PlayManifestClasspath(Configuration configuration, File assetsJarFile) {
+        public PlayManifestClasspath(Configuration configuration, File assetsJarFile, Property<Boolean> prefixDependencies) {
             this.configuration = configuration;
             this.assetsJarFile = assetsJarFile;
+            this.prefixDependencies = prefixDependencies;
         }
 
         @Override
         public String toString() {
             Stream<File> allFiles = Stream.concat(configuration.getFiles().stream(), Collections.singleton(assetsJarFile).stream());
-            Stream<String> transformedFiles = allFiles.map(new PrefixArtifactFileNames(configuration));
+            Stream<String> transformedFiles = allFiles.map(new PrefixArtifactFileNames(configuration, this.prefixDependencies));
             return String.join(" ",
                     transformedFiles.collect(Collectors.toList())
             );
@@ -219,10 +222,12 @@ public class PlayDistributionPlugin implements Plugin<Project> {
 
     static class PrefixArtifactFileNames implements Action<FileCopyDetails>, Function<File, String> {
         private final Configuration configuration;
+        private final Property<Boolean> prefixDependencies;
         Map<File, String> renames;
 
-        PrefixArtifactFileNames(Configuration configuration) {
+        PrefixArtifactFileNames(Configuration configuration, Property<Boolean> prefixDependencies) {
             this.configuration = configuration;
+            this.prefixDependencies = prefixDependencies;
         }
 
         @Override
@@ -234,7 +239,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         public String apply(File input) {
             calculateRenames();
             String rename = renames.get(input);
-            if (rename!=null) {
+            if (rename != null) {
                 return rename;
             }
             return input.getName();
@@ -253,10 +258,10 @@ public class PlayDistributionPlugin implements Plugin<Project> {
                 if (componentId instanceof ProjectComponentIdentifier) {
                     // rename project dependencies
                     ProjectComponentIdentifier projectComponentIdentifier = (ProjectComponentIdentifier) componentId;
-                    files.put(artifact.getFile(), renameForProject(projectComponentIdentifier, artifact.getFile()));
+                    files.put(artifact.getFile(), renameForProject(projectComponentIdentifier, artifact.getFile(), this.prefixDependencies));
                 } else if (componentId instanceof ModuleComponentIdentifier) {
                     ModuleComponentIdentifier moduleComponentIdentifier = (ModuleComponentIdentifier) componentId;
-                    files.put(artifact.getFile(), renameForModule(moduleComponentIdentifier, artifact.getFile()));
+                    files.put(artifact.getFile(), renameForModule(moduleComponentIdentifier, artifact.getFile(), this.prefixDependencies));
                 } else {
                     // don't rename other types of dependencies
                     files.put(artifact.getFile(), artifact.getFile().getName());
@@ -270,9 +275,9 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             return artifacts.getArtifacts();
         }
 
-        static String renameForProject(ProjectComponentIdentifier id, File file) {
+        static String renameForProject(ProjectComponentIdentifier id, File file, Property<Boolean> prefixDependencies) {
             String fileName = file.getName();
-            if (shouldBeRenamed(file)) {
+            if (shouldBeRenamed(file, prefixDependencies)) {
                 String projectPath = id.getProjectPath();
                 projectPath = projectPathToSafeFileName(projectPath);
                 return maybePrefix(projectPath, file);
@@ -280,8 +285,8 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             return fileName;
         }
 
-        static String renameForModule(ModuleComponentIdentifier id, File file) {
-            if (shouldBeRenamed(file)) {
+        static String renameForModule(ModuleComponentIdentifier id, File file, Property<Boolean> prefixDependencies) {
+            if (shouldBeRenamed(file, prefixDependencies)) {
                 return maybePrefix(id.getGroup(), file);
             }
             return file.getName();
@@ -301,8 +306,8 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             return projectPath.replaceAll(":", ".").substring(1);
         }
 
-        private static boolean shouldBeRenamed(File file) {
-            return hasExtension(file, ".jar");
+        private static boolean shouldBeRenamed(File file, Property<Boolean> prefixDependencies) {
+            return hasExtension(file, ".jar") && prefixDependencies.get();
         }
     }
 
