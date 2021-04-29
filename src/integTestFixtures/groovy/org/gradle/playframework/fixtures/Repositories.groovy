@@ -8,11 +8,6 @@ final class Repositories {
         """
             repositories {
                 mavenCentral()
-                // TODO Remove once lightbend migrates everything to repo.lightbend.com
-                maven {
-                    name "lightbend-bintray-releases"
-                    url "https://dl.bintray.com/typesafe/maven-releases"
-                }
                 maven {
                     name "lightbend-maven-release"
                     url "https://repo.lightbend.com/lightbend/maven-releases"
