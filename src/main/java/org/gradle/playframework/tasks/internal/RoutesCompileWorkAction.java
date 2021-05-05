@@ -1,29 +1,22 @@
 package org.gradle.playframework.tasks.internal;
 
-import org.gradle.playframework.tools.internal.routes.RoutesCompileSpec;
-import org.gradle.playframework.tools.internal.Compiler;
 import org.gradle.api.UncheckedIOException;
+import org.gradle.playframework.tools.internal.Compiler;
+import org.gradle.playframework.tools.internal.routes.RoutesCompileSpec;
+import org.gradle.workers.WorkAction;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class RoutesCompileRunnable implements Runnable {
-
-    private final RoutesCompileSpec routesCompileSpec;
-    private final Compiler<RoutesCompileSpec> compiler;
-
-    @Inject
-    public RoutesCompileRunnable(RoutesCompileSpec routesCompileSpec, Compiler<RoutesCompileSpec> compiler) {
-        this.routesCompileSpec = routesCompileSpec;
-        this.compiler = compiler;
-    }
+public abstract class RoutesCompileWorkAction implements WorkAction<RoutesCompileParameters> {
 
     @Override
-    public void run() {
+    public void execute() {
+        RoutesCompileSpec routesCompileSpec = getParameters().getSpec().get();
         Path destinationPath = routesCompileSpec.getDestinationDir().toPath();
         deleteOutputs(destinationPath);
+        Compiler<RoutesCompileSpec> compiler = getParameters().getCompiler().get();
         compiler.execute(routesCompileSpec);
     }
 

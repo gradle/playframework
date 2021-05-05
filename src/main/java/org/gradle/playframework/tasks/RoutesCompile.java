@@ -1,11 +1,5 @@
 package org.gradle.playframework.tasks;
 
-import org.gradle.playframework.extensions.PlayPlatform;
-import org.gradle.playframework.tasks.internal.RoutesCompileRunnable;
-import org.gradle.playframework.tools.internal.routes.DefaultRoutesCompileSpec;
-import org.gradle.playframework.tools.internal.routes.RoutesCompileSpec;
-import org.gradle.playframework.tools.internal.routes.RoutesCompilerFactory;
-import org.gradle.playframework.tools.internal.Compiler;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
 import org.gradle.api.file.FileTree;
@@ -19,7 +13,12 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.workers.IsolationMode;
+import org.gradle.playframework.extensions.PlayPlatform;
+import org.gradle.playframework.tasks.internal.RoutesCompileWorkAction;
+import org.gradle.playframework.tools.internal.Compiler;
+import org.gradle.playframework.tools.internal.routes.DefaultRoutesCompileSpec;
+import org.gradle.playframework.tools.internal.routes.RoutesCompileSpec;
+import org.gradle.playframework.tools.internal.routes.RoutesCompilerFactory;
 import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
@@ -100,12 +99,12 @@ public class RoutesCompile extends SourceTask {
     void compile() {
         RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get());
 
-        workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
-            workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
-            workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-            workerConfiguration.params(spec, getCompiler());
-            workerConfiguration.classpath(routesCompilerClasspath);
-            workerConfiguration.setDisplayName("Generating Scala source from routes templates");
+        workerExecutor.processIsolation(workerSpec -> {
+            workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+            workerSpec.getClasspath().from(routesCompilerClasspath);
+        }).submit(RoutesCompileWorkAction.class, parameters -> {
+            parameters.getCompiler().set(getCompiler());
+            parameters.getSpec().set(spec);
         });
     }
 

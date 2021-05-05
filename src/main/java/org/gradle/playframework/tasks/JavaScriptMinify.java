@@ -1,6 +1,6 @@
 package org.gradle.playframework.tasks;
 
-import org.gradle.playframework.tasks.internal.JavaScriptMinifyRunnable;
+import org.gradle.playframework.tasks.internal.JavaScriptMinifyWorkAction;
 import org.gradle.playframework.tools.internal.javascript.DefaultJavaScriptCompileSpec;
 import org.gradle.playframework.tools.internal.javascript.JavaScriptCompileSpec;
 import org.gradle.playframework.tools.internal.javascript.SimpleStaleClassCleaner;
@@ -20,7 +20,7 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.workers.IsolationMode;
+import org.gradle.workers.WorkQueue;
 import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
@@ -79,14 +79,13 @@ public class JavaScriptMinify extends SourceTask {
 
         JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, destinationDir.get().getAsFile());
 
-        workerExecutor.submit(JavaScriptMinifyRunnable.class, workerConfiguration -> {
-            workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
-            workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-            workerConfiguration.params(spec);
-            workerConfiguration.classpath(compilerClasspath);
-            workerConfiguration.setDisplayName("Minifying JavaScript source files");
+        WorkQueue workQueue = workerExecutor.processIsolation(workerSpec -> {
+            workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+            workerSpec.getClasspath().from(compilerClasspath);
         });
-        workerExecutor.await();
+        workQueue.submit(JavaScriptMinifyWorkAction.class, parameters -> parameters.getSpec().set(spec));
+
+        workQueue.await();
     }
 
     /**
