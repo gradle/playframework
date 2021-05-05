@@ -103,7 +103,11 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         TaskProvider<CreateStartScripts> createStartScriptsTask = project.getTasks().register(createStartScriptsTaskName, CreateStartScripts.class, createStartScripts -> {
             createStartScripts.setDescription("Creates OS specific scripts to run the distribution.");
             createStartScripts.setClasspath(distributionJarTask.get().getOutputs().getFiles());
-            createStartScripts.setMainClassName(getMainClass(playExtension.getPlatform()));
+            if (GradleVersion.current().compareTo(GradleVersion.version("6.4")) >= 0) {
+                createStartScripts.getMainClass().set(getMainClass(playExtension.getPlatform()));
+            } else {
+                createStartScripts.setMainClassName(getMainClass(playExtension.getPlatform()));
+            }
             createStartScripts.setApplicationName(distribution.getName());
             createStartScripts.setOutputDir(scriptsDir);
         });
