@@ -1,5 +1,8 @@
 package org.gradle.playframework.tasks;
 
+import org.gradle.api.Action;
+import org.gradle.playframework.tasks.internal.JavaScriptMinifyParameters;
+import org.gradle.playframework.tasks.internal.JavaScriptMinifyRunnable;
 import org.gradle.playframework.tasks.internal.JavaScriptMinifyWorkAction;
 import org.gradle.playframework.tools.internal.javascript.DefaultJavaScriptCompileSpec;
 import org.gradle.playframework.tools.internal.javascript.JavaScriptCompileSpec;
@@ -20,6 +23,9 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.util.GradleVersion;
+import org.gradle.workers.IsolationMode;
+import org.gradle.workers.ProcessWorkerSpec;
 import org.gradle.workers.WorkQueue;
 import org.gradle.workers.WorkerExecutor;
 
@@ -69,6 +75,7 @@ public class JavaScriptMinify extends SourceTask {
     }
 
     @TaskAction
+    @SuppressWarnings("Convert2Lambda")
     void compileJavaScriptSources() {
         StaleClassCleaner cleaner = new SimpleStaleClassCleaner(getOutputs());
         cleaner.addDirToClean(destinationDir.get().getAsFile());
@@ -79,13 +86,29 @@ public class JavaScriptMinify extends SourceTask {
 
         JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, destinationDir.get().getAsFile());
 
-        WorkQueue workQueue = workerExecutor.processIsolation(workerSpec -> {
-            workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-            workerSpec.getClasspath().from(compilerClasspath);
-        });
-        workQueue.submit(JavaScriptMinifyWorkAction.class, parameters -> parameters.getSpec().set(spec));
-
-        workQueue.await();
+        if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
+            workerExecutor.submit(JavaScriptMinifyRunnable.class, workerConfiguration -> {
+                workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
+                workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+                workerConfiguration.params(spec);
+                workerConfiguration.classpath(compilerClasspath);
+                workerConfiguration.setDisplayName("Minifying JavaScript source files");
+            });
+        } else {
+            WorkQueue workQueue = workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
+                @Override
+                public void execute(ProcessWorkerSpec workerSpec) {
+                    workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+                    workerSpec.getClasspath().from(compilerClasspath);
+                }
+            });
+            workQueue.submit(JavaScriptMinifyWorkAction.class, new Action<JavaScriptMinifyParameters>() {
+                @Override
+                public void execute(JavaScriptMinifyParameters parameters) {
+                    parameters.getSpec().set(spec);
+                }
+            });
+        }
     }
 
     /**

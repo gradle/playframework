@@ -1,28 +1,12 @@
 package org.gradle.playframework.tasks.internal;
 
-import org.gradle.api.UncheckedIOException;
-import org.gradle.playframework.tools.internal.twirl.TwirlCompileSpec;
 import org.gradle.workers.WorkAction;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public abstract class TwirlCompileWorkAction implements WorkAction<TwirlCompileParameters> {
 
     @Override
     public void execute() {
-        TwirlCompileSpec twirlCompileSpec = getParameters().getTwirlCompileSpec().get();
-        Path destinationPath = twirlCompileSpec.getDestinationDir().toPath();
-        deleteOutputs(destinationPath);
-        getParameters().getCompiler().get().execute(twirlCompileSpec);
-    }
-
-    private void deleteOutputs(Path pathToBeDeleted) {
-        try {
-            Files.walk(pathToBeDeleted).map(path -> path.toFile()).forEach(file -> file.delete());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        // TODO: When dropping support for <5.6, remove the Runnable and fold its functionality into here
+        new TwirlCompileRunnable(getParameters().getTwirlCompileSpec().get(), getParameters().getCompiler().get()).run();
     }
 }
