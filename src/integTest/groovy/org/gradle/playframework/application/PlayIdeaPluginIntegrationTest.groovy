@@ -3,7 +3,6 @@ package org.gradle.playframework.application
 import org.gradle.playframework.fixtures.ide.IdeaModuleFixture
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import spock.lang.Ignore
 
 import static org.gradle.playframework.fixtures.ide.IdeaFixtures.parseIml
 import static org.gradle.playframework.fixtures.ide.IdeaFixtures.parseIpr
@@ -49,39 +48,6 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         content.assertContainsSourcePaths(sourcePaths)
         content.assertContainsResourcePaths("conf")
         content.assertContainsExcludes("build", ".gradle")
-    }
-
-    @Ignore
-    def "IDEA metadata contains correct Scala version"() {
-        applyIdePlugin()
-        buildFile << """
-    allprojects {
-        pluginManager.withPlugin("org.gradle.playframework") {
-            tasks.idea {
-                doLast {
-                    assert ideaModule.module.scalaPlatform.getScalaCompatibilityVersion() == play.platform.scalaVersion.get()
-                    println "Validated Scala Version"
-                }
-            }
-        }
-    }
-"""
-        when:
-        BuildResult result = build(ideTask)
-        then:
-        result.output.contains("Validated Scala Version")
-
-        parseIml(moduleFile).dependencies.dependencies.any {
-            if (it instanceof IdeaModuleFixture.ImlLibrary) {
-                return it.name.startsWith("scala-sdk") && it.level == "project"
-            }
-            false
-        }
-
-        def libraryTable = parseIpr(projectFile).libraryTable
-        def scalaSdk = libraryTable.library.find { it.@name.toString().startsWith("scala-sdk") && it.@type == "Scala" }
-        def scalaClasspath = scalaSdk.properties."compiler-classpath".root."@url"
-        scalaClasspath.size() == expectedScalaClasspathSize
     }
 
     def "IDEA metadata contains correct Java version"() {

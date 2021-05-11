@@ -1,10 +1,27 @@
 package org.gradle.playframework
 
+import org.gradle.playframework.fixtures.test.JUnitXmlTestExecutionResult
+import org.gradle.playframework.fixtures.test.TestExecutionResult
 import org.gradle.samples.test.rule.UsesSample
 import spock.lang.Unroll
 
 @Unroll
 class MiscUserGuideIntegrationTest extends InDepthUserGuideSamplesIntegrationTest {
+    @UsesSample("basic/groovy")
+    def "basic sample is buildable #gradleVersion"(String gradleVersion) {
+        setupRunner(gradleVersion)
+        new File(sample.dir, "build.gradle") << """
+            apply plugin: "org.gradle.playframework-ide"
+            apply plugin: "idea"
+        """
+
+        expect:
+        build("idea")
+
+        where:
+        gradleVersion << VERSIONS_UNDER_TEST
+    }
+
     @UsesSample("source-sets/groovy")
     def "source-sets sample is buildable #gradleVersion"(String gradleVersion) {
         setupRunner(gradleVersion)

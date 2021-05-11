@@ -41,10 +41,6 @@ public class PlayIdeaPlugin implements Plugin<Project> {
             ConventionMapping conventionMapping = conventionMappingFor(module);
 
             TaskProvider<JavaScriptMinify> javaScriptMinifyTask = project.getTasks().named(PlayJavaScriptPlugin.JS_MINIFY_TASK_NAME, JavaScriptMinify.class);
-            TaskProvider<RoutesCompile> routesCompileTask =
-                    project.getTasks().named(PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME, RoutesCompile.class);
-            TaskProvider<TwirlCompile> twirlCompileTask =
-                    project.getTasks().named(PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME, TwirlCompile.class);
 
             conventionMapping.map("sourceDirs", (Callable<Set<File>>) () -> {
                 // TODO: Assets should probably be a source set too
@@ -57,36 +53,13 @@ public class PlayIdeaPlugin implements Plugin<Project> {
                 return sourceDirs;
             });
 
-            conventionMapping.map("singleEntryLibraries", (Callable<Map<String, Iterable<File>>>) () -> {
-                SourceSet mainSourceSet = getMainJavaSourceSet(project);
-                SourceSet testSourceSet = getTestJavaSourceSet(project);
-
-                Map<String, Iterable<File>> libs = new HashMap<>();
-                libs.put("COMPILE", mainSourceSet.getOutput().getClassesDirs());
-                libs.put("RUNTIME", Collections.singleton(mainSourceSet.getOutput().getResourcesDir()));
-                libs.put("TEST", testSourceSet.getOutput().getClassesDirs());
-                return Collections.unmodifiableMap(libs);
-            });
-
             PlayExtension playExtension = (PlayExtension) project.getExtensions().getByName(PLAY_EXTENSION_NAME);
-            module.setScalaPlatform(new DefaultScalaPlatform(playExtension.getPlatform().getScalaVersion().get()));
-
             conventionMapping.map("targetBytecodeVersion", (Callable<JavaVersion>) () -> getTargetJavaVersion(playExtension.getPlatform()));
             conventionMapping.map("languageLevel", (Callable<IdeaLanguageLevel>) () -> new IdeaLanguageLevel(getTargetJavaVersion(playExtension.getPlatform())));
 
-            module.getIml().withXml(xml -> {
-                NodeList sourceFolders = xml.asNode().getAt(QName.valueOf("component")).getAt(QName.valueOf("content")).getAt(QName.valueOf("sourceFolder"));
-                sourceFolders.forEach(sourceFolder -> {
-                    Node node = (Node) sourceFolder;
-                    if (node.get("@url").equals("file://$MODULE_DIR$/conf")) {
-                        node.attributes().put("type", "java-resource");
-                    }
-                });
-            });
-
             ideaModuleTask.dependsOn(javaScriptMinifyTask);
-            ideaModuleTask.dependsOn(routesCompileTask);
-            ideaModuleTask.dependsOn(twirlCompileTask);
+            ideaModuleTask.dependsOn(project.getTasks().withType(TwirlCompile.class));
+            ideaModuleTask.dependsOn(project.getTasks().withType(RoutesCompile.class));
         });
     }
 
@@ -94,7 +67,7 @@ public class PlayIdeaPlugin implements Plugin<Project> {
         return new DslObject(module).getConventionMapping();
     }
 
-    private JavaVersion getTargetJavaVersion(PlayPlatform Platform) {
-        return Platform.getJavaVersion().get();
+    private JavaVersion getTargetJavaVersion(PlayPlatform platform) {
+        return platform.getJavaVersion().get();
     }
 }
