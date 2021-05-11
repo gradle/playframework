@@ -3,6 +3,7 @@ package org.gradle.playframework.tasks;
 import org.gradle.api.Action;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.FileVisitor;
@@ -49,7 +50,7 @@ public class TwirlCompile extends SourceTask {
     /**
      * Target directory for the compiled template files.
      */
-    private final Property<Directory> outputDirectory;
+    private final DirectoryProperty outputDirectory;
 
     /**
      * The default imports to use when compiling templates
@@ -89,7 +90,7 @@ public class TwirlCompile extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public Property<Directory> getOutputDirectory() {
+    public DirectoryProperty getOutputDirectory() {
         return outputDirectory;
     }
 

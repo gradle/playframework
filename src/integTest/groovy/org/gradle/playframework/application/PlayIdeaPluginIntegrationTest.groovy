@@ -1,11 +1,10 @@
 package org.gradle.playframework.application
 
-import org.gradle.playframework.fixtures.ide.IdeaModuleFixture
+
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
 import static org.gradle.playframework.fixtures.ide.IdeaFixtures.parseIml
-import static org.gradle.playframework.fixtures.ide.IdeaFixtures.parseIpr
 
 abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTest {
 
@@ -73,16 +72,13 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
 
     def "IDEA metadata contains correct dependencies for RUNTIME, COMPILE, TEST"() {
         applyIdePlugin()
-        build("assemble") // Need generated directories to exist
+
         when:
         build(ideTask)
         then:
-
         def externalLibs = parseIml(moduleFile).dependencies.libraries
         def compileDeps = externalLibs.findAll({ it.scope == "COMPILE" }).collect { it.url }
-        compileDeps.any {
-            it.endsWith("build/classes/scala/main")
-        }
+        !compileDeps.empty
 
         def runtimeDeps = externalLibs.findAll({ it.scope == "RUNTIME" })
         !runtimeDeps.empty

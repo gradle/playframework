@@ -3,6 +3,7 @@ package org.gradle.playframework.tasks;
 import org.gradle.api.Action;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.Directory;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
@@ -39,7 +40,7 @@ public class RoutesCompile extends SourceTask {
     /**
      * Target directory for the compiled route files.
      */
-    private final Property<Directory> outputDirectory;
+    private final DirectoryProperty outputDirectory;
 
     /**
      * Additional imports used for by generated files.
@@ -82,7 +83,7 @@ public class RoutesCompile extends SourceTask {
      * @return The output directory.
      */
     @OutputDirectory
-    public Property<Directory> getOutputDirectory() {
+    public DirectoryProperty getOutputDirectory() {
         return outputDirectory;
     }
 
