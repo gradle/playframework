@@ -1,9 +1,11 @@
 == Change Log
 
 [discrete]
-=== v0.12 (2021-05-05)
+=== v0.12 (2021-06-10)
 
 * Fix compatibility with upcoming Gradle 8.0
+* Thank you to our community contributors:
+* https://github.com/iaco86[iaco86] - Add support for Play 2.8
 
 [discrete]
 === v0.11 (2021-01-22)
