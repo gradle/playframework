@@ -7,3 +7,12 @@ If your Play application requires additional Scala compiler flags, you can add t
 ----
 include::{samplesCodeDir}/configure-compiler/groovy/build.gradle[tag=additional-params]
 ----
+
+When working with Twirl templates in Java-based project, the Java default imports needs to be enabled to include necessary
+conversions of Scala objects to Java objects, e.g. Scala forms to Java forms.
+
+[source,groovy]
+.build.gradle
+----
+include::{samplesCodeDir}/basic-java/groovy/build.gradle[tag=enable-java-default-imports-in-templates]
+----
