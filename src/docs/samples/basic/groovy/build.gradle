@@ -1,6 +1,6 @@
 // tag::use-plugin[]
 plugins {
-    id 'org.gradle.playframework' version '0.11'
+    id 'org.gradle.playframework' version '0.12'
 }
 
 repositories {
