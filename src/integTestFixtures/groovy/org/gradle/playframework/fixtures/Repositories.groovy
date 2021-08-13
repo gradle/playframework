@@ -20,15 +20,4 @@ final class Repositories {
             }
         """
     }
-
-    static String gradleJavascriptRepository() {
-        """
-            repositories {
-                maven {
-                    name = "gradle-js"
-                    url = "https://repo.gradle.org/gradle/javascript-public"
-                }
-            }
-        """
-    }
 }

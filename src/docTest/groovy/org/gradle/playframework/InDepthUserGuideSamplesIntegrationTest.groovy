@@ -1,18 +1,14 @@
 package org.gradle.playframework
 
+import org.gradle.exemplar.test.rule.Sample
 import org.gradle.playframework.fixtures.archive.ArchiveTestFixture
 import org.gradle.playframework.fixtures.archive.JarTestFixture
 import org.gradle.playframework.fixtures.archive.TarTestFixture
 import org.gradle.playframework.fixtures.archive.ZipTestFixture
-import org.gradle.playframework.fixtures.test.JUnitXmlTestExecutionResult
-import org.gradle.playframework.fixtures.test.TestExecutionResult
-import org.gradle.samples.test.rule.Sample
-import org.gradle.samples.test.rule.UsesSample
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import spock.lang.Specification
-import spock.lang.Unroll
 
 /**
  * In-depth testing of user guide samples.

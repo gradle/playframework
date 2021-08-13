@@ -1,7 +1,7 @@
 package org.gradle.playframework
 
+import org.gradle.exemplar.test.runner.SamplesRoot
 import org.gradle.playframework.runner.GradlePluginSamplesRunner
-import org.gradle.samples.test.runner.SamplesRoot
 import org.junit.runner.RunWith
 
 /**

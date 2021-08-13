@@ -1,6 +1,6 @@
 package org.gradle.playframework
 
-import org.gradle.samples.test.rule.UsesSample
+import org.gradle.exemplar.test.rule.UsesSample
 import spock.lang.Unroll
 
 @Unroll

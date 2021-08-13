@@ -1,11 +1,12 @@
 package org.gradle.playframework.runner
 
-import org.gradle.samples.executor.CliCommandExecutor
-import org.gradle.samples.executor.CommandExecutionResult
-import org.gradle.samples.executor.CommandExecutor
-import org.gradle.samples.executor.ExecutionMetadata
-import org.gradle.samples.model.Command
-import org.gradle.samples.test.runner.GradleSamplesRunner
+import groovy.transform.CompileStatic
+import org.gradle.exemplar.executor.CliCommandExecutor
+import org.gradle.exemplar.executor.CommandExecutionResult
+import org.gradle.exemplar.executor.CommandExecutor
+import org.gradle.exemplar.executor.ExecutionMetadata
+import org.gradle.exemplar.model.Command
+import org.gradle.exemplar.test.runner.GradleSamplesRunner
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
@@ -15,6 +16,7 @@ import org.junit.runners.model.InitializationError
 /**
  * A samples runner for Gradle plugins "under test". Checks for the plugin classpath and passes it along to TestKit.
  */
+@CompileStatic
 class GradlePluginSamplesRunner extends GradleSamplesRunner {
     private static final String GRADLE_EXECUTABLE = "gradle"
 
@@ -28,16 +30,14 @@ class GradlePluginSamplesRunner extends GradleSamplesRunner {
     }
 
     @Override
-    CommandExecutionResult execute(final File tempSampleOutputDir, final Command command) {
-        File workingDir = tempSampleOutputDir
-
+    protected CommandExecutor selectExecutor(ExecutionMetadata executionMetadata, File workingDir, Command command) {
+        File actualWorkingDir = workingDir
         if (command.getExecutionSubdirectory() != null) {
-            workingDir = new File(tempSampleOutputDir, command.getExecutionSubdirectory())
+            actualWorkingDir = new File(workingDir, command.getExecutionSubdirectory())
         }
 
         boolean expectFailure = command.isExpectFailure()
-        ExecutionMetadata executionMetadata = getExecutionMetadata(tempSampleOutputDir)
-        new GradleRunnerCommandExecutor(workingDir, customGradleInstallation, expectFailure).execute(command, executionMetadata)
+        return new GradleRunnerCommandExecutor(actualWorkingDir, customGradleInstallation, expectFailure)
     }
 
     private static class GradleRunnerCommandExecutor extends CommandExecutor {

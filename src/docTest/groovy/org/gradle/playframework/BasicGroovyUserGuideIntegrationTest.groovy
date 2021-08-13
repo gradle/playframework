@@ -1,8 +1,8 @@
 package org.gradle.playframework
 
+import org.gradle.exemplar.test.rule.UsesSample
 import org.gradle.playframework.fixtures.test.JUnitXmlTestExecutionResult
 import org.gradle.playframework.fixtures.test.TestExecutionResult
-import org.gradle.samples.test.rule.UsesSample
 import spock.lang.Unroll
 
 @Unroll
