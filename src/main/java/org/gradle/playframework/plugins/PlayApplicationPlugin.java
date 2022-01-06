@@ -110,6 +110,10 @@ public class PlayApplicationPlugin implements Plugin<Project> {
         mainScalaSourceDirectorySet.srcDir(getTwirlCompileTask(project).flatMap(task -> task.getOutputDirectory()));
         mainScalaSourceDirectorySet.srcDir(getRoutesCompileTask(project).flatMap(task -> task.getOutputDirectory()));
 
+        SourceSet testSourceSet = PlayPluginHelper.getTestJavaSourceSet(project);
+        SourceDirectorySet testResourcesDirectorySet = testSourceSet.getResources();
+        testResourcesDirectorySet.setSrcDirs(Arrays.asList("test/resources"));
+
         SourceDirectorySet testScalaSourceDirectorySet = PlayPluginHelper.getTestScalaSourceDirectorySet(project);
         testScalaSourceDirectorySet.setSrcDirs(Arrays.asList("test"));
         testScalaSourceDirectorySet.include("**/*.scala", "**/*.java");
