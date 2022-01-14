@@ -9,7 +9,9 @@ import org.gradle.playframework.sourcesets.TwirlImports;
 import org.gradle.playframework.sourcesets.TwirlSourceSet;
 import org.gradle.playframework.sourcesets.internal.DefaultTwirlSourceSet;
 import org.gradle.playframework.tasks.TwirlCompile;
+import org.gradle.playframework.tasks.TwirlCompileExt;
 import org.gradle.playframework.tools.internal.twirl.TwirlCompilerFactory;
+import org.gradle.util.GradleVersion;
 
 import java.util.List;
 
@@ -56,7 +58,13 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
     }
 
     private TaskProvider<TwirlCompile> createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, Configuration compilerConfiguration, PlayExtension playExtension) {
-        return project.getTasks().register(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
+        Class<? extends TwirlCompile> type;
+        if (GradleVersion.current().compareTo(GradleVersion.version("6.7")) < 0) {
+            type = TwirlCompile.class;
+        } else {
+            type = TwirlCompileExt.class;
+        }
+        return project.getTasks().register(TWIRL_COMPILE_TASK_NAME, (Class<TwirlCompile>) type, twirlCompile -> {
             twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
             twirlCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
             twirlCompile.setSource(twirlSourceSet.getTwirl());

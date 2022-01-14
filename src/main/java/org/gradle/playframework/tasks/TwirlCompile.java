@@ -2,7 +2,6 @@ package org.gradle.playframework.tasks;
 
 import org.gradle.api.Action;
 import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
@@ -111,6 +110,10 @@ public class TwirlCompile extends SourceTask {
         return twirlCompilerClasspath;
     }
 
+    protected String executable() {
+        return null;
+    }
+
     @TaskAction
     @SuppressWarnings("Convert2Lambda")
     void compile() {
@@ -121,7 +124,13 @@ public class TwirlCompile extends SourceTask {
         if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
             workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
                 workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
-                workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+                workerConfiguration.forkOptions(options -> {
+                    options.jvmArgs("-XX:MaxMetaspaceSize=256m");
+                    String executable = executable();
+                    if (executable != null) {
+                        options.setExecutable(executable);
+                    }
+                });
                 workerConfiguration.params(spec, getCompiler());
                 workerConfiguration.classpath(twirlCompilerClasspath);
                 workerConfiguration.setDisplayName("Generating Scala source from Twirl templates");
@@ -130,7 +139,13 @@ public class TwirlCompile extends SourceTask {
             WorkQueue workQueue = workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
                 @Override
                 public void execute(ProcessWorkerSpec workerSpec) {
-                    workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+                    workerSpec.forkOptions(options -> {
+                        options.jvmArgs("-XX:MaxMetaspaceSize=256m");
+                        String executable = executable();
+                        if (executable != null) {
+                            options.setExecutable(executable);
+                        }
+                    });
                     workerSpec.getClasspath().from(twirlCompilerClasspath);
                 }
             });
