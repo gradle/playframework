@@ -2,7 +2,6 @@ package org.gradle.playframework.tasks;
 
 import org.gradle.api.Action;
 import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.FileVisitDetails;
@@ -35,7 +34,6 @@ import org.gradle.workers.ProcessWorkerSpec;
 import org.gradle.workers.WorkQueue;
 import org.gradle.workers.WorkerExecutor;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +97,6 @@ public class TwirlCompile extends SourceTask {
      *
      * @return The imports that will be used.
      */
-    @Nullable
     @Optional
     @Input
     public Property<TwirlImports> getDefaultImports() {
