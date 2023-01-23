@@ -1,6 +1,12 @@
 == Change Log
 
 [discrete]
+=== v0.13 (2023-01-24)
+* Remove usage of internal Gradle API org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact
+* Update wrapper to Gradle 6.9.3
+* Clean unused imports
+
+[discrete]
 === v0.12 (2021-06-10)
 
 * Fix compatibility with upcoming Gradle 8.0
