@@ -13,9 +13,9 @@ import org.gradle.api.artifacts.type.ArtifactTypeDefinition;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.artifacts.ArtifactAttributes;
-import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact;
 import org.gradle.api.plugins.scala.ScalaPlugin;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.TaskDependency;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.playframework.extensions.PlayExtension;
@@ -27,7 +27,10 @@ import org.gradle.playframework.tasks.RoutesCompile;
 import org.gradle.playframework.tasks.TwirlCompile;
 import org.gradle.util.VersionNumber;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 
 import static org.gradle.api.plugins.BasePlugin.ASSEMBLE_TASK_NAME;
 import static org.gradle.api.plugins.JavaPlugin.*;
@@ -131,7 +134,42 @@ public class PlayApplicationPlugin implements Plugin<Project> {
 
     private void registerOutgoingArtifact(Project project, TaskProvider<Jar> assetsJarTask) {
         Configuration runtimeElementsConfiguration = project.getConfigurations().getByName(RUNTIME_ELEMENTS_CONFIGURATION_NAME);
-        PublishArtifact jarArtifact = new LazyPublishArtifact(assetsJarTask);
+        PublishArtifact jarArtifact = new PublishArtifact() {
+            @Override
+            public String getName() {
+                return assetsJarTask.get().getArchiveFileName().get();
+            }
+
+            @Override
+            public String getExtension() {
+                return "jar";
+            }
+
+            @Override
+            public String getType() {
+                return "jar";
+            }
+
+            @Override
+            public String getClassifier() {
+                return assetsJarTask.get().getArchiveClassifier().get();
+            }
+
+            @Override
+            public File getFile() {
+                return assetsJarTask.get().getArchiveFile().get().getAsFile();
+            }
+
+            @Override
+            public Date getDate() {
+                return new Date();
+            }
+
+            @Override
+            public TaskDependency getBuildDependencies() {
+                return task -> Collections.singleton(assetsJarTask.get());
+            }
+        };
         ConfigurationPublications publications = runtimeElementsConfiguration.getOutgoing();
         publications.getArtifacts().add(jarArtifact);
         publications.getAttributes().attribute(ArtifactAttributes.ARTIFACT_FORMAT, ArtifactTypeDefinition.JAR_TYPE);
