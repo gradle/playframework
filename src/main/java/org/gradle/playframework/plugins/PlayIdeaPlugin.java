@@ -1,17 +1,12 @@
 package org.gradle.playframework.plugins;
 
-import groovy.util.Node;
-import groovy.util.NodeList;
-import groovy.xml.QName;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.plugins.DslObject;
-import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskProvider;
-import org.gradle.language.scala.internal.DefaultScalaPlatform;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.playframework.tasks.JavaScriptMinify;
@@ -22,15 +17,12 @@ import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel;
 import org.gradle.plugins.ide.idea.model.IdeaModule;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static org.gradle.playframework.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
-import static org.gradle.playframework.plugins.internal.PlayPluginHelper.*;
+import static org.gradle.playframework.plugins.internal.PlayPluginHelper.getMainScalaSourceDirectorySet;
 
 public class PlayIdeaPlugin implements Plugin<Project> {
 
