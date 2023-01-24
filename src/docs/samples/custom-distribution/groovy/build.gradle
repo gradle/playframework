@@ -1,5 +1,5 @@
 plugins {
-    id 'org.gradle.playframework' version '0.12'
+    id 'org.gradle.playframework' version '0.13'
 }
 
 repositories {
