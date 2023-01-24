@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "org.gradle.playframework"
-version = "0.12"
+version = "0.13"
 
 repositories {
     mavenCentral()
