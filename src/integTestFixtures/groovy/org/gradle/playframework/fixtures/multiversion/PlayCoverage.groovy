@@ -1,6 +1,6 @@
 package org.gradle.playframework.fixtures.multiversion
 
-import org.gradle.util.VersionNumber
+import org.gradle.playframework.util.VersionNumber
 
 import static org.gradle.playframework.extensions.PlayPlatform.DEFAULT_PLAY_VERSION
 

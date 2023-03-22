@@ -2,7 +2,7 @@ package org.gradle.playframework.extensions.internal;
 
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.api.InvalidUserDataException;
-import org.gradle.util.VersionNumber;
+import org.gradle.playframework.util.VersionNumber;
 
 import java.util.Arrays;
 import java.util.List;

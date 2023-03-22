@@ -1,7 +1,6 @@
 package org.gradle.playframework.fixtures.multiversion
 
-import org.gradle.playframework.extensions.internal.PlayMajorVersion
-import org.gradle.util.VersionNumber
+import org.gradle.playframework.util.VersionNumber
 
 import java.lang.annotation.Annotation
 

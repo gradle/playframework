@@ -1,6 +1,6 @@
 package org.gradle.playframework.fixtures.app
 
-import org.gradle.util.VersionNumber
+import org.gradle.playframework.util.VersionNumber
 
 class PlayCompositeBuild extends PlayApp {
     PlayCompositeBuild(VersionNumber version) {

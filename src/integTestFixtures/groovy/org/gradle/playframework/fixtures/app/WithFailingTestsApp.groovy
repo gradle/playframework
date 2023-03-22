@@ -1,6 +1,6 @@
 package org.gradle.playframework.fixtures.app
 
-import org.gradle.util.VersionNumber
+import org.gradle.playframework.util.VersionNumber
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 

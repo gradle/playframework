@@ -7,7 +7,7 @@ import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 import org.gradle.playframework.tools.internal.scala.ScalaReflectionUtil;
 import org.gradle.playframework.tools.internal.scala.ScalaSeq;
 import org.gradle.playframework.util.CollectionUtils;
-import org.gradle.util.VersionNumber;
+import org.gradle.playframework.util.VersionNumber;
 
 import java.io.File;
 import java.util.ArrayList;

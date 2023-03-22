@@ -1,9 +1,9 @@
 package org.gradle.playframework.tasks
 
 import org.gradle.playframework.PlayMultiVersionIntegrationTest
+import org.gradle.playframework.util.VersionNumber
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.VersionNumber
 import org.junit.Assume
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories

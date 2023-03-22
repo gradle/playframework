@@ -2,7 +2,7 @@ package org.gradle.playframework.tools.internal.routes;
 
 import org.gradle.playframework.extensions.PlayPlatform;
 import org.gradle.playframework.extensions.internal.PlayMajorVersion;
-import org.gradle.util.VersionNumber;
+import org.gradle.playframework.util.VersionNumber;
 
 public class RoutesCompilerFactory {
     public static RoutesCompiler create(PlayPlatform playPlatform) {

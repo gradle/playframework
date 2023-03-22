@@ -2,12 +2,9 @@ package org.gradle.playframework.application
 
 import org.gradle.playframework.PlayMultiVersionApplicationIntegrationTest
 import org.gradle.playframework.fixtures.archive.ArchiveTestFixture
-import org.gradle.playframework.fixtures.archive.JarTestFixture
+import org.gradle.playframework.util.VersionNumber
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.VersionNumber
-
-import java.util.jar.Attributes
 
 import static org.gradle.playframework.plugins.PlayApplicationPlugin.ASSETS_JAR_TASK_NAME
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
