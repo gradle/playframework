@@ -1,6 +1,6 @@
 package org.gradle.playframework.tools.internal.run;
 
-import org.gradle.util.CollectionUtils;
+import org.gradle.playframework.util.CollectionUtils;
 
 import java.io.File;
 import java.util.List;
