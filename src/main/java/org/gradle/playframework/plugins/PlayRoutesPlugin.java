@@ -1,5 +1,6 @@
 package org.gradle.playframework.plugins;
 
+import org.gradle.api.provider.Property;
 import org.gradle.playframework.sourcesets.internal.DefaultRoutesSourceSet;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.sourcesets.RoutesSourceSet;
@@ -30,7 +31,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
         Configuration routesCompilerConfiguration = createRoutesCompilerConfiguration(project);
         declareDefaultDependencies(project, routesCompilerConfiguration, playExtension);
         RoutesSourceSet routesSourceSet = createCustomSourceSet(project, DefaultRoutesSourceSet.class, "routes");
-        createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
+        createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator(), playExtension.getStripRoutesComments());
     }
 
     private Configuration createRoutesCompilerConfiguration(Project project) {
@@ -48,7 +49,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
         });
     }
 
-    private void createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration, PlayExtension playExtension, Provider<Boolean> injectedRoutesGenerator) {
+    private void createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration, PlayExtension playExtension, Provider<Boolean> injectedRoutesGenerator, Property<Boolean> stripRoutesComments) {
         project.getTasks().register(ROUTES_COMPILE_TASK_NAME, RoutesCompile.class, routesCompile -> {
             routesCompile.setDescription("Generates routes for the '" + sourceDirectory.getDisplayName() + "' source set.");
             routesCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
@@ -57,6 +58,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
             routesCompile.getOutputDirectory().set(getOutputDir(project, sourceDirectory));
             routesCompile.getInjectedRoutesGenerator().set(injectedRoutesGenerator);
             routesCompile.getRoutesCompilerClasspath().setFrom(compilerConfiguration);
+            routesCompile.getStripRoutesComments().set(stripRoutesComments);
         });
     }
 }

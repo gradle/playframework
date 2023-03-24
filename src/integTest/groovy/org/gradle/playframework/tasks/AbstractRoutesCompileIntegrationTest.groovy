@@ -6,6 +6,8 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.VersionNumber
 import org.junit.Assume
 
+import java.nio.charset.StandardCharsets
+
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 import static org.gradle.playframework.fixtures.file.FileFixtures.assertContentsHaveChangedSince
 import static org.gradle.playframework.fixtures.file.FileFixtures.snapshot
@@ -258,5 +260,38 @@ $ROUTES_COMPILE_TASK_NAME {
         and:
         new File(destinationDir, getReverseRoutesFileName('', '')).text.contains("extra.package")
         new File(destinationDir, getScalaRoutesFileName('', '')).text.contains("extra.package")
+    }
+
+    def "do not strip generated comments by default"() {
+        when:
+        withRoutesTemplate()
+        then:
+        build(ROUTES_COMPILE_TASK_NAME)
+        and:
+        createRouteFileList().each {
+            def generatedFile = new File(destinationDir, it)
+            assert generatedFile.isFile()
+            assert generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @SOURCE")
+            assert generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @DATE")
+        }
+    }
+
+    def "can strip generated comments"() {
+        when:
+        buildFile << """
+play {
+    stripRoutesComments = true
+}
+"""
+        withRoutesTemplate()
+        then:
+        build(ROUTES_COMPILE_TASK_NAME)
+        and:
+        createRouteFileList().each {
+            def generatedFile = new File(destinationDir, it)
+            assert generatedFile.isFile()
+            assert !generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @SOURCE")
+            assert !generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @DATE")
+        }
     }
 }

@@ -12,8 +12,11 @@ import java.util.ArrayList;
 public class RoutesCompiler implements Compiler<RoutesCompileSpec>, Serializable {
     private final VersionedRoutesCompilerAdapter adapter;
 
+    private final DefaultRoutesPostProcessor postProcessor;
+
     public RoutesCompiler(VersionedRoutesCompilerAdapter adapter) {
         this.adapter = adapter;
+        this.postProcessor = new DefaultRoutesPostProcessor();
     }
 
     @Override
@@ -41,6 +44,9 @@ public class RoutesCompiler implements Compiler<RoutesCompileSpec>, Serializable
             Boolean ret = compile(sourceFile, spec);
             didWork = ret || didWork;
         }
+
+        // Post-process routes files
+        postProcessor.execute(spec);
 
         return WorkResults.didWork(didWork);
     }

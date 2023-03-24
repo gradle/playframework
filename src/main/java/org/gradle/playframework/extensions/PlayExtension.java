@@ -29,6 +29,7 @@ public class PlayExtension {
 
     private final PlayPlatform platform;
     private final Property<Boolean> injectedRoutesGenerator;
+    private final Property<Boolean> stripRoutesComments;
 
     public PlayExtension(ObjectFactory objectFactory) {
         this.platform = objectFactory.newInstance(PlayPlatform.class, objectFactory);
@@ -37,6 +38,8 @@ public class PlayExtension {
         this.platform.getScalaVersion().convention(platform.getPlayVersion().map(playVersion -> PlayMajorVersion.forPlayVersion(playVersion).getDefaultScalaPlatform()));
         this.injectedRoutesGenerator = objectFactory.property(Boolean.class);
         injectedRoutesGenerator.convention(platform.getPlayVersion().map(playVersion -> !PlayMajorVersion.forPlayVersion(playVersion).hasSupportForStaticRoutesGenerator()));
+        this.stripRoutesComments  = objectFactory.property(Boolean.class);
+        stripRoutesComments.convention(Boolean.FALSE);
     }
 
     /**
@@ -65,5 +68,14 @@ public class PlayExtension {
      */
     public Property<Boolean> getInjectedRoutesGenerator() {
         return injectedRoutesGenerator;
+    }
+
+    /**
+     * Returns the property configuring if build dependent comments should be stripped from the generated routes files.
+     *
+     * @return Property configuring whether build dependent comments should be stripped
+     */
+    public Property<Boolean> getStripRoutesComments() {
+        return stripRoutesComments;
     }
 }
