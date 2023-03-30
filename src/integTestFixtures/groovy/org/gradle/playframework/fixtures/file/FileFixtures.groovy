@@ -32,6 +32,11 @@ final class FileFixtures {
         assertNotEquals(oldSnapshot.hash, now.hash)
     }
 
+    static void assertModificationTimeHasChangedSince(Snapshot oldSnapshot, File file) {
+        Snapshot now = snapshot(file)
+        assertNotEquals(oldSnapshot.modTime, now.modTime)
+    }
+
     private static File assertIsFile(File file) {
         assertTrue(file.isFile())
     }

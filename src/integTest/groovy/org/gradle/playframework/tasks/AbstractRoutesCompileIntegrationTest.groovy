@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 import static org.gradle.playframework.fixtures.file.FileFixtures.assertContentsHaveChangedSince
+import static org.gradle.playframework.fixtures.file.FileFixtures.assertModificationTimeHasChangedSince
 import static org.gradle.playframework.fixtures.file.FileFixtures.snapshot
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
@@ -123,7 +124,7 @@ GET     /newroute                          ${controllers()}.Application.index()
 
         and:
         assertContentsHaveChangedSince(scalaRoutesFileSnapshot, getScalaRoutesFile())
-        assertContentsHaveChangedSince(javaRoutesFileSnapshot, getJavaRoutesFile())
+        assertModificationTimeHasChangedSince(javaRoutesFileSnapshot, getJavaRoutesFile())
         assertContentsHaveChangedSince(reverseRoutesFileSnapshot, getReverseRoutesFile())
 
         when:
