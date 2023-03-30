@@ -11,9 +11,9 @@ public class DefaultRoutesCompileSpec implements RoutesCompileSpec {
     private final boolean generateReverseRoutes;
     private final boolean injectedRoutesGenerator;
     private final Collection<String> additionalImports;
-    private final String projectDir;
+    private final File projectDir;
 
-    public DefaultRoutesCompileSpec(Iterable<File> sourceFiles, File outputDirectory, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports, String projectDir) {
+    public DefaultRoutesCompileSpec(Iterable<File> sourceFiles, File outputDirectory, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports, File projectDir) {
         this.sourceFiles = sourceFiles;
         this.outputDirectory = outputDirectory;
         this.javaProject = javaProject;
@@ -60,7 +60,7 @@ public class DefaultRoutesCompileSpec implements RoutesCompileSpec {
     }
 
     @Override
-    public String getProjectDir() {
+    public File getProjectDir() {
         return projectDir;
     }
 }

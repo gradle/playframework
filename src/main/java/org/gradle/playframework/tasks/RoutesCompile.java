@@ -28,6 +28,7 @@ import org.gradle.workers.ProcessWorkerSpec;
 import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
+import java.io.File;
 
 /**
  * Task for compiling routes templates into Scala code.
@@ -51,7 +52,7 @@ public class RoutesCompile extends SourceTask {
     private final Property<PlayPlatform> platform;
     private final Property<Boolean> injectedRoutesGenerator;
     private final ConfigurableFileCollection routesCompilerClasspath;
-    private final String projectDir;
+    private final File projectDir;
 
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
@@ -66,7 +67,7 @@ public class RoutesCompile extends SourceTask {
         this.injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
         this.injectedRoutesGenerator.set(false);
         this.routesCompilerClasspath = getProject().files();
-        this.projectDir = getProject().getProjectDir().getAbsolutePath();
+        this.projectDir = getProject().getProjectDir();
     }
 
     /**
@@ -106,7 +107,7 @@ public class RoutesCompile extends SourceTask {
     @TaskAction
     @SuppressWarnings("Convert2Lambda")
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), projectDir);
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), getProjectDir());
 
         if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
             workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
@@ -134,7 +135,7 @@ public class RoutesCompile extends SourceTask {
     }
 
     private Compiler<RoutesCompileSpec> getCompiler() {
-        return RoutesCompilerFactory.create(getPlatform().get(), projectDir);
+        return RoutesCompilerFactory.create(getPlatform().get());
     }
 
     @Internal
@@ -177,5 +178,16 @@ public class RoutesCompile extends SourceTask {
     @Input
     public Property<Boolean> getInjectedRoutesGenerator() {
         return injectedRoutesGenerator;
+    }
+
+    /**
+     * The project directory is used to relativize the route source folder
+     * when post-processing the generated routes files.
+     *
+     * @return The project directory.
+     */
+    @Internal
+    public File getProjectDir() {
+        return projectDir;
     }
 }

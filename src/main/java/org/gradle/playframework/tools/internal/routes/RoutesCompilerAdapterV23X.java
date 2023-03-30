@@ -15,7 +15,7 @@ class RoutesCompilerAdapterV23X extends DefaultVersionedRoutesCompilerAdapter {
     private final List<String> defaultScalaImports = Arrays.asList("controllers.Assets.Asset");
     private final List<String> defaultJavaImports = Arrays.asList("controllers.Assets.Asset", "play.libs.F");
 
-    public RoutesCompilerAdapterV23X(String playVersion, String projectDir) {
+    public RoutesCompilerAdapterV23X(String playVersion) {
         // No 2.11 version of routes compiler published
         super(playVersion, "2.10");
     }
@@ -36,7 +36,7 @@ class RoutesCompilerAdapterV23X extends DefaultVersionedRoutesCompilerAdapter {
     }
 
     @Override
-    public Object[] createCompileParameters(ClassLoader cl, File file, File destinationDir, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports, String projectDir) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Object[] createCompileParameters(ClassLoader cl, File file, File destinationDir, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         List<String> defaultImports = javaProject ? defaultJavaImports : defaultScalaImports;
         defaultImports.addAll(additionalImports);
         return new Object[] {
@@ -45,8 +45,7 @@ class RoutesCompilerAdapterV23X extends DefaultVersionedRoutesCompilerAdapter {
                 ScalaListBuffer.fromList(cl, defaultImports),
                 generateReverseRoutes,
                 isGenerateRefReverseRouter(),
-                namespaceReverseRouter,
-                "barbar2"
+                namespaceReverseRouter
         };
     }
 

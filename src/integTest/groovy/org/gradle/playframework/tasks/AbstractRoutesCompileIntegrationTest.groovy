@@ -267,12 +267,12 @@ $ROUTES_COMPILE_TASK_NAME {
         withRoutesTemplate()
         when:
         build(ROUTES_COMPILE_TASK_NAME)
-        expect:
+        then:
         createRouteFileList().each {
             def generatedFile = new File(destinationDir, it)
             assert generatedFile.isFile()
-            assert !generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @SOURCE")
-            assert !generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @DATE")
+            assert generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @(SOURCE):conf/routes")
+            assert !generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @(DATE)")
         }
     }
 }

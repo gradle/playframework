@@ -8,11 +8,10 @@ plugins {
     org.gradle.playframework.`github-pages`
     org.gradle.playframework.`documentation-test`
     id("com.gradle.plugin-publish") version "0.12.0"
-    id("maven-publish")
 }
 
 group = "org.gradle.playframework"
-version = "0.14"
+version = "0.13"
 
 repositories {
     mavenCentral()
@@ -108,11 +107,5 @@ pluginBundle {
     mavenCoordinates {
         groupId = project.group.toString()
         artifactId = base.archivesBaseName
-    }
-}
-
-publishing {
-    repositories {
-        mavenLocal()
     }
 }

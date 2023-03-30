@@ -3,6 +3,7 @@ package org.gradle.playframework.tools.internal.routes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -15,17 +16,33 @@ class DefaultRoutesPostProcessor implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRoutesPostProcessor.class);
 
     void execute(RoutesCompileSpec spec) {
+        String sourceReplacementString = getSourceReplacementString(spec.getSources(), spec.getProjectDir());
+
         try (Stream<Path> stream = Files.find(spec.getDestinationDir().toPath(), Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile())) {
-            stream.forEach(this::process);
+            stream.forEach(routeFile -> process(routeFile, sourceReplacementString));
         } catch (IOException e) {
             LOGGER.warn("Unable to post-process routes", e);
         }
     }
 
-    private void process(Path routeFile) {
+    private String getSourceReplacementString(Iterable<File> sources, File projectDir) {
+        String sourceReplacementString = "";
+
+        if(sources.iterator().hasNext()) {
+            File sourceFile = sources.iterator().next();
+            sourceReplacementString = "// @(SOURCE):" +
+                    projectDir.toURI().relativize(sourceFile.toURI())
+                            .getPath()
+                            .replace(File.separator, "/");
+        }
+
+        return sourceReplacementString;
+    }
+
+    private void process(Path routeFile, String sourceReplacementString) {
         try {
             String content = new String(Files.readAllBytes(routeFile), StandardCharsets.UTF_8);
-            content = content.replaceAll("(?m)^// @(SOURCE):.*", "");
+            content = content.replaceAll("(?m)^// @(SOURCE):.*", sourceReplacementString);
             content = content.replaceAll("(?m)^// @(DATE):.*", "");
             Files.write(routeFile, content.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {

@@ -1,6 +1,5 @@
 package org.gradle.playframework.plugins;
 
-import org.gradle.api.provider.Property;
 import org.gradle.playframework.sourcesets.internal.DefaultRoutesSourceSet;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.sourcesets.RoutesSourceSet;
@@ -44,7 +43,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
     private void declareDefaultDependencies(Project project, Configuration configuration, PlayExtension playExtension) {
         configuration.defaultDependencies(dependencies -> {
-            String dependencyNotation = RoutesCompilerFactory.createAdapter(playExtension.getPlatform(), project.getProjectDir().getAbsolutePath()).getDependencyNotation();
+            String dependencyNotation = RoutesCompilerFactory.createAdapter(playExtension.getPlatform()).getDependencyNotation();
             dependencies.add(project.getDependencies().create(dependencyNotation));
         });
     }
