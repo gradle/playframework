@@ -10,12 +10,15 @@ import java.util.Collection;
 import java.util.List;
 
 public class RoutesCompilerAdapterV27X extends RoutesCompilerAdapterV24X {
-    public RoutesCompilerAdapterV27X(String playVersion, String scalaVersion) {
+    private final String projectDir;
+
+    public RoutesCompilerAdapterV27X(String playVersion, String scalaVersion, String projectDir) {
         super(playVersion, scalaVersion);
+        this.projectDir = projectDir;
     }
 
     @Override
-    public Object[] createCompileParameters(ClassLoader cl, File file, File destinationDir, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports) throws ClassNotFoundException {
+    public Object[] createCompileParameters(ClassLoader cl, File file, File destinationDir, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports, String projectDirFoo) throws ClassNotFoundException {
         List<String> defaultImports = getDefaultImports(javaProject);
         defaultImports.addAll(additionalImports);
 
@@ -24,7 +27,8 @@ public class RoutesCompilerAdapterV27X extends RoutesCompilerAdapterV24X {
                 ScalaSeq.fromList(cl, defaultImports),
                 isGenerateForwardsRouter(),
                 generateReverseRoutes,
-                namespaceReverseRouter
+                namespaceReverseRouter,
+                projectDir
         );
 
         String routeGenerator = PLAY_ROUTES_COMPILER_INJECTED_ROUTES_GENERATOR;

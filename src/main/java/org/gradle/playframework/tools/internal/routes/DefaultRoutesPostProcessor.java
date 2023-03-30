@@ -15,12 +15,10 @@ class DefaultRoutesPostProcessor implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRoutesPostProcessor.class);
 
     void execute(RoutesCompileSpec spec) {
-        if(spec.isStripRoutesComments()) {
-            try (Stream<Path> stream = Files.find(spec.getDestinationDir().toPath(), Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile())) {
-                stream.forEach(this::process);
-            } catch (IOException e) {
-                LOGGER.warn("Unable to post-process routes", e);
-            }
+        try (Stream<Path> stream = Files.find(spec.getDestinationDir().toPath(), Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile())) {
+            stream.forEach(this::process);
+        } catch (IOException e) {
+            LOGGER.warn("Unable to post-process routes", e);
         }
     }
 

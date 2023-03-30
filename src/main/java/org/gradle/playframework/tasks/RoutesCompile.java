@@ -2,7 +2,6 @@ package org.gradle.playframework.tasks;
 
 import org.gradle.api.Action;
 import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.provider.ListProperty;
@@ -52,7 +51,7 @@ public class RoutesCompile extends SourceTask {
     private final Property<PlayPlatform> platform;
     private final Property<Boolean> injectedRoutesGenerator;
     private final ConfigurableFileCollection routesCompilerClasspath;
-    private final Property<Boolean> stripRoutesComments;
+    private final String projectDir;
 
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
@@ -67,8 +66,7 @@ public class RoutesCompile extends SourceTask {
         this.injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
         this.injectedRoutesGenerator.set(false);
         this.routesCompilerClasspath = getProject().files();
-        this.stripRoutesComments = getProject().getObjects().property(Boolean.class);
-        this.stripRoutesComments.set(false);
+        this.projectDir = getProject().getProjectDir().getAbsolutePath();
     }
 
     /**
@@ -108,7 +106,7 @@ public class RoutesCompile extends SourceTask {
     @TaskAction
     @SuppressWarnings("Convert2Lambda")
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), getStripRoutesComments().get());
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), projectDir);
 
         if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
             workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
@@ -136,7 +134,7 @@ public class RoutesCompile extends SourceTask {
     }
 
     private Compiler<RoutesCompileSpec> getCompiler() {
-        return RoutesCompilerFactory.create(getPlatform().get());
+        return RoutesCompilerFactory.create(getPlatform().get(), projectDir);
     }
 
     @Internal
@@ -179,16 +177,5 @@ public class RoutesCompile extends SourceTask {
     @Input
     public Property<Boolean> getInjectedRoutesGenerator() {
         return injectedRoutesGenerator;
-    }
-
-    /**
-     * Should build dependent comments in generated routes files be stripped?  Default is false.
-     *
-     * @return false if build dependent comments in generated route files should not be stripped,
-     * true otherwise.
-     */
-    @Input
-    public Property<Boolean> getStripRoutesComments() {
-        return stripRoutesComments;
     }
 }

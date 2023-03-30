@@ -33,9 +33,3 @@ play {
     injectedRoutesGenerator = true
 }
 // end::injected-routes-compiler[]
-
-// tag::strip-routes-comments[]
-play {
-    stripRoutesComments = true
-}
-// end::strip-routes-comments[]

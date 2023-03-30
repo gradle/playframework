@@ -19,5 +19,5 @@ public interface RoutesCompileSpec extends PlayCompileSpec, Serializable {
 
     Collection<String> getAdditionalImports();
 
-    boolean isStripRoutesComments();
+    String getProjectDir();
 }

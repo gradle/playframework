@@ -44,7 +44,7 @@ public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAda
     }
 
     @Override
-    public Object[] createCompileParameters(ClassLoader cl, File file, File destinationDir, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports) throws ClassNotFoundException {
+    public Object[] createCompileParameters(ClassLoader cl, File file, File destinationDir, boolean javaProject, boolean namespaceReverseRouter, boolean generateReverseRoutes, boolean injectedRoutesGenerator, Collection<String> additionalImports, String projectDir) throws ClassNotFoundException {
         List<String> defaultImports = getDefaultImports(javaProject);
         defaultImports.addAll(additionalImports);
 
@@ -53,7 +53,8 @@ public class RoutesCompilerAdapterV24X extends DefaultVersionedRoutesCompilerAda
                 ScalaListBuffer.fromList(cl, defaultImports),
                 isGenerateForwardsRouter(),
                 generateReverseRoutes,
-                namespaceReverseRouter
+                namespaceReverseRouter,
+                "fuufuu"
         );
 
         String routeGenerator;

@@ -31,7 +31,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
         Configuration routesCompilerConfiguration = createRoutesCompilerConfiguration(project);
         declareDefaultDependencies(project, routesCompilerConfiguration, playExtension);
         RoutesSourceSet routesSourceSet = createCustomSourceSet(project, DefaultRoutesSourceSet.class, "routes");
-        createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator(), playExtension.getStripRoutesComments());
+        createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
     }
 
     private Configuration createRoutesCompilerConfiguration(Project project) {
@@ -44,12 +44,12 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
     private void declareDefaultDependencies(Project project, Configuration configuration, PlayExtension playExtension) {
         configuration.defaultDependencies(dependencies -> {
-            String dependencyNotation = RoutesCompilerFactory.createAdapter(playExtension.getPlatform()).getDependencyNotation();
+            String dependencyNotation = RoutesCompilerFactory.createAdapter(playExtension.getPlatform(), project.getProjectDir().getAbsolutePath()).getDependencyNotation();
             dependencies.add(project.getDependencies().create(dependencyNotation));
         });
     }
 
-    private void createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration, PlayExtension playExtension, Provider<Boolean> injectedRoutesGenerator, Property<Boolean> stripRoutesComments) {
+    private void createDefaultRoutesCompileTask(Project project, SourceDirectorySet sourceDirectory, Configuration compilerConfiguration, PlayExtension playExtension, Provider<Boolean> injectedRoutesGenerator) {
         project.getTasks().register(ROUTES_COMPILE_TASK_NAME, RoutesCompile.class, routesCompile -> {
             routesCompile.setDescription("Generates routes for the '" + sourceDirectory.getDisplayName() + "' source set.");
             routesCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
@@ -58,7 +58,6 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
             routesCompile.getOutputDirectory().set(getOutputDir(project, sourceDirectory));
             routesCompile.getInjectedRoutesGenerator().set(injectedRoutesGenerator);
             routesCompile.getRoutesCompilerClasspath().setFrom(compilerConfiguration);
-            routesCompile.getStripRoutesComments().set(stripRoutesComments);
         });
     }
 }

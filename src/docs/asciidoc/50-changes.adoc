@@ -2,7 +2,7 @@
 
 [discrete]
 === v0.14 (TBD)
-* Add configuration to strip routes comments ({uri-github-issues}/109[issue #109]).
+* Add configuration to post-process routes comments ({uri-github-issues}/109[issue #109]).
 
 [discrete]
 === v0.13 (2023-01-24)
