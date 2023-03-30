@@ -21,8 +21,8 @@ import freemarker.template.Configuration
 import freemarker.template.Template
 import freemarker.template.TemplateExceptionHandler
 import org.gradle.playframework.extensions.PlayPlatform
+import org.gradle.playframework.util.VersionNumber
 import org.gradle.util.RelativePathUtil
-import org.gradle.util.VersionNumber
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 

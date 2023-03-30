@@ -3,7 +3,7 @@ package org.gradle.playframework
 import org.gradle.playframework.fixtures.multiversion.PlayCoverage
 import org.gradle.playframework.fixtures.multiversion.PlayMultiVersionRunner
 import org.gradle.playframework.fixtures.multiversion.TargetCoverage
-import org.gradle.util.VersionNumber
+import org.gradle.playframework.util.VersionNumber
 import org.junit.runner.RunWith
 
 @RunWith(PlayMultiVersionRunner)

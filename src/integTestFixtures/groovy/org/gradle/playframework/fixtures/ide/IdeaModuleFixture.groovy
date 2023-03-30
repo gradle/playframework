@@ -3,7 +3,7 @@ package org.gradle.playframework.fixtures.ide
 import groovy.transform.ToString
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.internal.Transformers
-import org.gradle.util.CollectionUtils
+import org.gradle.playframework.util.CollectionUtils
 
 class IdeaModuleFixture extends IdeProjectFixture {
     private final GPathResult iml

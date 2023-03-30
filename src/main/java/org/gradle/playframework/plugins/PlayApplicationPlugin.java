@@ -23,7 +23,7 @@ import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.tasks.PlayRun;
 import org.gradle.playframework.tasks.RoutesCompile;
 import org.gradle.playframework.tasks.TwirlCompile;
-import org.gradle.util.VersionNumber;
+import org.gradle.playframework.util.VersionNumber;
 
 import java.util.Arrays;
 

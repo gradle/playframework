@@ -9,7 +9,7 @@ import org.gradle.api.tasks.WorkResults;
 import org.gradle.internal.FileUtils;
 import org.gradle.playframework.tools.internal.scala.ScalaMethod;
 import org.gradle.playframework.tools.internal.scala.ScalaOptionInvocationWrapper;
-import org.gradle.util.CollectionUtils;
+import org.gradle.playframework.util.CollectionUtils;
 
 import java.io.File;
 import java.io.Serializable;
