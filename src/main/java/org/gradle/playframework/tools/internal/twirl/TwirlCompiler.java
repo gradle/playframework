@@ -23,8 +23,11 @@ public class TwirlCompiler implements Compiler<TwirlCompileSpec>, Serializable {
 
     private final VersionedTwirlCompilerAdapter adapter;
 
+    private final DefaultTwirlPostProcessor postProcessor;
+
     public TwirlCompiler(VersionedTwirlCompilerAdapter adapter) {
         this.adapter = adapter;
+        this.postProcessor = new DefaultTwirlPostProcessor();
     }
 
     @Override
@@ -47,6 +50,9 @@ public class TwirlCompiler implements Compiler<TwirlCompileSpec>, Serializable {
                 throw new RuntimeException("Error invoking Play Twirl template compiler.", e);
             }
         }
+
+        // Post-process files
+        postProcessor.execute(spec);
 
         return WorkResults.didWork(!outputFiles.isEmpty());
     }
