@@ -1,5 +1,6 @@
 package org.gradle.playframework.tools.internal.routes;
 
+import org.gradle.util.RelativePathUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +31,7 @@ class DefaultRoutesPostProcessor implements Serializable {
 
         if(sources.iterator().hasNext()) {
             File sourceFile = sources.iterator().next();
-            sourceReplacementString = "// @(SOURCE):" +
-                    projectDir.toURI().relativize(sourceFile.toURI())
-                            .getPath()
-                            .replace(File.separator, "/");
+            sourceReplacementString = "// @(SOURCE):" + RelativePathUtil.relativePath(projectDir, sourceFile);
         }
 
         return sourceReplacementString;
