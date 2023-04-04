@@ -83,7 +83,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         BuildResult result = build(SCALA_COMPILE_TASK_NAME)
         then:
         result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
-        result.task(SCALA_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
+        result.task(SCALA_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
     }
 
     def "can specify additional imports for a Twirl template"() {
