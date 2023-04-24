@@ -52,8 +52,6 @@ public class RoutesCompile extends SourceTask {
     private final Property<PlayPlatform> platform;
     private final Property<Boolean> injectedRoutesGenerator;
     private final ConfigurableFileCollection routesCompilerClasspath;
-    private final File projectDir;
-
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
@@ -67,7 +65,6 @@ public class RoutesCompile extends SourceTask {
         this.injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
         this.injectedRoutesGenerator.set(false);
         this.routesCompilerClasspath = getProject().files();
-        this.projectDir = getProject().getProjectDir();
     }
 
     /**
@@ -107,7 +104,7 @@ public class RoutesCompile extends SourceTask {
     @TaskAction
     @SuppressWarnings("Convert2Lambda")
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), getProjectDir());
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), getProject().getProjectDir());
 
         if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
             workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
@@ -180,14 +177,4 @@ public class RoutesCompile extends SourceTask {
         return injectedRoutesGenerator;
     }
 
-    /**
-     * The project directory is used to relativize the route source folder
-     * when post-processing the generated routes files.
-     *
-     * @return The project directory.
-     */
-    @Internal
-    public File getProjectDir() {
-        return projectDir;
-    }
 }
