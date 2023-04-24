@@ -12,6 +12,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+// This post processor fixes build / project dependent comments (DATE and SOURCE) from the RoutesCompiler generated files:
+// @GENERATOR:play-routes-compiler
+// @(DATE): Mon Apr 03 10:27:51 CEST 2023
+// @(SOURCE):/private/var/folders/79/xmc9yr493y75ptry2_nrx3r00000gn/T/junit4995996226044083355/conf/routes
 class DefaultRoutesPostProcessor implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRoutesPostProcessor.class);
@@ -22,7 +26,7 @@ class DefaultRoutesPostProcessor implements Serializable {
         try (Stream<Path> stream = Files.find(spec.getDestinationDir().toPath(), Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile())) {
             stream.forEach(routeFile -> process(routeFile, sourceReplacementString));
         } catch (IOException e) {
-            LOGGER.warn("Unable to post-process routes", e);
+            LOGGER.warn("Unable to post-process files", e);
         }
     }
 
@@ -44,7 +48,7 @@ class DefaultRoutesPostProcessor implements Serializable {
             content = content.replaceAll("(?m)^// @(DATE):.*", "");
             Files.write(routeFile, content.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            LOGGER.warn(String.format("Unable to post-process route file %s", routeFile.getFileName()), e);
+            LOGGER.warn(String.format("Unable to post-process file %s", routeFile.getFileName()), e);
         }
     }
 }
