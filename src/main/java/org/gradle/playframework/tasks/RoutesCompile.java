@@ -28,7 +28,6 @@ import org.gradle.workers.ProcessWorkerSpec;
 import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
-import java.io.File;
 
 /**
  * Task for compiling routes templates into Scala code.
