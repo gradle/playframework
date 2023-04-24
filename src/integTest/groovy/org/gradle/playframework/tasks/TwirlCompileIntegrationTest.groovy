@@ -83,7 +83,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         BuildResult result = build(SCALA_COMPILE_TASK_NAME)
         then:
         result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
-        result.task(SCALA_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
+        result.task(SCALA_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
     }
 
     def "can specify additional imports for a Twirl template"() {
@@ -288,6 +288,26 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         BuildResult result = buildAndFail(SCALA_COMPILE_TASK_NAME)
         then:
         result.output.contains("Twirl compiler could not find a matching template for 'test.scala.custom'.")
+    }
+
+    @Unroll
+    def "post-process generated comments"() {
+        given:
+        twirlTemplate("test.scala.${format}") << template
+        when:
+        build(SCALA_COMPILE_TASK_NAME)
+        then:
+        def generatedFile = new File(destinationDir, "${format}/test.template.scala")
+        generatedFile.isFile()
+        generatedFile.text.contains("SOURCE: views/test.scala.${format}")
+        !generatedFile.text.contains("DATE:")
+
+        where:
+        format | templateFormat     | template
+        "js"   | 'JavaScriptFormat' | '@(username: String) alert(@helper.json(username));'
+        "xml"  | 'XmlFormat'        | '@(username: String) <xml> <username> @username </username>'
+        "txt"  | 'TxtFormat'        | '@(username: String) @username'
+        "html" | 'HtmlFormat'       | '@(username: String) <html> <body> <h1>Hello @username</h1> </body> </html>'
     }
 
     def withTemplateSource(File templateFile) {

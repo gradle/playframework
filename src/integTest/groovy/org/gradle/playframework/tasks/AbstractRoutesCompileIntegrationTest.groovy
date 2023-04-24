@@ -6,8 +6,11 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Assume
 
+import java.nio.charset.StandardCharsets
+
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 import static org.gradle.playframework.fixtures.file.FileFixtures.assertContentsHaveChangedSince
+import static org.gradle.playframework.fixtures.file.FileFixtures.assertModificationTimeHasChangedSince
 import static org.gradle.playframework.fixtures.file.FileFixtures.snapshot
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
@@ -121,7 +124,7 @@ GET     /newroute                          ${controllers()}.Application.index()
 
         and:
         assertContentsHaveChangedSince(scalaRoutesFileSnapshot, getScalaRoutesFile())
-        assertContentsHaveChangedSince(javaRoutesFileSnapshot, getJavaRoutesFile())
+        assertModificationTimeHasChangedSince(javaRoutesFileSnapshot, getJavaRoutesFile())
         assertContentsHaveChangedSince(reverseRoutesFileSnapshot, getReverseRoutesFile())
 
         when:
@@ -258,5 +261,19 @@ $ROUTES_COMPILE_TASK_NAME {
         and:
         new File(destinationDir, getReverseRoutesFileName('', '')).text.contains("extra.package")
         new File(destinationDir, getScalaRoutesFileName('', '')).text.contains("extra.package")
+    }
+
+    def "post-processed generated comments contain path and timestamp replacements"() {
+        given:
+        withRoutesTemplate()
+        when:
+        build(ROUTES_COMPILE_TASK_NAME)
+        then:
+        createRouteFileList().each {
+            def generatedFile = new File(destinationDir, it)
+            assert generatedFile.isFile()
+            assert generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @(SOURCE):conf/routes")
+            assert !generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @(DATE)")
+        }
     }
 }

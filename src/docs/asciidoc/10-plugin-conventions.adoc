@@ -9,3 +9,5 @@ include::13-tasks.adoc[]
 include::14-source-sets.adoc[]
 
 include::15-dependency-configurations.adoc[]
+
+include::16-generated-files-comments.adoc[]

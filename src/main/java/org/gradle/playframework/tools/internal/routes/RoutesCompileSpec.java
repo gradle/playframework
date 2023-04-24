@@ -18,4 +18,6 @@ public interface RoutesCompileSpec extends PlayCompileSpec, Serializable {
     boolean isInjectedRoutesGenerator();
 
     Collection<String> getAdditionalImports();
+
+    File getProjectDir();
 }

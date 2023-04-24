@@ -2,7 +2,6 @@ package org.gradle.playframework.tasks;
 
 import org.gradle.api.Action;
 import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.provider.ListProperty;
@@ -52,7 +51,6 @@ public class RoutesCompile extends SourceTask {
     private final Property<PlayPlatform> platform;
     private final Property<Boolean> injectedRoutesGenerator;
     private final ConfigurableFileCollection routesCompilerClasspath;
-
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
@@ -105,7 +103,7 @@ public class RoutesCompile extends SourceTask {
     @TaskAction
     @SuppressWarnings("Convert2Lambda")
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get());
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), getProject().getProjectDir());
 
         if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
             workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
@@ -177,4 +175,5 @@ public class RoutesCompile extends SourceTask {
     public Property<Boolean> getInjectedRoutesGenerator() {
         return injectedRoutesGenerator;
     }
+
 }
