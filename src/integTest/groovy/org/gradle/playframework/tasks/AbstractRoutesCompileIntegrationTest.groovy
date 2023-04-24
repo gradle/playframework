@@ -263,7 +263,7 @@ $ROUTES_COMPILE_TASK_NAME {
         new File(destinationDir, getScalaRoutesFileName('', '')).text.contains("extra.package")
     }
 
-    def "post-process generated comments"() {
+    def "post-processed generated comments contain path and timestamp replacements"() {
         given:
         withRoutesTemplate()
         when:
