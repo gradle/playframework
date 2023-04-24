@@ -12,10 +12,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-// This post processor fixes build / project dependent comments (DATE and SOURCE) from the RoutesCompiler generated files:
-// @GENERATOR:play-routes-compiler
-// @(DATE): Mon Apr 03 10:27:51 CEST 2023
-// @(SOURCE):/private/var/folders/79/xmc9yr493y75ptry2_nrx3r00000gn/T/junit4995996226044083355/conf/routes
+/** This post processor fixes build / project dependent comments (DATE and SOURCE) from the RoutesCompiler generated files.
+ * Here is an example:
+ * @GENERATOR:play-routes-compiler
+ * @(DATE): Mon Apr 03 10:27:51 CEST 2023
+ * @(SOURCE):/private/var/folders/79/xmc9yr493y75ptry2_nrx3r00000gn/T/junit4995996226044083355/conf/routes
+**/
 class DefaultRoutesPostProcessor implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRoutesPostProcessor.class);
