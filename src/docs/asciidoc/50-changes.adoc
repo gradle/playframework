@@ -1,8 +1,9 @@
 == Change Log
 
 [discrete]
-=== v0.14 (TBD)
+=== v0.14 (2023-06-28)
 * Add configuration to post-process routes comments ({uri-github-issues}/109[issue #109]).
+* Remove use of more internal APIs 
 
 [discrete]
 === v0.13 (2023-01-24)
