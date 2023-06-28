@@ -7,7 +7,7 @@ plugins {
     org.gradle.playframework.`user-guide`
     org.gradle.playframework.`github-pages`
     org.gradle.playframework.`documentation-test`
-    id("com.gradle.plugin-publish") version "0.12.0"
+    id("com.gradle.plugin-publish") version "1.1.0"
 }
 
 group = "org.gradle.playframework"
@@ -104,8 +104,4 @@ pluginBundle {
     website = "https://gradle.github.io/playframework/"
     vcsUrl = "https://github.com/gradle/playframework"
     tags = listOf("playframework", "web", "java", "scala")
-    mavenCoordinates {
-        groupId = project.group.toString()
-        artifactId = base.archivesBaseName
-    }
 }
