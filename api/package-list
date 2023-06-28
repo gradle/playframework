@@ -13,3 +13,4 @@ org.gradle.playframework.tools.internal.routes
 org.gradle.playframework.tools.internal.run
 org.gradle.playframework.tools.internal.scala
 org.gradle.playframework.tools.internal.twirl
+org.gradle.playframework.util
