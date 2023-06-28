@@ -13,20 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-/** This post processor fixes build / project dependent comments (DATE and SOURCE) from the TwirlCompiler generated files.
- * Here is an example:
- * -- GENERATED --
- * DATE: Mon Apr 03 10:27:51 CEST 2023
- * SOURCE: /private/var/folders/79/xmc9yr493y75ptry2_nrx3r00000gn/T/junit4995996226044083355/app/views/test.scala.html
- * HASH: 4bbbe5fde39afa0d46da8df7714a136a78170d6a
- * MATRIX: 728->1|841->19|869->20|920->45|948->53
- * LINES: 21->1|26->1|26->1|26->1|26->1
- * -- GENERATED --
-*/
- class DefaultTwirlPostProcessor implements Serializable {
+/**
+ * This post processor fixes build / project dependent comments (DATE and SOURCE) from the TwirlCompiler generated files.
+ */
+class DefaultTwirlPostProcessor implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTwirlPostProcessor.class);
-
+    /*
+     * Here is an example:
+     * -- GENERATED --
+     * DATE: Mon Apr 03 10:27:51 CEST 2023
+     * SOURCE: /private/var/folders/79/xmc9yr493y75ptry2_nrx3r00000gn/T/junit4995996226044083355/app/views/test.scala.html
+     * HASH: 4bbbe5fde39afa0d46da8df7714a136a78170d6a
+     * MATRIX: 728->1|841->19|869->20|920->45|948->53
+     * LINES: 21->1|26->1|26->1|26->1|26->1
+     * -- GENERATED --
+     */
     private static final String GENERATED_TAG = "-- GENERATED --";
     private static final String GENERATED_LINE_PREFIX_DATE = "DATE: ";
     private static final String GENERATED_LINE_PREFIX_SOURCE = "SOURCE: ";
@@ -44,7 +46,7 @@ import java.util.stream.Stream;
     private String getSourceReplacementString(Iterable<RelativeFile> sources) {
         String sourceReplacementString = "";
 
-        if(sources.iterator().hasNext()) {
+        if (sources.iterator().hasNext()) {
             RelativeFile sourceFile = sources.iterator().next();
             sourceReplacementString = "SOURCE: " + sourceFile.getRelativePath();
         }
@@ -59,14 +61,14 @@ import java.util.stream.Stream;
 
             boolean isInGeneratedSection = false;
             for (String currentLine : generatedSourceLines) {
-                if(currentLine.contains(GENERATED_TAG)) {
+                if (currentLine.contains(GENERATED_TAG)) {
                     isInGeneratedSection = !isInGeneratedSection;
                 }
-                if(isInGeneratedSection && currentLine.contains(GENERATED_LINE_PREFIX_SOURCE)) {
+                if (isInGeneratedSection && currentLine.contains(GENERATED_LINE_PREFIX_SOURCE)) {
                     // update path to relative and keep trailing spaces
                     String updatedLine = currentLine.substring(0, currentLine.indexOf(GENERATED_LINE_PREFIX_SOURCE)) + sourceReplacementString;
                     updatedSourceLines.add(updatedLine);
-                } else if(!(isInGeneratedSection && currentLine.contains(GENERATED_LINE_PREFIX_DATE))) {
+                } else if (!(isInGeneratedSection && currentLine.contains(GENERATED_LINE_PREFIX_DATE))) {
                     updatedSourceLines.add(currentLine);
                 }
             }

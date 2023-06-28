@@ -10,10 +10,11 @@ import java.util.Objects;
  *
  * <p>This class considers missing parts to be 0, so that "1.0" == "1.0.0" == "1.0.0_0".</p>
  *
- * <p>Note that this class considers "1.2.3-something" less than "1.2.3". Qualifiers are compared lexicographically ("1.2.3-alpha" < "1.2.3-beta") and case-insensitive ("1.2.3-alpha" <
- * "1.2.3.RELEASE").
+ * <p>Note that this class considers "1.2.3-something" less than "1.2.3".
+ * Qualifiers are compared lexicographically ({@code "1.2.3-alpha" < "1.2.3-beta"}) and case-insensitive ({@code "1.2.3-alpha" < "1.2.3.RELEASE"}).
  *
- * <p>To check if a version number is at least "1.2.3", disregarding a potential qualifier like "beta", use {@code version.getBaseVersion().compareTo(VersionNumber.parse("1.2.3")) >= 0}.
+ * <p>To check if a version number is at least "1.2.3", disregarding a potential qualifier like "beta", use
+ * {@code version.getBaseVersion().compareTo(VersionNumber.parse("1.2.3")) >= 0}.
  */
 public class VersionNumber implements Comparable<VersionNumber> {
     private static final VersionNumber.DefaultScheme DEFAULT_SCHEME = new VersionNumber.DefaultScheme();
