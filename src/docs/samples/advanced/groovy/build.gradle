@@ -4,7 +4,7 @@ plugins {
 
 play {
     platform {
-        playVersion = '2.6.15'
+        playVersion = '2.6.25'
         scalaVersion = '2.12'
         javaVersion = JavaVersion.VERSION_1_8
     }
@@ -15,7 +15,7 @@ play {
 // tag::play-dependencies[]
 dependencies {
     implementation "commons-lang:commons-lang:2.6"
-    implementation "com.typesafe.play:play-guice_2.12:2.6.15"
+    implementation "com.typesafe.play:play-guice_2.12:2.6.25"
     implementation "ch.qos.logback:logback-classic:1.2.3"
     testImplementation "org.scalatestplus.play:scalatestplus-play_2.12:3.1.2"
 }
