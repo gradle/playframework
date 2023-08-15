@@ -1,0 +1,48 @@
+// tag::use-plugin[]
+plugins {
+    id 'org.gradle.playframework' version '0.9'
+}
+
+repositories {
+    jcenter()
+    maven {
+        name "lightbend-maven-release"
+        url "https://repo.lightbend.com/lightbend/maven-releases"
+    }
+    ivy {
+        name "lightbend-ivy-release"
+        url "https://repo.lightbend.com/lightbend/ivy-releases"
+        layout "ivy"
+    }
+}
+// end::use-plugin[]
+
+play {
+    injectedRoutesGenerator = true
+}
+
+dependencies {
+    implementation 'commons-lang:commons-lang:2.6'
+    testImplementation "com.google.guava:guava:17.0"
+    testImplementation "org.scalatestplus.play:scalatestplus-play_2.12:3.1.2"
+    implementation "com.typesafe.play:play-guice_2.12:2.6.15"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
+
+    implementation group: 'com.typesafe.play', name: 'play-java-forms_2.12', version: '2.6.15'
+}
+
+// tag::enable-java-default-imports-in-templates[]
+sourceSets {
+    main {
+        twirl {
+            defaultImports = org.gradle.playframework.sourcesets.TwirlImports.JAVA
+        }
+    }
+}
+
+// alternatively
+// compilePlayTwirlTemplates {
+//     defaultImports = org.gradle.playframework.sourcesets.TwirlImports.JAVA
+// }
+
+// end::enable-java-default-imports-in-templates[]
