@@ -187,11 +187,11 @@ public class PlayDistributionPlugin implements Plugin<Project> {
                 @Override
                 public String call() throws Exception {
                     String baseName = (String) Distribution.class.getMethod("getBaseName").invoke(distribution);
-                    return "".equals(baseName) ? "" : distribution.getName();
+                    return baseName != null && !baseName.isEmpty() ? baseName : distribution.getName();
                 }
             });
         } else {
-            return distribution.getDistributionBaseName().map(baseName -> baseName.isEmpty() ? "" : distribution.getName()).orElse(distribution.getName());
+            return distribution.getDistributionBaseName().map(baseName -> !baseName.isEmpty() ? baseName : distribution.getName()).orElse(distribution.getName());
         }
     }
 
@@ -238,7 +238,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         public String apply(File input) {
             calculateRenames();
             String rename = renames.get(input);
-            if (rename!=null) {
+            if (rename != null) {
                 return rename;
             }
             return input.getName();
