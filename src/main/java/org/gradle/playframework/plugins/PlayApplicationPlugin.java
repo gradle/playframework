@@ -92,6 +92,7 @@ public class PlayApplicationPlugin implements Plugin<Project> {
             case PLAY_2_6_X:
             case PLAY_2_7_X:
             case PLAY_2_8_X:
+            case PLAY_2_9_X:
                 dependencies.add(PLATFORM_CONFIGURATION, playPlatform.getDependencyNotation("play-java-forms").get());
         }
     }

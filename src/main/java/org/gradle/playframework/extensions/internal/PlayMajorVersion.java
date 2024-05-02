@@ -14,7 +14,9 @@ public enum PlayMajorVersion {
     PLAY_2_5_X("2.5.x", true,"2.11"),
     PLAY_2_6_X("2.6.x", true, "2.12", "2.11"),
     PLAY_2_7_X("2.7.x", false, "2.13", "2.12", "2.11"),
-    PLAY_2_8_X("2.8.x", false, "2.13", "2.12");
+    PLAY_2_8_X("2.8.x", false, "2.13", "2.12"),
+    // https://www.playframework.com/documentation/3.0.x/Migration29#Scala-2.12-support-discontinued
+    PLAY_2_9_X("2.9.x", false, "2.13");
 
     private final String name;
     private final boolean supportForStaticRoutes;

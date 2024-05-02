@@ -70,6 +70,14 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return new VersionNumber(major, minor, micro, patch, null, scheme);
     }
 
+    public boolean isLowerThan(VersionNumber other) {
+        return this.compareTo(other) < 0;
+    }
+
+    public boolean isHigherThan(VersionNumber other) {
+        return this.compareTo(other) > 0;
+    }
+
     @Override
     public int compareTo(VersionNumber other) {
         if (major != other.major) {
