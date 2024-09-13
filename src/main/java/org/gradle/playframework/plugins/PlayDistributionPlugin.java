@@ -238,7 +238,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         public String apply(File input) {
             calculateRenames();
             String rename = renames.get(input);
-            if (rename!=null) {
+            if (rename != null) {
                 return rename;
             }
             return input.getName();
