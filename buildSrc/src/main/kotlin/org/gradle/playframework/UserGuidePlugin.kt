@@ -32,9 +32,11 @@ class UserGuidePlugin : Plugin<Project> {
     fun Project.configureAsciidoctorTask() {
         val asciidoctor by tasks.existing(AsciidoctorTask::class) {
             sourceDir = file("src/docs/asciidoc")
-            sources(delegateClosureOf<PatternSet> {
-                include("index.adoc")
-            })
+            sources(
+                delegateClosureOf<PatternSet> {
+                    include("index.adoc")
+                }
+            )
 
             attributes(
                 mapOf(
