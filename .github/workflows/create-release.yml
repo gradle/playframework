@@ -16,7 +16,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Publish plugin
-        uses: eskatos/gradle-command-action@v1.2.0
+        uses: eskatos/gradle-command-action@v3.5.0
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
