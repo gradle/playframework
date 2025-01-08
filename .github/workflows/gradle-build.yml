@@ -1,6 +1,6 @@
 # .github/workflows/gradle-build-pr.yml
 name: Run integration tests
-on: 
+on:
   push:
     branches:
       - master
@@ -22,7 +22,7 @@ jobs:
         arguments: ${{ matrix.task }}
     # upload build output for later inspection, if the build failed
     #  N.B only applies to the last task in the matrix
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: wholebuild #testreports
