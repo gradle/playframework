@@ -17,10 +17,10 @@ jobs:
       with:
         java-version: 8
         distribution: 'temurin'
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
     # run the build
-    - uses: eskatos/gradle-command-action@v3.5.0
-      with:
-        arguments: ${{ matrix.task }}
+    - run: ./gradlew ${{ matrix.task }}
     # upload build output for later inspection, if the build failed
     #  N.B only applies to the last task in the matrix
     - uses: actions/upload-artifact@v4
