@@ -16,6 +16,7 @@ jobs:
     - uses: actions/setup-java@v4
       with:
         java-version: 8
+        distribution: 'temurin'
     # run the build
     - uses: eskatos/gradle-command-action@v1.2.0
       with:
