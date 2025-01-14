@@ -1,11 +1,17 @@
 plugins {
     `kotlin-dsl`
-    id("org.gradle.kotlin-dsl.ktlint-convention") version "0.4.1"
+    id("org.gradle.kotlin-dsl.ktlint-convention") version "0.5.0"
 }
 
 repositories {
+    maven {
+        url = uri("https://repo.gradle.org/gradle/libs/")
+        content {
+            includeModule("org.ysb33r.gradle", "grolifant")
+        }
+    }
     mavenCentral()
-    maven("https://plugins.gradle.org/m2/")
+    gradlePluginPortal()
 }
 
 dependencies {
