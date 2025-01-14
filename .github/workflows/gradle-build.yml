@@ -18,7 +18,7 @@ jobs:
         java-version: 8
         distribution: 'temurin'
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
     # run the build
     - run: ./gradlew ${{ matrix.task }}
     # upload build output for later inspection, if the build failed
