@@ -15,13 +15,12 @@ jobs:
           java-version: 8
           distribution: 'temurin'
 
-      - name: Publish plugin
-        uses: eskatos/gradle-command-action@v1.2.0
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - run: ./gradlew publishPlugins
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
-        with:
-          arguments: publishPlugins
 
       - name: Get release version
         run: |
