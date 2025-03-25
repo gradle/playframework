@@ -1,9 +1,6 @@
 package org.gradle.playframework.plugins;
 
-import org.gradle.api.Action;
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
-import org.gradle.api.Task;
+import org.gradle.api.*;
 import org.gradle.api.artifacts.ArtifactCollection;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.component.ComponentIdentifier;
@@ -122,11 +119,30 @@ public class PlayDistributionPlugin implements Plugin<Project> {
 
         distSpec.into("bin", copySpec -> {
             copySpec.from(createStartScriptsTask);
-            copySpec.setFileMode(0755);
+            setFileMode(copySpec);
         });
 
         distSpec.into("conf", copySpec -> copySpec.from("conf").exclude("routes"));
         distSpec.from("README");
+    }
+
+    private void setFileMode(CopySpec copySpec) {
+        try {
+            if (GradleVersion.current().compareTo(GradleVersion.version("8.3")) >= 0) {
+                copySpec.getClass().getMethod("filePermissions", Action.class)
+                        .invoke(copySpec, (Action<?>) filePermission -> {
+                            try {
+                                filePermission.getClass().getMethod("unix", String.class).invoke(filePermission, "0755");
+                            } catch (Exception e) {
+                                throw new GradleException("Failed to set unix file permission", e);
+                            }
+                        });
+            } else {
+                copySpec.getClass().getMethod("setFileMode", Integer.class).invoke(copySpec, 0755);
+            }
+        } catch (Exception e) {
+            throw new GradleException("Failed to set file permissions", e);
+        }
     }
 
     private String getMainClass(PlayPlatform playPlatform) {
@@ -238,7 +254,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         public String apply(File input) {
             calculateRenames();
             String rename = renames.get(input);
-            if (rename!=null) {
+            if (rename != null) {
                 return rename;
             }
             return input.getName();

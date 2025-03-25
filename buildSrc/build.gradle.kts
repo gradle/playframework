@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    id("org.gradle.kotlin-dsl.ktlint-convention") version "0.5.0"
+    id("org.gradle.kotlin-dsl.ktlint-convention") version "0.6.0"
 }
 
 repositories {
@@ -16,8 +16,12 @@ repositories {
 
 dependencies {
     implementation(kotlin("gradle-plugin"))
-    implementation("org.asciidoctor:asciidoctor-gradle-plugin:1.5.9.1")
     implementation("org.ajoberstar:gradle-git-publish:0.3.3")
+
+    implementation("org.asciidoctor:asciidoctor-gradle-plugin:1.6.1")
+    constraints {
+        implementation("org.ysb33r.gradle:grolifant:0.12.1")
+    }
 }
 
 kotlinDslPluginOptions {
