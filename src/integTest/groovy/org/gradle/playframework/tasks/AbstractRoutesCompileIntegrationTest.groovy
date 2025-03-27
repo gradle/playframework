@@ -205,7 +205,7 @@ GET     /                          ${controllers()}${packageId}.Application.inde
         File controllersDir = file("app/controllers")
 
         if (!controllersDir.isDirectory()) {
-            temporaryFolder.newFolder('app', 'controllers')
+            new File(new File(temporaryFolder, 'app'), 'controllers').with { mkdirs() }
         }
 
         File packageIdDir = controllersDir
@@ -231,10 +231,11 @@ GET     /                          ${controllers()}${packageId}.Application.inde
         def routesDir = file('conf')
 
         if (!routesDir.isDirectory()) {
-            temporaryFolder.newFolder('conf')
+            new File(temporaryFolder, 'conf').with { mkdirs() }
         }
 
         def routesFile = packageName.isEmpty() ? new File(routesDir, "routes") : new File(routesDir, packageName + ".routes")
+        routesFile.createNewFile()
         def packageId = packageName.isEmpty() ? "" : ".$packageName"
         withRoutesSource(routesFile, packageId)
     }

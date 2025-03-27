@@ -14,7 +14,7 @@ class PlayJavaAnnotationProcessingIntegrationTest extends AbstractIntegrationTes
             plugins {
                 id 'org.gradle.playframework'
             }
-            
+
             ${playRepositories()}
 
             configurations {
@@ -26,23 +26,24 @@ class PlayJavaAnnotationProcessingIntegrationTest extends AbstractIntegrationTes
             }
         """
 
-        File appControllerDir = temporaryFolder.newFolder('app', 'controller')
+        File appControllerDir = new File(new File(temporaryFolder, 'app'), 'controller')
+        appControllerDir.mkdirs()
         new File(appControllerDir, "GetterSetterExample.java") << """
             package controller;
 
             import lombok.AccessLevel;
             import lombok.Getter;
             import lombok.Setter;
-            
+
             public class GetterSetterExample {
                 @Getter
                 @Setter
                 private int age = 10;
-                
+
                 @Setter(AccessLevel.PROTECTED)
                 private String name;
-            
-                @Override 
+
+                @Override
                 public String toString() {
                     return String.format("%s (age: %d)", name, getAge());
                 }

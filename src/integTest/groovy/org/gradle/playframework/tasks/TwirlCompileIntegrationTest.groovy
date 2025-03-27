@@ -98,7 +98,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 }
             }
         """
-        temporaryFolder.newFolder('app', 'my', 'pkg')
+        new File(new File(new File(temporaryFolder, 'app'), 'my'), 'pkg').with { mkdirs() }
         file("app/my/pkg/MyClass.scala") << """
             package my.pkg
 
@@ -144,14 +144,14 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 }
             }
         """
-        temporaryFolder.newFolder('app', 'views')
+        new File(new File(temporaryFolder, 'app'), 'views').with { mkdirs() }
         file("app/views/IndexTemplate.scala.html") << """
             @this(summarizer: models.Summarizer)
             @(item: String)
 
             @{summarizer.summarize(item)}
         """
-        temporaryFolder.newFolder('app', 'models')
+        new File(new File(temporaryFolder, 'app'), 'models').with { mkdirs() }
         file("app/models/Summarizer.scala") << """
             package models
             trait Summarizer {
@@ -159,15 +159,15 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 def summarize(item: String)
             }
         """
-        temporaryFolder.newFolder('app', 'controllers')
+        new File(new File(temporaryFolder, 'app'), 'controllers').with { mkdirs() }
         file("app/controllers/MyController.scala") << """
 
             import play.api.mvc.{AbstractController, Action, BaseController, ControllerComponents}
             import play.mvc.Results._
             import javax.inject.Inject
-            
+
             class MyController @Inject()(template: views.html.IndexTemplate, cc: ControllerComponents) extends AbstractController(cc) {
-  
+
                 def index = Action { implicit request =>
                     val item = "some extremely long text"
                     Ok(template(item))
@@ -228,7 +228,8 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     def "can build twirl source set with default Java imports"() {
         withTwirlJavaSourceSets()
-        File twirlJavaDir = temporaryFolder.newFolder("twirlJava")
+        File twirlJavaDir = new File(temporaryFolder, "twirlJava")
+        twirlJavaDir.mkdirs()
         withTemplateSourceExpectingJavaImports(new File(twirlJavaDir, "javaTemplate.scala.html"))
         validateThatPlayJavaDependencyIsAdded()
 
@@ -244,7 +245,8 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     }
 
     def "twirl source sets default to Scala imports"() {
-        File appViewsDir = temporaryFolder.newFolder('app', 'views')
+        File appViewsDir = new File(new File(temporaryFolder, 'app'), 'views')
+        appViewsDir.mkdirs()
         withTemplateSource(new File(appViewsDir, "index.scala.html"))
         validateThatPlayJavaDependencyIsNotAdded()
         validateThatSourceSetsDefaultToScalaImports()
@@ -322,7 +324,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         File appViewsDir = file('app/views')
 
         if (!appViewsDir.isDirectory()) {
-            temporaryFolder.newFolder('app', 'views')
+            new File(new File(temporaryFolder, 'app'), 'views').with { mkdirs() }
         }
 
         new File(appViewsDir, fileName)
@@ -332,7 +334,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         File appViewsDir = file('app/views')
 
         if (!appViewsDir.isDirectory()) {
-            temporaryFolder.newFolder('app', 'views')
+            new File(new File(temporaryFolder, 'app'), 'views').with { mkdirs() }
         }
 
         def templateFile = new File(appViewsDir, fileName)
@@ -413,7 +415,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 }
             }
         """
-        temporaryFolder.newFolder('app', 'views', 'formats', 'csv')
+        new File(new File(new File(new File(temporaryFolder, 'app'), 'views'), 'formats'), 'csv').with { mkdirs() }
 
         if (playVersion < VersionNumber.parse("2.3.0")) {
             file("app/views/formats/csv/Csv.scala") << """

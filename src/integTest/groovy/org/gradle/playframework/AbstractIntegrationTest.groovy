@@ -5,23 +5,22 @@ import org.gradle.playframework.fixtures.archive.TarTestFixture
 import org.gradle.playframework.fixtures.archive.ZipTestFixture
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.TempDir
 
 class AbstractIntegrationTest extends Specification {
 
-    @Rule
-    TemporaryFolder temporaryFolder = new TemporaryFolder()
+    @TempDir
+    File temporaryFolder
 
     File projectDir
     File buildFile
     File settingsFile
 
     def setup() {
-        projectDir = temporaryFolder.root
-        buildFile = temporaryFolder.newFile('build.gradle')
-        settingsFile = temporaryFolder.newFile('settings.gradle')
+        projectDir = temporaryFolder
+        buildFile = new File(temporaryFolder, 'build.gradle')
+        settingsFile = new File(temporaryFolder, 'settings.gradle')
     }
 
     protected BuildResult build(String... arguments) {

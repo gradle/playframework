@@ -24,7 +24,7 @@ abstract class AbstractJavaScriptMinifyIntegrationTest extends AbstractIntegrati
         File assetsDir = file('app/assets')
 
         if (!assetsDir.isDirectory()) {
-            temporaryFolder.newFolder('app', 'assets')
+            new File(new File(temporaryFolder, 'app'), 'assets').with { mkdirs()}
         }
 
         new File(assetsDir, fileName)

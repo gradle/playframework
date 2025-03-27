@@ -11,14 +11,15 @@ class PlayApplicationCompilationIntegrationTest extends AbstractIntegrationTest 
             plugins {
                 id 'org.gradle.playframework-application'
             }
-            
+
             ${playRepositories()}
         """
     }
 
     def "can compile Java code"() {
         given:
-        File appDir = temporaryFolder.newFolder('app', 'org', 'gradle', 'playframework')
+        File appDir = new File(new File(new File(new File(temporaryFolder, 'app'), 'org'), 'gradle'), 'playframework')
+        appDir.mkdirs()
         new File(appDir, 'JavaHelloWorld.java') << """
             package org.gradle.playframework;
 
@@ -35,7 +36,8 @@ class PlayApplicationCompilationIntegrationTest extends AbstractIntegrationTest 
 
     def "can compile Scala code"() {
         given:
-        File appDir = temporaryFolder.newFolder('app', 'org', 'gradle', 'playframework')
+        File appDir = new File(new File(new File(new File(temporaryFolder, 'app'), 'org'), 'gradle'), 'playframework')
+        appDir.mkdirs()
 
         new File(appDir, 'ScalaHelloWorld.scala') << """
             package org.gradle.playframework

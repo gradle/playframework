@@ -2,15 +2,12 @@ package org.gradle.playframework.runner
 
 import groovy.transform.CompileStatic
 import org.gradle.exemplar.executor.CliCommandExecutor
-import org.gradle.exemplar.executor.CommandExecutionResult
 import org.gradle.exemplar.executor.CommandExecutor
 import org.gradle.exemplar.executor.ExecutionMetadata
 import org.gradle.exemplar.model.Command
 import org.gradle.exemplar.test.runner.GradleSamplesRunner
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import org.junit.runners.model.InitializationError
 
 /**
@@ -19,9 +16,6 @@ import org.junit.runners.model.InitializationError
 @CompileStatic
 class GradlePluginSamplesRunner extends GradleSamplesRunner {
     private static final String GRADLE_EXECUTABLE = "gradle"
-
-    @Rule
-    TemporaryFolder tempGradleUserHomeDir = new TemporaryFolder()
 
     private File customGradleInstallation = null
 

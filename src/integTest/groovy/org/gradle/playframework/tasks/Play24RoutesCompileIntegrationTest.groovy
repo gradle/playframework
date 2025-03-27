@@ -108,7 +108,8 @@ play {
 
     def "failure to generate routes fails the build with useful message"() {
         given:
-        File confDir = temporaryFolder.newFolder('conf')
+        File confDir = new File(temporaryFolder, 'conf')
+        confDir.mkdirs()
         new File(confDir, "routes") << """
 # This will cause route compilation failure since overload is not supported.
 GET        /        com.foobar.HelloController.index()

@@ -13,14 +13,15 @@ class PlayTwirlPluginIntegrationTest extends AbstractIntegrationTest {
             plugins {
                 id 'org.gradle.playframework'
             }
-            
+
             ${playRepositories()}
         """
     }
 
     def "can compile Twirl files"() {
         given:
-        File appViewDir = temporaryFolder.newFolder('app', 'views')
+        File appViewDir = new File(new File(temporaryFolder, 'app'), 'views')
+        appViewDir.mkdirs()
         new File(appViewDir, 'test.scala.js') << jsTwirlTemplate()
 
         when:
@@ -36,9 +37,11 @@ class PlayTwirlPluginIntegrationTest extends AbstractIntegrationTest {
 
     def "can add source directories to default source set"() {
         given:
-        File appViewDir = temporaryFolder.newFolder('app', 'views')
+        File appViewDir = new File(new File(temporaryFolder, 'app'), 'views')
+        appViewDir.mkdirs()
         new File(appViewDir, 'test.scala.js') << jsTwirlTemplate()
-        File extraTwirlDir = temporaryFolder.newFolder('extra', 'twirl')
+        File extraTwirlDir = new File(new File(temporaryFolder, 'extra'), 'twirl')
+        extraTwirlDir.mkdirs()
         new File(extraTwirlDir, 'extra.scala.js') << jsTwirlTemplate()
 
         buildFile << """

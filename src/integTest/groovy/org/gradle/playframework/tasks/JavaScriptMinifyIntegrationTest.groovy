@@ -131,7 +131,7 @@ class JavaScriptMinifyIntegrationTest extends AbstractJavaScriptMinifyIntegratio
 
     def "produces sensible error on minify failure"() {
         given:
-        temporaryFolder.newFolder('app', 'assets', 'javascripts')
+        new File(new File(new File(temporaryFolder, 'app'), 'assets'), 'javascripts').mkdirs()
         file("app/assets/javascripts/test1.js") << "BAD SOURCE"
         file("app/assets/javascripts/test2.js") << "BAD SOURCE"
         withJavaScriptSource("app/assets/javascripts/hello.js")
