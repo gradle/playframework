@@ -13,17 +13,10 @@ import org.junit.runners.BlockJUnit4ClassRunner
 import org.junit.runners.Suite
 import org.junit.runners.model.InitializationError
 import org.junit.runners.model.RunnerBuilder
-import org.spockframework.runtime.Sputnik
-import org.spockframework.runtime.model.FeatureInfo
-import org.spockframework.runtime.model.IterationInfo
-import org.spockframework.runtime.model.NameProvider
-import org.spockframework.runtime.model.SpecInfo
 
 import javax.annotation.Nullable
 import java.lang.annotation.Annotation
 import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
-
 /**
  * A base class for those test runners which execute a test multiple times.
  */
@@ -141,54 +134,8 @@ abstract class AbstractMultiTestRunner extends Runner implements Filterable {
     }
 
     private static class UnrollAwareSuite extends Suite {
-
-        private static final Method SPEC_METHOD
-
-        static {
-            Method spec = null
-            try {
-                spec = Sputnik.class.getDeclaredMethod("getSpec")
-                spec.setAccessible(true)
-            } catch (NoSuchMethodException e) {
-                spec = null
-            } finally {
-                SPEC_METHOD = spec
-            }
-        }
-
         UnrollAwareSuite(RunnerBuilder builder, Class<?>[] classes, final Execution execution) throws InitializationError {
             super(builder, classes)
-            if (execution != null) {
-                fixupNameProvider(execution)
-            }
-        }
-
-        private void fixupNameProvider(final Execution execution) {
-            for (Runner child : getChildren()) {
-                if (child instanceof Sputnik && SPEC_METHOD != null) {
-                    try {
-                        Description childDescription = child.getDescription()
-                        SpecInfo spec = (SpecInfo) SPEC_METHOD.invoke(child)
-                        List<FeatureInfo> allFeatures = spec.getAllFeatures()
-                        for (FeatureInfo feature : allFeatures) {
-                            feature.setSkipped(feature.isSkipped() || !execution.isTestEnabled(new TestDescriptionBackedTestDetails(childDescription, feature.getDescription())))
-                            final NameProvider<IterationInfo> provider = feature.getIterationNameProvider()
-                            if (provider!=null) {
-                                feature.setIterationNameProvider(new NameProvider<IterationInfo>() {
-                                    @Override
-                                    public String getName(IterationInfo iterationInfo) {
-                                        return provider.getName(iterationInfo) + " [" + execution.getDisplayName() + "]"
-                                    }
-                                })
-                            }
-                        }
-                    } catch (IllegalAccessException e) {
-                        // no luck
-                    } catch (InvocationTargetException e) {
-                        // no luck
-                    }
-                }
-            }
         }
     }
 
