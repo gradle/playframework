@@ -60,23 +60,14 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
     }
 
     void verifyJars() {
-        if (playVersion.major == 2 && playVersion.minor == 3) {
-            jar("build/libs/${playApp.name}.jar").containsDescendants(
-                    'Routes.class',
-                    'views/html/index.class',
-                    'views/html/main.class',
-                    'controllers/Application.class',
-                    'application.conf',
-                    'logback.xml')
-        } else {
-            jar("build/libs/${playApp.name}.jar").containsDescendants(
-                    'router/Routes.class',
-                    'views/html/index.class',
-                    'views/html/main.class',
-                    'controllers/Application.class',
-                    'application.conf',
-                    'logback.xml')
-        }
+        println("Verifying jars for Play version: ${playVersion}")
+        jar("build/libs/${playApp.name}.jar").containsDescendants(
+                'router/Routes.class',
+                'views/html/index.class',
+                'views/html/main.class',
+                'controllers/Application.class',
+                'application.conf',
+                'logback.xml')
         jar("build/libs/${playApp.name}-assets.jar").containsDescendants(
                 'public/images/favicon.svg',
                 'public/stylesheets/main.css',
