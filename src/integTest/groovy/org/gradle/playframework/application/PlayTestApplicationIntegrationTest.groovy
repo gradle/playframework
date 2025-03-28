@@ -22,6 +22,10 @@ abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplic
 
     def "can run play app tests"() {
         when:
+        playVersion = version
+        setupBuildFile()
+        configurePlayVersionInBuildScript()
+
         BuildResult result = build("check")
         then:
         result.task(ROUTES_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
@@ -41,6 +45,9 @@ abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplic
         result.task(SCALA_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
         result.task(SCALA_TEST_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
         result.task(TEST_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
+
+        where:
+        version << createExecutions()
     }
 
     void verifyTestOutput(TestExecutionResult result) { }

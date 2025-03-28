@@ -24,6 +24,11 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
     private static final String MAIN_DIST_JAR_TASK_PATH = ":createMainDistributionJar"
 
     def "can build play app distribution"() {
+        given:
+        playVersion = version
+        setupBuildFile()
+        configurePlayVersionInBuildScript()
+
         when:
         BuildResult result = build("stage")
 
@@ -48,6 +53,9 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
 
         and:
         verifyArchives()
+
+        where:
+        version << createExecutions()
     }
 
     List<ArchiveTestFixture> archives() {

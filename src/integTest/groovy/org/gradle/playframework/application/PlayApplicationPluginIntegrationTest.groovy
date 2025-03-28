@@ -20,6 +20,11 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
     private static final String ASSEMBLE_TASK_PATH = ":$ASSEMBLE_TASK_NAME".toString()
 
     def "can build application binaries"() {
+        given:
+        playVersion = version
+        setupBuildFile()
+        configurePlayVersionInBuildScript()
+
         when:
         BuildResult result = build('assemble')
 
@@ -38,6 +43,9 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
         result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
         result.task(JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
         result.task(ASSETS_JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
+
+        where:
+        version << createExecutions()
     }
 
     String[] getBuildTasks() {
