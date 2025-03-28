@@ -50,7 +50,7 @@ abstract class PlayMultiVersionIntegrationTest extends AbstractIntegrationTest {
             if (userProvidedPlayVersions) {
                 return userProvidedPlayVersions
             } else {
-                return targetCoverage.value().newInstance(target, target).call() as List
+                return targetCoverage.value().newInstance(this, this).call() as List
             }
         } else {
             return [PlayCoverage.DEFAULT]
