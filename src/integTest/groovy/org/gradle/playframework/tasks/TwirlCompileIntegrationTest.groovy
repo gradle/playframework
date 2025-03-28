@@ -4,7 +4,6 @@ import org.gradle.playframework.PlayMultiVersionIntegrationTest
 import org.gradle.playframework.util.VersionNumber
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import spock.lang.Ignore
 import spock.lang.Unroll
 
 import static org.gradle.playframework.plugins.PlayTwirlPlugin.TWIRL_COMPILE_TASK_NAME
@@ -48,7 +47,6 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         ].combinations().collect { [it[0][0], it[0][1], it[0][2], it[1]] }
     }
 
-    @Ignore("This is a Scala compilation error and needs a Scala expert to fix")
     def "can compile custom Twirl templates"() {
         given:
         playVersion = version
