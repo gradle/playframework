@@ -4,14 +4,10 @@ import org.gradle.playframework.PlayMultiVersionIntegrationTest
 import org.gradle.playframework.util.VersionNumber
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Assume
 
 import java.nio.charset.StandardCharsets
 
-import static org.gradle.playframework.fixtures.Repositories.playRepositories
-import static org.gradle.playframework.fixtures.file.FileFixtures.assertContentsHaveChangedSince
-import static org.gradle.playframework.fixtures.file.FileFixtures.assertModificationTimeHasChangedSince
-import static org.gradle.playframework.fixtures.file.FileFixtures.snapshot
+import static org.gradle.playframework.fixtures.file.FileFixtures.*
 import static org.gradle.playframework.plugins.PlayRoutesPlugin.ROUTES_COMPILE_TASK_NAME
 
 abstract class AbstractRoutesCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
@@ -31,14 +27,6 @@ abstract class AbstractRoutesCompileIntegrationTest extends PlayMultiVersionInte
     def setup() {
         destinationDir = file(destinationDirPath)
         settingsFile << """ rootProject.name = 'routes-play-app' """
-        buildFile << """
-plugins {
-    id 'org.gradle.playframework-application'
-}
-
-${playRepositories()}
-"""
-        configurePlayVersionInBuildScript()
     }
 
     protected String controllers() {
@@ -86,6 +74,9 @@ object Application extends Controller {
 
     def "can run RoutesCompile"() {
         given:
+        playVersion = version
+        setupBuildFile()
+
         withRoutesTemplate()
         expect:
         build(ROUTES_COMPILE_TASK_NAME)
@@ -93,10 +84,15 @@ object Application extends Controller {
         createRouteFileList().each {
             assert new File(destinationDir, it).isFile()
         }
+        where:
+        version << createExecutions()
     }
 
     def "recompiles on changed routes file input"() {
         given:
+        playVersion = version
+        setupBuildFile()
+
         File templateFile = withRoutesTemplate()
         build(ROUTES_COMPILE_TASK_NAME)
 
@@ -132,6 +128,9 @@ GET     /newroute                          ${controllers()}.Application.index()
 
         then:
         result.task(ROUTES_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
+
+        where:
+        version << createExecutions()
     }
 
     private File getScalaRoutesFile() {
@@ -147,6 +146,10 @@ GET     /newroute                          ${controllers()}.Application.index()
     }
 
     def "compiles additional routes file and cleans up output on removal"() {
+        given:
+        playVersion = version
+        setupBuildFile()
+
         when:
         withRoutesTemplate()
         then:
@@ -174,10 +177,16 @@ GET     /newroute                          ${controllers()}.Application.index()
             assert new File(destinationDir, it).isFile()
         }
         createRouteFileList('foo').each { assert !new File(destinationDir, it).isFile() }
+
+        where:
+        version << createExecutions()
     }
 
     def "can run RoutesCompile with namespaceReverseRouter set"() {
         given:
+        playVersion = version
+        setupBuildFile()
+
         withRoutesTemplate("org.gradle.test")
         buildFile << """
             $ROUTES_COMPILE_TASK_NAME {
@@ -190,11 +199,14 @@ GET     /newroute                          ${controllers()}.Application.index()
         createRouteFileList("org/gradle/test", "org/gradle/test").each {
             assert new File(destinationDir, it).isFile()
         }
+
+        where:
+        version << createExecutions()
     }
 
     def withRoutesSource(File routesFile, String packageId) {
         routesFile.createNewFile()
-        routesFile << """
+        routesFile.text = """
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
@@ -206,6 +218,7 @@ GET     /                          ${controllers()}${packageId}.Application.inde
 
         if (!controllersDir.isDirectory()) {
             new File(new File(temporaryFolder, 'app'), 'controllers').with { mkdirs() }
+            println("Created controllers dir: $controllersDir")
         }
 
         File packageIdDir = controllersDir
@@ -235,9 +248,8 @@ GET     /                          ${controllers()}${packageId}.Application.inde
         }
 
         def routesFile = packageName.isEmpty() ? new File(routesDir, "routes") : new File(routesDir, packageName + ".routes")
-        routesFile.createNewFile()
         def packageId = packageName.isEmpty() ? "" : ".$packageName"
-        withRoutesSource(routesFile, packageId)
+        return withRoutesSource(routesFile, packageId)
     }
 
     def createRouteFileList(String packageName = '', String namespace = '') {
@@ -247,9 +259,10 @@ GET     /                          ${controllers()}${packageId}.Application.inde
     }
 
     def "can add additional imports"() {
-        // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion > VersionNumber.parse("2.3.99"))
         given:
+        playVersion = version
+        setupBuildFile()
+
         withRoutesTemplate()
         and:
         buildFile << """
@@ -262,10 +275,16 @@ $ROUTES_COMPILE_TASK_NAME {
         and:
         new File(destinationDir, getReverseRoutesFileName('', '')).text.contains("extra.package")
         new File(destinationDir, getScalaRoutesFileName('', '')).text.contains("extra.package")
+
+        where: // Play version 2.3 not supported
+        version << createExecutions().findAll {it > VersionNumber.parse("2.3.99") }
     }
 
     def "post-processed generated comments contain path and timestamp replacements"() {
         given:
+        playVersion = version
+        setupBuildFile()
+
         withRoutesTemplate()
         when:
         build(ROUTES_COMPILE_TASK_NAME)
@@ -276,5 +295,8 @@ $ROUTES_COMPILE_TASK_NAME {
             assert generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @(SOURCE):conf/routes")
             assert !generatedFile.getText(StandardCharsets.UTF_8.toString()).contains("// @(DATE)")
         }
+
+        where:
+        version << createExecutions()
     }
 }

@@ -3,7 +3,6 @@ package org.gradle.playframework.tasks
 import org.gradle.playframework.util.VersionNumber
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Assume
 
 class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegrationTest {
 
@@ -55,9 +54,10 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
     }
 
     def "can specify route compiler type as injected"() {
-        // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion > VersionNumber.parse("2.3.99"))
         given:
+        playVersion = version
+        setupBuildFile()
+
         withRoutesTemplate()
         withInjectedRoutesController()
         buildFile << """
@@ -71,13 +71,17 @@ play {
         createRouteFileList().each {
             assert new File(destinationDir, it).isFile()
         }
+
+        where:
+        // Play version 2.3 not supported
+        version << createExecutions().findAll {it > VersionNumber.parse("2.3.99") }
     }
 
     def "recompiles when route compiler type is changed"() {
-        // Play version 2.3 not supported
-        Assume.assumeTrue(playVersion > VersionNumber.parse("2.3.99"))
-        // Play 2.7+ only has a single route compiler type.
-        Assume.assumeTrue(playVersion < VersionNumber.parse("2.7"))
+        given:
+        playVersion = version
+        setupBuildFile()
+
         when:
         withRoutesTemplate()
         then:
@@ -97,6 +101,11 @@ play {
         createRouteFileList().each {
             assert new File(destinationDir, it).isFile()
         }
+
+        where:
+        // Play version 2.3 not supported
+        // Play 2.7+ only has a single route compiler type.
+        version << createExecutions().findAll {it > VersionNumber.parse("2.3.99") && it < VersionNumber.parse("2.7")}
     }
 
     private withInjectedRoutesController() {
@@ -108,6 +117,9 @@ play {
 
     def "failure to generate routes fails the build with useful message"() {
         given:
+        playVersion = version
+        setupBuildFile()
+
         File confDir = new File(temporaryFolder, 'conf')
         confDir.mkdirs()
         new File(confDir, "routes") << """
@@ -118,5 +130,8 @@ GET        /*path   com.foobar.HelloController.index(path)
         expect:
         BuildResult result = buildAndFail(ROUTES_COMPILE_TASK_PATH)
         result.output.contains("Using different overloaded methods is not allowed. If you are using a single method in combination with default parameters, make sure you declare them all explicitly.")
+
+        where:
+        version << createExecutions()
     }
 }

@@ -4,9 +4,8 @@ import org.gradle.playframework.fixtures.app.PlayApp
 
 abstract class PlayMultiVersionApplicationIntegrationTest extends PlayMultiVersionIntegrationTest {
 
-    def setup() {
+    def configurePlayVersionInBuildScript() {
         getPlayApp().writeSources(projectDir)
-        configurePlayVersionInBuildScript()
         settingsFile << """
             rootProject.name = '${playApp.name}'
         """

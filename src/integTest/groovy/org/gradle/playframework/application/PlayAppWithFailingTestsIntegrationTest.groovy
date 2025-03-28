@@ -7,14 +7,14 @@ import org.gradle.playframework.fixtures.test.JUnitXmlTestExecutionResult
 import org.gradle.testkit.runner.BuildResult
 
 class PlayAppWithFailingTestsIntegrationTest extends PlayMultiVersionIntegrationTest {
-
-    PlayApp playApp = new WithFailingTestsApp(playVersion)
-
-    def setup() {
-        playApp.writeSources(projectDir)
-    }
-
     def "reports failing run play app tests"() {
+        given:
+        playVersion = version
+        setupBuildFile()
+
+        PlayApp playApp = new WithFailingTestsApp(playVersion)
+        playApp.writeSources(projectDir)
+
         when:
         BuildResult result = buildAndFail("test")
         then:
@@ -37,5 +37,8 @@ FailingIntegrationSpec > failingTest FAILED
         testResult.testClass("IntegrationSpec").assertTestCount(1, 0, 0)
         testResult.testClass("FailingIntegrationSpec").assertTestCount(1, 1, 0)
         testResult.testClass("FailingApplicationSpec").assertTestCount(2, 1, 0)
+
+        where:
+        version << createExecutions()
     }
 }
