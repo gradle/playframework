@@ -109,7 +109,7 @@ pluginBundle {
 }
 
 tasks.named<ProcessResources>("processIntegTestFixturesResources") {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
 tasks.withType<Test>().configureEach {

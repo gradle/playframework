@@ -218,7 +218,6 @@ GET     /                          ${controllers()}${packageId}.Application.inde
 
         if (!controllersDir.isDirectory()) {
             new File(new File(temporaryFolder, 'app'), 'controllers').with { mkdirs() }
-            println("Created controllers dir: $controllersDir")
         }
 
         File packageIdDir = controllersDir
