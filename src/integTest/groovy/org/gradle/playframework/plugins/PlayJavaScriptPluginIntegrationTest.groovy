@@ -13,14 +13,15 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
             plugins {
                 id 'org.gradle.playframework'
             }
-            
+
             ${playRepositories()}
         """
     }
 
     def "can minify JavaScript files"() {
         given:
-        File assetsDir = temporaryFolder.newFolder('app', 'assets')
+        File assetsDir = new File(new File(temporaryFolder, 'app'), 'assets')
+        assetsDir.mkdirs()
         new File(assetsDir, 'test.js') << 'test'
 
         when:
@@ -37,9 +38,11 @@ class PlayJavaScriptPluginIntegrationTest extends AbstractIntegrationTest {
 
     def "can add source directories to default source set"() {
         given:
-        File assetsDir = temporaryFolder.newFolder('app', 'assets')
+        File assetsDir = new File(new File(temporaryFolder, 'app'), 'assets')
+        assetsDir.mkdirs()
         new File(assetsDir, 'test.js') << 'test'
-        File extraJavascriptDir = temporaryFolder.newFolder('extra', 'javascript')
+        File extraJavascriptDir = new File(new File(temporaryFolder, 'extra'), 'javascript')
+        extraJavascriptDir.mkdirs()
         new File(extraJavascriptDir, 'extra.js') << 'extra'
 
         buildFile << """

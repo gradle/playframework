@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    id("org.gradle.kotlin-dsl.ktlint-convention") version "0.6.0"
+    id("org.gradle.kotlin-dsl.ktlint-convention") version "0.9.0"
 }
 
 repositories {

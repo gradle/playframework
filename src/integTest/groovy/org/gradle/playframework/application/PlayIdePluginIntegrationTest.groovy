@@ -12,7 +12,11 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
     abstract String[] getBuildTasks()
     abstract String[] getUnexecutedTasks()
 
-    def "generates IDE configuration"() {
+    def "generates IDE configuration"() {given:
+        playVersion = version
+        setupBuildFile()
+        configurePlayVersionInBuildScript()
+
         applyIdePlugin()
         when:
         BuildResult result = build(ideTask)
@@ -26,11 +30,22 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
         ideFiles.each {
             assert it.exists()
         }
+
+        where:
+        version << getVersionsToTest()
     }
 
     def "does not blow up when no IDE plugin is applied"() {
+        given:
+        playVersion = version
+        setupBuildFile()
+        configurePlayVersionInBuildScript()
+
         expect:
         build("tasks")
+
+        where:
+        version << getVersionsToTest()
     }
 
     protected void applyIdePlugin() {

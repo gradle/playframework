@@ -10,7 +10,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
                 id '${getPluginName()}'
                 id 'idea'
             }
-            
+
             ${playRepositories()}
         """
     }
@@ -22,11 +22,11 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
             tasks.configureEach {
                 configuredTasks << it
             }
-            
+
             gradle.buildFinished {
                 def configuredTaskPaths = configuredTasks*.path
-                
-                assert configuredTaskPaths == [':compilePlayTwirlTemplates', ':help']
+
+                assert configuredTaskPaths == [':compilePlayTwirlTemplates', ':help', ':clean']
             }
         """
 

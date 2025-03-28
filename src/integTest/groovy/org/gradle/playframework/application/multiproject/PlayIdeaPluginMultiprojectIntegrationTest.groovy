@@ -56,8 +56,4 @@ class PlayIdeaPluginMultiprojectIntegrationTest extends PlayIdeaPluginIntegratio
             ":primary:compileScala".toString()
         ]
     }
-
-    int getExpectedScalaClasspathSize() {
-        PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(playVersion.toString())]
-    }
 }

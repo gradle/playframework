@@ -14,14 +14,15 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
             plugins {
                 id 'org.gradle.playframework'
             }
-            
+
             ${playRepositories()}
         """
     }
 
     def "can compile routes files"() {
         given:
-        File confDir = temporaryFolder.newFolder('conf')
+        File confDir = new File(temporaryFolder,'conf')
+        confDir.mkdirs()
         new File(confDir, 'routes') << getRoutes()
 
         when:
@@ -48,9 +49,11 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
     }
 
     def "can add source directories to default source set"() {
-        File confDir = temporaryFolder.newFolder('conf')
+        File confDir = new File(temporaryFolder, 'conf')
+        confDir.mkdirs()
         new File(confDir, 'routes') << getRoutes()
-        File extraRoutesDir = temporaryFolder.newFolder('extra', 'more')
+        File extraRoutesDir = new File(new File(temporaryFolder, 'extra'), 'more')
+        extraRoutesDir.mkdirs()
         new File(extraRoutesDir, 'more') << getRoutes()
 
         buildFile << """
@@ -88,7 +91,8 @@ class PlayRoutesPluginIntegrationTest extends AbstractIntegrationTest {
 
     def "can configure static routes generator"() {
         given:
-        File confDir = temporaryFolder.newFolder('conf')
+        File confDir = new File(temporaryFolder, 'conf')
+        confDir.mkdirs()
         new File(confDir, 'routes') << getRoutes()
 
         buildFile << """
