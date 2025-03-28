@@ -74,7 +74,7 @@ play {
 
         where:
         // Play version 2.3 not supported
-        version << createExecutions().findAll {it > VersionNumber.parse("2.3.99") }
+        version << getVersionsToTest().findAll {it > VersionNumber.parse("2.3.99") }
     }
 
     def "recompiles when route compiler type is changed"() {
@@ -105,7 +105,7 @@ play {
         where:
         // Play version 2.3 not supported
         // Play 2.7+ only has a single route compiler type.
-        version << createExecutions().findAll {it > VersionNumber.parse("2.3.99") && it < VersionNumber.parse("2.7")}
+        version << getVersionsToTest().findAll {it > VersionNumber.parse("2.3.99") && it < VersionNumber.parse("2.7")}
     }
 
     private withInjectedRoutesController() {
@@ -132,6 +132,6 @@ GET        /*path   com.foobar.HelloController.index(path)
         result.output.contains("Using different overloaded methods is not allowed. If you are using a single method in combination with default parameters, make sure you declare them all explicitly.")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 }

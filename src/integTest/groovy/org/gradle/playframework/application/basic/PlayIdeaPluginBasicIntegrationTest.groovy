@@ -83,7 +83,7 @@ sourceSets {
         content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/play/routes", "build/src/play/twirl")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "IDEA metadata contains custom source set"() {
@@ -110,6 +110,6 @@ sourceSets {
         content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/play/routes", "build/src/play/twirl")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 }

@@ -3,7 +3,6 @@ package org.gradle.playframework.application.basic
 import org.gradle.playframework.PlayMultiVersionApplicationIntegrationTest
 import org.gradle.playframework.fixtures.app.BasicPlayApp
 import org.gradle.playframework.fixtures.app.PlayApp
-import org.gradle.testkit.runner.BuildResult
 
 class PlayBasicAppIntegrationTest extends PlayMultiVersionApplicationIntegrationTest {
 
@@ -22,6 +21,6 @@ class PlayBasicAppIntegrationTest extends PlayMultiVersionApplicationIntegration
         build("build", "--warning-mode=fail")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 }

@@ -39,6 +39,6 @@ FailingIntegrationSpec > failingTest FAILED
         testResult.testClass("FailingApplicationSpec").assertTestCount(2, 1, 0)
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 }

@@ -55,7 +55,7 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
         verifyArchives()
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     List<ArchiveTestFixture> archives() {

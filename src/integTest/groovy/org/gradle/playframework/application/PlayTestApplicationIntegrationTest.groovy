@@ -47,7 +47,7 @@ abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplic
         result.task(TEST_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     void verifyTestOutput(TestExecutionResult result) { }

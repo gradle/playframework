@@ -85,7 +85,7 @@ object Application extends Controller {
             assert new File(destinationDir, it).isFile()
         }
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "recompiles on changed routes file input"() {
@@ -130,7 +130,7 @@ GET     /newroute                          ${controllers()}.Application.index()
         result.task(ROUTES_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     private File getScalaRoutesFile() {
@@ -179,7 +179,7 @@ GET     /newroute                          ${controllers()}.Application.index()
         createRouteFileList('foo').each { assert !new File(destinationDir, it).isFile() }
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "can run RoutesCompile with namespaceReverseRouter set"() {
@@ -201,7 +201,7 @@ GET     /newroute                          ${controllers()}.Application.index()
         }
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def withRoutesSource(File routesFile, String packageId) {
@@ -276,7 +276,7 @@ $ROUTES_COMPILE_TASK_NAME {
         new File(destinationDir, getScalaRoutesFileName('', '')).text.contains("extra.package")
 
         where: // Play version 2.3 not supported
-        version << createExecutions().findAll {it > VersionNumber.parse("2.3.99") }
+        version << getVersionsToTest().findAll {it > VersionNumber.parse("2.3.99") }
     }
 
     def "post-processed generated comments contain path and timestamp replacements"() {
@@ -296,6 +296,6 @@ $ROUTES_COMPILE_TASK_NAME {
         }
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 }

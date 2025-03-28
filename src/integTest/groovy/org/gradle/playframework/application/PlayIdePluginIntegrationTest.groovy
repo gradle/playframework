@@ -32,7 +32,7 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
         }
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "does not blow up when no IDE plugin is applied"() {
@@ -45,7 +45,7 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
         build("tasks")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     protected void applyIdePlugin() {

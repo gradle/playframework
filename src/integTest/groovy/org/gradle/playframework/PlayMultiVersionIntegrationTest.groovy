@@ -1,3 +1,4 @@
+//file:noinspection GrMethodMayBeStatic
 package org.gradle.playframework
 
 import org.gradle.playframework.fixtures.multiversion.PlayCoverage
@@ -32,7 +33,7 @@ abstract class PlayMultiVersionIntegrationTest extends AbstractIntegrationTest {
         """
     }
 
-    protected List<VersionNumber> createExecutions() {
+    protected List<VersionNumber> getVersionsToTest() {
         final Annotation targetCoverage = this.getClass().getAnnotation(TargetCoverage)
 
         // All multi-version tests need to declare the annotation
@@ -42,22 +43,21 @@ abstract class PlayMultiVersionIntegrationTest extends AbstractIntegrationTest {
 
         // Allow target platform configuration for CI environments or if user provides explicit version
         if (System.getenv("CI") || USER_PROVIDED_PLAY_VERSION_SYS_PROP) {
-            List<VersionNumber> userProvidedPlayVersions = determineUserProvidedPlayVersions()
+            List<VersionNumber> userProvidedPlayVersions = determineUserProvidedVersions()
 
             // Apply user-provided Play versions if available
             // If no value was provided then use assigned annotation value
             if (userProvidedPlayVersions) {
-                return createConfiguredVersionExecutions(userProvidedPlayVersions)
+                return userProvidedPlayVersions
             } else {
-                List<VersionNumber> playVersions = targetCoverage.value().newInstance(target, target).call() as List
-                return createConfiguredVersionExecutions(playVersions)
+                return targetCoverage.value().newInstance(target, target).call() as List
             }
         } else {
-            return createDefaultVersionExecution()
+            return [PlayCoverage.DEFAULT]
         }
     }
 
-    private List<VersionNumber> determineUserProvidedPlayVersions() {
+    private List<VersionNumber> determineUserProvidedVersions() {
         if (USER_PROVIDED_PLAY_VERSION_SYS_PROP) {
             if (USER_PROVIDED_PLAY_VERSION_SYS_PROP == DEFAULT_PLAY_VERSION_SYS_PROP_VALUE) {
                 return [PlayCoverage.DEFAULT]
@@ -69,13 +69,5 @@ abstract class PlayMultiVersionIntegrationTest extends AbstractIntegrationTest {
         } else {
             return []
         }
-    }
-
-    private List<VersionNumber> createConfiguredVersionExecutions(List<VersionNumber> playVersions) {
-        return playVersions
-    }
-
-    private List<VersionNumber> createDefaultVersionExecution() {
-        return [PlayCoverage.DEFAULT]
     }
 }

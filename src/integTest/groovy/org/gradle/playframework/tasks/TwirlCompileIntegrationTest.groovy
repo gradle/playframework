@@ -43,7 +43,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 ["txt",  "TxtFormat",        '@(username: String) @username'],
                 ["html", "HtmlFormat",       '@(username: String) <html> <body> <h1>Hello @username</h1> </body> </html>']
             ],
-            createExecutions()
+            getVersionsToTest()
         ].combinations().collect { [it[0][0], it[0][1], it[0][2], it[1]] }
     }
 
@@ -86,7 +86,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         result.task(SCALA_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "can specify additional imports for a Twirl template"() {
@@ -138,7 +138,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         generatedFile.text.contains("import my.pkg.MyClass")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "can specify constructor annotations for a Twirl template"() {
@@ -195,7 +195,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         generatedFile.text.contains("class IndexTemplate @javax.inject.Inject()")
 
         where:
-        version << createExecutions().findAll { it >= VersionNumber.parse("2.6.0") }
+        version << getVersionsToTest().findAll { it >= VersionNumber.parse("2.6.0") }
     }
 
     def "runs compiler incrementally"() {
@@ -223,7 +223,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         new File(destinationDir, "html/input2.template.scala").isFile()
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "removes stale output files in incremental compile"() {
@@ -249,7 +249,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         !new File(destinationDir, "html/input2.template.scala").isFile()
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "can build twirl source set with default Java imports"() {
@@ -273,7 +273,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 .containsDescendants("html/javaTemplate.class")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "twirl source sets default to Scala imports"() {
@@ -293,7 +293,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.SUCCESS
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
 
@@ -325,7 +325,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 ["'.ext', 'CustomFormat'",  "Custom template extension should not start with a dot."],
                 ["'ext', null",             "Custom template format type cannot be null."]
             ],
-            createExecutions()
+            getVersionsToTest()
         ].combinations().collect { [it[0][0], it[0][1], it[1]] }
     }
 
@@ -340,7 +340,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
         result.output.contains("Twirl compiler could not find a matching template for 'test.scala.custom'.")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     @Unroll
@@ -366,7 +366,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
                 ["txt",  "TxtFormat",        '@(username: String) @username'],
                 ["html", "HtmlFormat",       '@(username: String) <html> <body> <h1>Hello @username</h1> </body> </html>']
             ],
-            createExecutions()
+            getVersionsToTest()
         ].combinations().collect { [it[0][0], it[0][1], it[0][2], it[1]] }
     }
 

@@ -45,7 +45,7 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
         result.task(ASSETS_JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     String[] getBuildTasks() {

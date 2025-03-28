@@ -53,7 +53,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         content.assertContainsExcludes("build", ".gradle")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "IDEA metadata contains correct Java version"() {
@@ -82,7 +82,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         result.output.contains("Validated Java Version")
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "IDEA metadata contains correct dependencies for RUNTIME, COMPILE, TEST"() {
@@ -107,7 +107,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         !testDeps.empty
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "IDEA plugin depends on source generation tasks"() {
@@ -126,7 +126,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         }
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 
     def "can modify source directories"() {
@@ -160,6 +160,6 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         }
 
         where:
-        version << createExecutions()
+        version << getVersionsToTest()
     }
 }
