@@ -3,7 +3,7 @@ package org.gradle.playframework.fixtures.file
 import org.gradle.internal.hash.HashCode
 import org.gradle.internal.hash.Hashing
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 final class FileFixtures {
 

@@ -22,7 +22,7 @@ dependencies {
         exclude(group = "org.codehaus.groovy")
     }
     testImplementation("org.junit.platform:junit-platform-launcher")
-    testImplementation("junit:junit:4.12")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     integTestFixturesImplementation("com.google.guava:guava:23.0")
     integTestFixturesImplementation("org.hamcrest:hamcrest-library:1.3")
     integTestFixturesImplementation("org.apache.ant:ant:1.9.3")
