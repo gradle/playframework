@@ -60,7 +60,7 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         applyIdePlugin()
         build(ideTask)
@@ -90,7 +90,7 @@ sourceSets {
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         applyIdePlugin()
         file("extra/java").mkdirs()

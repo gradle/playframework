@@ -15,7 +15,7 @@ class PlayBasicAppIntegrationTest extends PlayMultiVersionApplicationIntegration
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         expect:
         build("build", "--warning-mode=fail")

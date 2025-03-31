@@ -23,7 +23,7 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         when:
         BuildResult result = build('assemble')

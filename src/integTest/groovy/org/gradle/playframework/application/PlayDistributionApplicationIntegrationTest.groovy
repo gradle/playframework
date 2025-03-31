@@ -26,7 +26,7 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         when:
         BuildResult result = build("stage")

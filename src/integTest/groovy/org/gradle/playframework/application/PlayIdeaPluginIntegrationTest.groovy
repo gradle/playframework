@@ -40,7 +40,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         applyIdePlugin()
 
@@ -60,7 +60,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         applyIdePlugin()
         buildFile << """
@@ -89,7 +89,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         applyIdePlugin()
 
@@ -114,7 +114,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         applyIdePlugin()
 
@@ -133,7 +133,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         given:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         applyIdePlugin()
         buildFile << """

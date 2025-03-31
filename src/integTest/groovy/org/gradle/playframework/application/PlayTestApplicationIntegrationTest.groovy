@@ -24,7 +24,7 @@ abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplic
         when:
         playVersion = version
         setupBuildFile()
-        configurePlayVersionInBuildScript()
+        configurePlayApplication()
 
         BuildResult result = build("check")
         then:
