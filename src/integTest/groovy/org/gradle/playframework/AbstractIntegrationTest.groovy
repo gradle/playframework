@@ -10,6 +10,7 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 class AbstractIntegrationTest extends Specification {
+    int dummyField = 1 // Dummy field for force test rerun
 
     @Rule
     TemporaryFolder temporaryFolder = new TemporaryFolder()
