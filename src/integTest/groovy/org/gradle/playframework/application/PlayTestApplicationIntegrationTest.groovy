@@ -23,8 +23,7 @@ abstract class PlayTestApplicationIntegrationTest extends PlayMultiVersionApplic
     def "can run play app tests"() {
         when:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         BuildResult result = build("check")
         then:

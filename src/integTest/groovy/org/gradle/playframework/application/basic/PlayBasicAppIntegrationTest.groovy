@@ -14,8 +14,7 @@ class PlayBasicAppIntegrationTest extends PlayMultiVersionApplicationIntegration
     def "does not emit deprecation warnings"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         expect:
         build("build", "--warning-mode=fail")

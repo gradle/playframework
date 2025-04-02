@@ -61,14 +61,23 @@ abstract class PlayApp {
         return appSources + testSources + viewSources + assetSources + confSources + otherSources
     }
 
-    SourceFile getGradleBuild() {
-        String gradleBuildContent = renderTemplate(getResourcePath(getName() + "/build.gradle.ftl"))
-        def gradleBuildWithRepositories = gradleBuildContent.concat """
+    SourceFile getGradleBuild(VersionNumber playVersion) {
+        String buildFileContent = renderTemplate(getResourcePath(getName() + "/build.gradle.ftl"))
+        buildFileContent = buildFileContent.concat """
             allprojects {
                 ${playRepositories()}
             }
-        """
-        return new SourceFile("", "build.gradle", gradleBuildWithRepositories)
+        """.stripIndent() // TODO: why allprojects?
+        if (playVersion != null) {
+            buildFileContent = buildFileContent.concat """
+                play {
+                    platform {
+                        playVersion = '${playVersion.toString()}'
+                    }
+                }
+            """.stripIndent()
+        }
+        return new SourceFile("", "build.gradle", buildFileContent)
     }
 
     List<SourceFile> getAssetSources() {
@@ -115,8 +124,11 @@ abstract class PlayApp {
         }
     }
 
+    void writeBuildFile(File sourceDir, VersionNumber playVersion = null) {
+        getGradleBuild(playVersion).writeToDir(sourceDir)
+    }
+
     void writeSources(File sourceDir) {
-        gradleBuild.writeToDir(sourceDir)
         for (SourceFile srcFile : allFiles) {
             srcFile.writeToDir(sourceDir)
         }

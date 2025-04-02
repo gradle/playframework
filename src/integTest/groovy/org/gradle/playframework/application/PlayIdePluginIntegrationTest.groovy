@@ -14,8 +14,7 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
 
     def "generates IDE configuration"() {given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         applyIdePlugin()
         when:
@@ -38,8 +37,7 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
     def "does not blow up when no IDE plugin is applied"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         expect:
         build("tasks")

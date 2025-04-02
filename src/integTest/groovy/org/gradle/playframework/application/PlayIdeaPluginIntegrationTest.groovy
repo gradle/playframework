@@ -39,8 +39,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
     def "IML contains path to Play app sources"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         applyIdePlugin()
 
@@ -59,8 +58,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
     def "IDEA metadata contains correct Java version"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         applyIdePlugin()
         buildFile << """
@@ -88,8 +86,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
     def "IDEA metadata contains correct dependencies for RUNTIME, COMPILE, TEST"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         applyIdePlugin()
 
@@ -113,8 +110,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
     def "IDEA plugin depends on source generation tasks"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         applyIdePlugin()
 
@@ -132,8 +128,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
     def "can modify source directories"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         applyIdePlugin()
         buildFile << """

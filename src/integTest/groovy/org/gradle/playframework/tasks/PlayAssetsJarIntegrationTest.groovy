@@ -15,6 +15,7 @@ class PlayAssetsJarIntegrationTest extends AbstractIntegrationTest {
     private static final ASSETS_JAR_FILE_PATH = 'build/libs/play-app-assets.jar'
 
     def setup() {
+        new BasicPlayApp().writeBuildFile(projectDir)
         new BasicPlayApp().writeSources(projectDir)
         settingsFile << "rootProject.name = 'play-app'"
 

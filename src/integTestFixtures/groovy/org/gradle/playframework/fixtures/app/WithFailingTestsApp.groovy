@@ -11,14 +11,23 @@ class WithFailingTestsApp extends PlayApp {
     List<SourceFile> testSources
 
     @Override
-    SourceFile getGradleBuild() {
+    SourceFile getGradleBuild(VersionNumber playVersion) {
         def gradleBuild = sourceFile("", "build.gradle.ftl", "basicplayapp")
-        def gradleBuildWithRepositories = gradleBuild.content.concat """
+        def buildFileContent = gradleBuild.content.concat """
             allprojects {
                 ${playRepositories()}
             }
         """
-        return new SourceFile(gradleBuild.path, gradleBuild.name, gradleBuildWithRepositories)
+        if (playVersion != null) {
+            buildFileContent = buildFileContent.concat """
+                play {
+                    platform {
+                        playVersion = '${playVersion.toString()}'
+                    }
+                }
+            """.stripIndent()
+        }
+        return new SourceFile(gradleBuild.path, gradleBuild.name, buildFileContent)
     }
 
     WithFailingTestsApp(VersionNumber version){

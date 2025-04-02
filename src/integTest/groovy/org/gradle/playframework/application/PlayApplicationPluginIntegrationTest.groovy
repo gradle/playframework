@@ -22,8 +22,7 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
     def "can build application binaries"() {
         given:
         playVersion = version
-        setupBuildFile()
-        configurePlayApplication()
+        configurePlayApplication(version)
 
         when:
         BuildResult result = build('assemble')

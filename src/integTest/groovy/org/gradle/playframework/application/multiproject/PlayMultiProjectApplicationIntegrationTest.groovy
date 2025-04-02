@@ -11,6 +11,7 @@ class PlayMultiProjectApplicationIntegrationTest extends AbstractIntegrationTest
     PlayApp playApp = new PlayMultiProject()
 
     def setup() {
+        playApp.writeBuildFile(projectDir)
         playApp.writeSources(projectDir)
     }
 

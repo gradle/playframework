@@ -15,7 +15,7 @@ abstract class PlayMultiVersionIntegrationTest extends AbstractIntegrationTest {
     private static final String ALL_PLAY_VERSIONS_SYS_PROP_VALUE = 'all'
     private static final String USER_PROVIDED_PLAY_VERSION_SYS_PROP = System.getProperty('playframework.int-test.target.version')
 
-    static VersionNumber playVersion
+    static VersionNumber playVersion // TODO: remove
 
     protected setupBuildFile() {
         buildFile << """
