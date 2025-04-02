@@ -18,7 +18,7 @@ abstract class PlayMultiVersionIntegrationTest extends AbstractIntegrationTest {
     static VersionNumber playVersion
 
     protected configurePlay(VersionNumber playVersion) {
-        this.playVersion = playVersion
+        PlayMultiVersionIntegrationTest.playVersion = playVersion
 
         buildFile << """
             plugins {
