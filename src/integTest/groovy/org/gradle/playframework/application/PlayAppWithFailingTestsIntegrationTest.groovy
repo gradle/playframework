@@ -12,7 +12,6 @@ class PlayAppWithFailingTestsIntegrationTest extends PlayMultiVersionIntegration
         configurePlay(version)
 
         PlayApp playApp = new WithFailingTestsApp(playVersion)
-        playApp.writeBuildFile(projectDir)
         playApp.writeSources(projectDir)
 
         when:

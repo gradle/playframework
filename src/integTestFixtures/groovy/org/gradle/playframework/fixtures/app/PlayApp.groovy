@@ -67,7 +67,7 @@ abstract class PlayApp {
             allprojects {
                 ${playRepositories()}
             }
-        """.stripIndent() // TODO: why allprojects?
+        """.stripIndent()
         if (playVersion != null) {
             buildFileContent = buildFileContent.concat """
                 play {
