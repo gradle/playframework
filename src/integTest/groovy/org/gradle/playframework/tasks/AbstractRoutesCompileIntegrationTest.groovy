@@ -74,8 +74,7 @@ object Application extends Controller {
 
     def "can run RoutesCompile"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withRoutesTemplate()
         expect:
@@ -90,8 +89,7 @@ object Application extends Controller {
 
     def "recompiles on changed routes file input"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         File templateFile = withRoutesTemplate()
         build(ROUTES_COMPILE_TASK_NAME)
@@ -147,8 +145,7 @@ GET     /newroute                          ${controllers()}.Application.index()
 
     def "compiles additional routes file and cleans up output on removal"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         when:
         withRoutesTemplate()
@@ -184,8 +181,7 @@ GET     /newroute                          ${controllers()}.Application.index()
 
     def "can run RoutesCompile with namespaceReverseRouter set"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withRoutesTemplate("org.gradle.test")
         buildFile << """
@@ -259,8 +255,7 @@ GET     /                          ${controllers()}${packageId}.Application.inde
 
     def "can add additional imports"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withRoutesTemplate()
         and:
@@ -281,8 +276,7 @@ $ROUTES_COMPILE_TASK_NAME {
 
     def "post-processed generated comments contain path and timestamp replacements"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withRoutesTemplate()
         when:

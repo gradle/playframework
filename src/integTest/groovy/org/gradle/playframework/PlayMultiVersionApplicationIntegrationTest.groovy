@@ -6,6 +6,8 @@ import org.gradle.playframework.util.VersionNumber
 abstract class PlayMultiVersionApplicationIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     def configurePlayApplication(VersionNumber playVersion) {
+        this.playVersion = playVersion
+
         getPlayApp().writeBuildFile(projectDir, playVersion)
 
         getPlayApp().writeSources(projectDir)

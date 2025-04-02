@@ -24,7 +24,6 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
 
     def "can build play app distribution"() {
         given:
-        playVersion = version
         configurePlayApplication(version)
 
         when:

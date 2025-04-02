@@ -23,8 +23,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     @Unroll
     def "can run TwirlCompile with #format template"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         twirlTemplate("test.scala.${format}") << template
         when:
@@ -49,8 +48,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     def "can compile custom Twirl templates"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         twirlTemplate("test.scala.csv") << """
             @(username: String)(content: Csv)
@@ -91,8 +89,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     def "can specify additional imports for a Twirl template"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withTwirlTemplate()
         buildFile << """
@@ -143,8 +140,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     def "can specify constructor annotations for a Twirl template"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         buildFile << """
             sourceSets {
@@ -200,8 +196,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     def "runs compiler incrementally"() {
         when:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withTwirlTemplate("input1.scala.html")
         then:
@@ -228,8 +223,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
 
     def "removes stale output files in incremental compile"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withTwirlTemplate("input1.scala.html")
         withTwirlTemplate("input2.scala.html")
@@ -253,8 +247,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     }
 
     def "can build twirl source set with default Java imports"() {
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withTwirlJavaSourceSets()
         File twirlJavaDir = new File(temporaryFolder, "twirlJava")
@@ -277,8 +270,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     }
 
     def "twirl source sets default to Scala imports"() {
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         File appViewsDir = new File(new File(temporaryFolder, 'app'), 'views')
         appViewsDir.mkdirs()
@@ -300,8 +292,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     @Unroll
     def "has reasonable error if Twirl template is configured incorrectly with (#template)"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         buildFile << """
             sourceSets {
@@ -330,8 +321,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     }
 
     def "has reasonable error if Twirl template cannot be found"() {
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         twirlTemplate("test.scala.custom") << "@(username: String) Custom template, @username!"
         when:
@@ -346,8 +336,7 @@ class TwirlCompileIntegrationTest extends PlayMultiVersionIntegrationTest {
     @Unroll
     def "post-process generated comments"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         twirlTemplate("test.scala.${format}") << template
         when:

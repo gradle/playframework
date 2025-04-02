@@ -13,7 +13,6 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
     abstract String[] getUnexecutedTasks()
 
     def "generates IDE configuration"() {given:
-        playVersion = version
         configurePlayApplication(version)
 
         applyIdePlugin()
@@ -36,7 +35,6 @@ abstract class PlayIdePluginIntegrationTest extends PlayMultiVersionApplicationI
 
     def "does not blow up when no IDE plugin is applied"() {
         given:
-        playVersion = version
         configurePlayApplication(version)
 
         expect:

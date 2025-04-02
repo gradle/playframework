@@ -55,8 +55,7 @@ class Play24RoutesCompileIntegrationTest extends AbstractRoutesCompileIntegratio
 
     def "can specify route compiler type as injected"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         withRoutesTemplate()
         withInjectedRoutesController()
@@ -79,8 +78,7 @@ play {
 
     def "recompiles when route compiler type is changed"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         when:
         withRoutesTemplate()
@@ -117,8 +115,7 @@ play {
 
     def "failure to generate routes fails the build with useful message"() {
         given:
-        playVersion = version
-        setupBuildFile()
+        configurePlay(version)
 
         File confDir = new File(temporaryFolder, 'conf')
         confDir.mkdirs()

@@ -58,7 +58,6 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
 
     def "when model configuration changes, IDEA metadata can be rebuilt"() {
         given:
-        playVersion = version
         configurePlayApplication(version)
 
         applyIdePlugin()
@@ -87,7 +86,6 @@ sourceSets {
 
     def "IDEA metadata contains custom source set"() {
         given:
-        playVersion = version
         configurePlayApplication(version)
 
         applyIdePlugin()
