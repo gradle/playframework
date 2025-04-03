@@ -3,12 +3,13 @@ package org.gradle.playframework.application.multiproject
 import org.gradle.playframework.AbstractIntegrationTest
 import org.gradle.playframework.fixtures.app.PlayApp
 import org.gradle.playframework.fixtures.app.PlayMultiProject
+import org.gradle.playframework.fixtures.multiversion.PlayCoverage
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
 class PlayMultiProjectApplicationIntegrationTest extends AbstractIntegrationTest {
 
-    PlayApp playApp = new PlayMultiProject()
+    PlayApp playApp = new PlayMultiProject(PlayCoverage.DEFAULT)
 
     def setup() {
         playApp.writeBuildFile(projectDir)

@@ -14,3 +14,9 @@ plugins {
 }
 
 </#if>
+
+play {
+    platform {
+        playVersion = "${fullPlayVersion}"
+    }
+}

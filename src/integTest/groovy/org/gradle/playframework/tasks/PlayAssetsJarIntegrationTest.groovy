@@ -2,6 +2,7 @@ package org.gradle.playframework.tasks
 
 import org.gradle.playframework.AbstractIntegrationTest
 import org.gradle.playframework.fixtures.app.BasicPlayApp
+import org.gradle.playframework.fixtures.multiversion.PlayCoverage
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -15,8 +16,8 @@ class PlayAssetsJarIntegrationTest extends AbstractIntegrationTest {
     private static final ASSETS_JAR_FILE_PATH = 'build/libs/play-app-assets.jar'
 
     def setup() {
-        new BasicPlayApp().writeBuildFile(projectDir)
-        new BasicPlayApp().writeSources(projectDir)
+        new BasicPlayApp(PlayCoverage.DEFAULT).writeBuildFile(projectDir)
+        new BasicPlayApp(PlayCoverage.DEFAULT).writeSources(projectDir)
         settingsFile << "rootProject.name = 'play-app'"
 
         when:

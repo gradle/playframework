@@ -20,7 +20,6 @@ import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
 import freemarker.template.Template
 import freemarker.template.TemplateExceptionHandler
-import org.gradle.playframework.extensions.PlayPlatform
 import org.gradle.playframework.util.VersionNumber
 import org.gradle.util.RelativePathUtil
 
@@ -30,10 +29,6 @@ abstract class PlayApp {
     final VersionNumber playVersion
     final Configuration cfg
     final Map<String, String> model
-
-    PlayApp() {
-        this(VersionNumber.parse(PlayPlatform.DEFAULT_PLAY_VERSION))
-    }
 
     PlayApp(VersionNumber version) {
         playVersion = version
@@ -46,6 +41,7 @@ abstract class PlayApp {
         cfg.setFallbackOnNullLoopVariable(false)
         model = new HashMap<>()
         model.put("playVersion", playVersion.major + "." + playVersion.minor)
+        model.put("fullPlayVersion", playVersion.toString())
     }
 
     String getName() {
