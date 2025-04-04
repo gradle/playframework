@@ -1,9 +1,15 @@
 == Change Log
 
 [discrete]
+=== v0.15 (2025-04-04)
+* Update project to use Gradle 7.4.2
+* Updates Spock to Spock 2.0 and modernizes multi-version testing to use `where:` blocks
+* Removes the use of some APIs scheduled for removal in Gradle 9.0
+
+[discrete]
 === v0.14 (2023-06-28)
 * Add configuration to post-process routes comments ({uri-github-issues}/109[issue #109]).
-* Remove use of more internal APIs 
+* Remove use of more internal APIs
 
 [discrete]
 === v0.13 (2023-01-24)
@@ -28,7 +34,7 @@
 
 * Thank you to our community contributors:
 * https://github.com/cmsr[cmsr] - TwirlCompiler support for dependency injection
-* https://github.com/novokrest[novokrest] - NPE when compiling routes with Play 2.3.X 
+* https://github.com/novokrest[novokrest] - NPE when compiling routes with Play 2.3.X
 * https://github.com/clemstoquart[clemstoquart] - Fix deprecated code relying on ProjectLayout.configurableFiles()
 * https://github.com/arjunchhabra[arjunchhabra] - Add preliminary support for Play 2.7.X
 * https://github.com/JospehChiu[JospehChiu] - Release automation
@@ -36,7 +42,7 @@
 [discrete]
 === v0.9 (2019-08-20)
 
-* Add workaround for multiple SLF4J bindings on classpath for runPlay 
+* Add workaround for multiple SLF4J bindings on classpath for runPlay
 
 [discrete]
 === v0.8 (2019-08-07)
