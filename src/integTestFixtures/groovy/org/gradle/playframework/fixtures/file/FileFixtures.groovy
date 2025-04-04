@@ -2,11 +2,8 @@ package org.gradle.playframework.fixtures.file
 
 import org.gradle.internal.hash.HashCode
 import org.gradle.internal.hash.Hashing
-import org.gradle.internal.hash.HashingOutputStream
 
-import java.nio.file.Files
-
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 final class FileFixtures {
 
@@ -42,13 +39,7 @@ final class FileFixtures {
     }
 
     private static HashCode md5(File file) {
-        HashingOutputStream hashingStream = Hashing.primitiveStreamHasher()
-        try {
-            Files.copy(file.toPath(), hashingStream)
-        } catch (IOException e) {
-            throw new RuntimeException(e)
-        }
-        return hashingStream.hash()
+        return Hashing.md5().hashFile(file)
     }
 
     static class Snapshot {

@@ -1,12 +1,17 @@
 package org.gradle.playframework
 
 import org.gradle.playframework.fixtures.app.PlayApp
+import org.gradle.playframework.util.VersionNumber
 
 abstract class PlayMultiVersionApplicationIntegrationTest extends PlayMultiVersionIntegrationTest {
 
-    def setup() {
+    def configurePlayApplication(VersionNumber playVersion) {
+        PlayMultiVersionIntegrationTest.playVersion = playVersion
+
+        getPlayApp().writeBuildFile(projectDir, playVersion)
+
         getPlayApp().writeSources(projectDir)
-        configurePlayVersionInBuildScript()
+
         settingsFile << """
             rootProject.name = '${playApp.name}'
         """

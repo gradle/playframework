@@ -20,7 +20,6 @@ import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
 import freemarker.template.Template
 import freemarker.template.TemplateExceptionHandler
-import org.gradle.playframework.extensions.PlayPlatform
 import org.gradle.playframework.util.VersionNumber
 import org.gradle.util.RelativePathUtil
 
@@ -30,10 +29,6 @@ abstract class PlayApp {
     final VersionNumber playVersion
     final Configuration cfg
     final Map<String, String> model
-
-    PlayApp() {
-        this(VersionNumber.parse(PlayPlatform.DEFAULT_PLAY_VERSION))
-    }
 
     PlayApp(VersionNumber version) {
         playVersion = version
@@ -46,6 +41,7 @@ abstract class PlayApp {
         cfg.setFallbackOnNullLoopVariable(false)
         model = new HashMap<>()
         model.put("playVersion", playVersion.major + "." + playVersion.minor)
+        model.put("fullPlayVersion", playVersion.toString())
     }
 
     String getName() {
@@ -61,14 +57,23 @@ abstract class PlayApp {
         return appSources + testSources + viewSources + assetSources + confSources + otherSources
     }
 
-    SourceFile getGradleBuild() {
-        String gradleBuildContent = renderTemplate(getResourcePath(getName() + "/build.gradle.ftl"))
-        def gradleBuildWithRepositories = gradleBuildContent.concat """
+    SourceFile getGradleBuild(VersionNumber playVersion) {
+        String buildFileContent = renderTemplate(getResourcePath(getName() + "/build.gradle.ftl"))
+        buildFileContent = buildFileContent.concat """
             allprojects {
                 ${playRepositories()}
             }
-        """
-        return new SourceFile("", "build.gradle", gradleBuildWithRepositories)
+        """.stripIndent()
+        if (playVersion != null) {
+            buildFileContent = buildFileContent.concat """
+                play {
+                    platform {
+                        playVersion = '${playVersion.toString()}'
+                    }
+                }
+            """.stripIndent()
+        }
+        return new SourceFile("", "build.gradle", buildFileContent)
     }
 
     List<SourceFile> getAssetSources() {
@@ -115,8 +120,11 @@ abstract class PlayApp {
         }
     }
 
+    void writeBuildFile(File sourceDir, VersionNumber playVersion = null) {
+        getGradleBuild(playVersion).writeToDir(sourceDir)
+    }
+
     void writeSources(File sourceDir) {
-        gradleBuild.writeToDir(sourceDir)
         for (SourceFile srcFile : allFiles) {
             srcFile.writeToDir(sourceDir)
         }

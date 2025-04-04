@@ -2,7 +2,6 @@ package org.gradle.playframework.application
 
 import org.gradle.playframework.PlayMultiVersionApplicationIntegrationTest
 import org.gradle.playframework.fixtures.archive.ArchiveTestFixture
-import org.gradle.playframework.util.VersionNumber
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -24,6 +23,9 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
     private static final String MAIN_DIST_JAR_TASK_PATH = ":createMainDistributionJar"
 
     def "can build play app distribution"() {
+        given:
+        configurePlayApplication(version)
+
         when:
         BuildResult result = build("stage")
 
@@ -48,6 +50,9 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
 
         and:
         verifyArchives()
+
+        where:
+        version << getVersionsToTest()
     }
 
     List<ArchiveTestFixture> archives() {
@@ -80,7 +85,7 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
     void verifyJars() {
         def mainJar = jar("build/distributionJars/main/${playApp.name}.jar")
         mainJar.containsDescendants(
-                determineRoutesClassName(),
+                "router/Routes.class",
                 "views/html/index.class",
                 "views/html/main.class",
                 "controllers/Application.class",
@@ -104,9 +109,5 @@ abstract class PlayDistributionApplicationIntegrationTest extends PlayMultiVersi
                 MAIN_START_SCRIPTS_TASK_PATH,
                 STAGE_MAIN_DIST_TASK_PATH
         ]
-    }
-
-    String determineRoutesClassName() {
-        return playVersion >= VersionNumber.parse('2.4.0') ? "router/Routes.class" : "Routes.class"
     }
 }

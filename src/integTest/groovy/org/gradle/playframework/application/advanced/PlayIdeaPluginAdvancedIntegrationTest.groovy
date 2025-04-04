@@ -57,8 +57,4 @@ class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTes
             SCALA_COMPILE_TASK_PATH
         ]
     }
-
-    int getExpectedScalaClasspathSize() {
-        PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(playVersion.toString())]
-    }
 }

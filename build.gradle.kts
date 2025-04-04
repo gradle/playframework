@@ -18,9 +18,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.spockframework:spock-core:1.2-groovy-2.5") {
+    testImplementation("org.spockframework:spock-core:2.0-groovy-3.0") {
         exclude(group = "org.codehaus.groovy")
     }
+    testImplementation("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     integTestFixturesImplementation("com.google.guava:guava:23.0")
     integTestFixturesImplementation("org.hamcrest:hamcrest-library:1.3")
     integTestFixturesImplementation("org.apache.ant:ant:1.9.3")
@@ -104,4 +106,14 @@ pluginBundle {
     website = "https://gradle.github.io/playframework/"
     vcsUrl = "https://github.com/gradle/playframework"
     tags = listOf("playframework", "web", "java", "scala")
+}
+
+tasks.named<ProcessResources>("processIntegTestFixturesResources") {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+
+tasks.withType<Test>().configureEach {
+    if (name != "docTest") {
+        useJUnitPlatform() // required for Spock 2+, but Samples use JUnit 4 rule
+    }
 }

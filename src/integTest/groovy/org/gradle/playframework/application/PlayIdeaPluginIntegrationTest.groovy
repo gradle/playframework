@@ -35,9 +35,11 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
     }
 
     abstract String[] getSourcePaths()
-    abstract int getExpectedScalaClasspathSize()
 
     def "IML contains path to Play app sources"() {
+        given:
+        configurePlayApplication(version)
+
         applyIdePlugin()
 
         when:
@@ -47,9 +49,15 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         content.assertContainsSourcePaths(sourcePaths)
         content.assertContainsResourcePaths("conf")
         content.assertContainsExcludes("build", ".gradle")
+
+        where:
+        version << getVersionsToTest()
     }
 
     def "IDEA metadata contains correct Java version"() {
+        given:
+        configurePlayApplication(version)
+
         applyIdePlugin()
         buildFile << """
     allprojects {
@@ -68,9 +76,15 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         BuildResult result = build(ideTask)
         then:
         result.output.contains("Validated Java Version")
+
+        where:
+        version << getVersionsToTest()
     }
 
     def "IDEA metadata contains correct dependencies for RUNTIME, COMPILE, TEST"() {
+        given:
+        configurePlayApplication(version)
+
         applyIdePlugin()
 
         when:
@@ -85,9 +99,15 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
 
         def testDeps = externalLibs.findAll({ it.scope == "TEST" })
         !testDeps.empty
+
+        where:
+        version << getVersionsToTest()
     }
 
     def "IDEA plugin depends on source generation tasks"() {
+        given:
+        configurePlayApplication(version)
+
         applyIdePlugin()
 
         when:
@@ -96,9 +116,15 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         buildTasks.each {
             assert result.task(it).outcome == TaskOutcome.SUCCESS
         }
+
+        where:
+        version << getVersionsToTest()
     }
 
     def "can modify source directories"() {
+        given:
+        configurePlayApplication(version)
+
         applyIdePlugin()
         buildFile << """
             allprojects {
@@ -106,7 +132,7 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
                 Set<File> allSourceDirs = ideaModule.module.sourceDirs
                 allSourceDirs.add(customDir)
                 ideaModule.module.sourceDirs = allSourceDirs
-                
+
                 tasks.idea {
                     doLast {
                         assert ideaModule.module.sourceDirs.contains(customDir)
@@ -122,5 +148,8 @@ abstract class PlayIdeaPluginIntegrationTest extends PlayIdePluginIntegrationTes
         buildTasks.each {
             assert result.task(it).outcome == TaskOutcome.SUCCESS
         }
+
+        where:
+        version << getVersionsToTest()
     }
 }

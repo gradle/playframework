@@ -20,6 +20,9 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
     private static final String ASSEMBLE_TASK_PATH = ":$ASSEMBLE_TASK_NAME".toString()
 
     def "can build application binaries"() {
+        given:
+        configurePlayApplication(version)
+
         when:
         BuildResult result = build('assemble')
 
@@ -38,6 +41,9 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
         result.task(TWIRL_COMPILE_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
         result.task(JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
         result.task(ASSETS_JAR_TASK_PATH).outcome == TaskOutcome.UP_TO_DATE
+
+        where:
+        version << getVersionsToTest()
     }
 
     String[] getBuildTasks() {
@@ -52,23 +58,14 @@ abstract class PlayApplicationPluginIntegrationTest extends PlayMultiVersionAppl
     }
 
     void verifyJars() {
-        if (playVersion.major == 2 && playVersion.minor == 3) {
-            jar("build/libs/${playApp.name}.jar").containsDescendants(
-                    'Routes.class',
-                    'views/html/index.class',
-                    'views/html/main.class',
-                    'controllers/Application.class',
-                    'application.conf',
-                    'logback.xml')
-        } else {
-            jar("build/libs/${playApp.name}.jar").containsDescendants(
-                    'router/Routes.class',
-                    'views/html/index.class',
-                    'views/html/main.class',
-                    'controllers/Application.class',
-                    'application.conf',
-                    'logback.xml')
-        }
+        println("Verifying jars for Play version: ${playVersion}")
+        jar("build/libs/${playApp.name}.jar").containsDescendants(
+                'router/Routes.class',
+                'views/html/index.class',
+                'views/html/main.class',
+                'controllers/Application.class',
+                'application.conf',
+                'logback.xml')
         jar("build/libs/${playApp.name}-assets.jar").containsDescendants(
                 'public/images/favicon.svg',
                 'public/stylesheets/main.css',

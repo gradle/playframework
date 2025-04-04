@@ -56,11 +56,10 @@ class PlayIdeaPluginBasicIntegrationTest extends PlayIdeaPluginIntegrationTest {
         ]
     }
 
-    int getExpectedScalaClasspathSize() {
-        return PLAY_VERSION_TO_CLASSPATH_SIZE[PlayMajorVersion.forPlayVersion(playVersion.toString())]
-    }
-
     def "when model configuration changes, IDEA metadata can be rebuilt"() {
+        given:
+        configurePlayApplication(version)
+
         applyIdePlugin()
         build(ideTask)
         when:
@@ -80,9 +79,15 @@ sourceSets {
         result.task(':ideaModule').outcome == TaskOutcome.SUCCESS
         def content = parseIml(moduleFile).content
         content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/play/routes", "build/src/play/twirl")
+
+        where:
+        version << getVersionsToTest()
     }
 
     def "IDEA metadata contains custom source set"() {
+        given:
+        configurePlayApplication(version)
+
         applyIdePlugin()
         file("extra/java").mkdirs()
         buildFile << """
@@ -99,5 +104,8 @@ sourceSets {
         then:
         def content = parseIml(moduleFile).content
         content.assertContainsSourcePaths("extra/java", "public", "conf", "app", "test", "build/src/play/routes", "build/src/play/twirl")
+
+        where:
+        version << getVersionsToTest()
     }
 }

@@ -21,3 +21,9 @@ dependencies {
 }
 
 </#if>
+
+play {
+    platform {
+        playVersion = "${fullPlayVersion}"
+    }
+}
