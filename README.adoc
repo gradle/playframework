@@ -1,6 +1,6 @@
 = Gradle Play Plugin image:https://travis-ci.org/gradle/playframework.svg?branch=master["Build Status", link="https://travis-ci.org/gradle/playframework"]  image:https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/org/gradle/playframework/org.gradle.playframework.gradle.plugin/maven-metadata.xml.svg?label=latest%20release["Latest release", link="https://plugins.gradle.org/plugin/org.gradle.playframework"]
 
-== Documentation 
+== Documentation
 
 - https://gradle.github.io/playframework/[User manual]
 - https://gradle.github.io/playframework/api[Javadocs]
@@ -43,10 +43,11 @@ Importing the project into IntelliJ is straight forward. From the menu select _F
 
 The project currently doesn't define a release process that can be triggered by running a single task. Following the process below.
 
-1. Update the release notes and release date in link:./src/docs/asciidoc/50-changes.adoc[changelog file].
-2. Create a release on GitHub with the appropriate tag.
-3. Build and publish the Javadocs and the user guide by running the task `gitPublishPush`.
-4. Check that the https://github.com/gradle/playframework/actions?query=workflow%3A%22Create+Release%22 GitHub action is successful.
+1. Ensure the version in `build.gradle.kts` is updated to the new version to be published.
+2. Update the release notes and release date in link:./src/docs/asciidoc/50-changes.adoc[changelog file].
+3. Create a release on GitHub with the appropriate tag.
+4. Build and publish the Javadocs and the user guide by running the task `gitPublishPush`.
+5. Check that the https://github.com/gradle/playframework/actions?query=workflow%3A%22Create+Release%22 GitHub action is successful.
 
 === Generating documentation
 
