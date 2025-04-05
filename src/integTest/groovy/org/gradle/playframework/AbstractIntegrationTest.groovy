@@ -9,6 +9,7 @@ import spock.lang.Specification
 import spock.lang.TempDir
 
 class AbstractIntegrationTest extends Specification {
+    int dummyField = 1 // Dummy field for force test rerun
 
     @TempDir
     File temporaryFolder
