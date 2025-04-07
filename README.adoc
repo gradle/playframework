@@ -44,7 +44,7 @@ Importing the project into IntelliJ is straight forward. From the menu select _F
 The project currently doesn't define a release process that can be triggered by running a single task. Following the process below.
 
 1. Ensure the version in `build.gradle.kts` is updated to the new version to be published.
-2. Make sure you have a GH token for publishing the docs available.
+2. Make sure you have a GH token for publishing the docs available.  Note that this must be a GH Classic Token.
 3. Test building the docs by running `:asciidoctor :javadoc` and verifying that the generated files in `build/docs/asciidoc` and `build/docs/javadoc` are correct.
 4. Update the release notes and release date in link:./src/docs/asciidoc/50-changes.adoc[changelog file].
 5. Create a release on GitHub with the appropriate tag.
