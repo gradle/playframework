@@ -44,14 +44,16 @@ Importing the project into IntelliJ is straight forward. From the menu select _F
 The project currently doesn't define a release process that can be triggered by running a single task. Following the process below.
 
 1. Ensure the version in `build.gradle.kts` is updated to the new version to be published.
-2. Update the release notes and release date in link:./src/docs/asciidoc/50-changes.adoc[changelog file].
-3. Create a release on GitHub with the appropriate tag.
-4. Build and publish the Javadocs and the user guide by running the task `gitPublishPush`.
-5. Check that the https://github.com/gradle/playframework/actions?query=workflow%3A%22Create+Release%22 GitHub action is successful.
+2. Make sure you have a GH token for publishing the docs available.
+3. Test building the docs by running `:asciidoctor :javadoc` and verifying that the generated files in `build/docs/asciidoc` and `build/docs/javadoc` are correct.
+4. Update the release notes and release date in link:./src/docs/asciidoc/50-changes.adoc[changelog file].
+5. Create a release on GitHub with the appropriate tag.
+6. Build and publish the Javadocs and the user guide by running `:gitPublishPush -Dorg.ajoberstar.grgit.auth.username=$GH_TOKEN`.
+7. Check that the https://github.com/gradle/playframework/actions?query=workflow%3A%22Create+Release%22 GitHub action is successful.
 
 === Generating documentation
 
-The markup language for the user guide of this plugin is AsciiDoc. Documentation sources sit in the directory `src/docs`. To generate the HTML version of the plugin user guide, run the task `asciidoctor`. The generated HTML will be available in the directory `build/asciidoc/html5`.
+The markup language for the user guide of this plugin is AsciiDoc. Documentation sources sit in the directory `src/docs`. To generate the HTML version of the plugin user guide, run the task `asciidoctor`. The generated HTML will be available in the directory `build/asciidoc/html`.
 
 === Publishing documentation to GitHub Pages
 

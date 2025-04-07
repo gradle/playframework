@@ -119,6 +119,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
 
     /**
      * Returns the default MAJOR.MINOR.MICRO-QUALIFIER scheme.
+     * @return the default scheme
      */
     public static VersionNumber.Scheme scheme() {
         return DEFAULT_SCHEME;
@@ -126,6 +127,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
 
     /**
      * Returns the MAJOR.MINOR.MICRO.PATCH-QUALIFIER scheme.
+     * @return the scheme with patch number
      */
     public static VersionNumber.Scheme withPatchNumber() {
         return PATCH_SCHEME;

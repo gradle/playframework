@@ -18,10 +18,7 @@ dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation("org.ajoberstar:gradle-git-publish:0.3.3")
 
-    implementation("org.asciidoctor:asciidoctor-gradle-plugin:1.6.1")
-    constraints {
-        implementation("org.ysb33r.gradle:grolifant:0.12.1")
-    }
+    implementation("org.asciidoctor:asciidoctor-gradle-jvm:4.0.4")
 }
 
 kotlinDslPluginOptions {
