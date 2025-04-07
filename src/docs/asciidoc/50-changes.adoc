@@ -1,6 +1,12 @@
 == Change Log
 
 [discrete]
+=== v0.15.1 (2025-04-07)
+* Update project to use Asciidoctor 4.0.4
+* Fixes javadoc warnings upon building docs
+* Removes the use of more APIs scheduled for removal in Gradle 9.0
+
+[discrete]
 === v0.15 (2025-04-04)
 * Update project to use Gradle 7.4.2
 * Updates Spock to Spock 2.0 and modernizes multi-version testing to use `where:` blocks
