@@ -48,7 +48,7 @@ class GitHubPagesPlugin : Plugin<Project> {
                 from(javadoc) {
                     into("api")
                 }
-                from("${asciidoctor.get().outputDir}/html5")
+                from("${asciidoctor.get().outputDir}/index.html")
             }
         }
     }
