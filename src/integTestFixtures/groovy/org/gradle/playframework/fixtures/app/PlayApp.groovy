@@ -20,8 +20,8 @@ import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
 import freemarker.template.Template
 import freemarker.template.TemplateExceptionHandler
+import org.gradle.playframework.util.PathUtil
 import org.gradle.playframework.util.VersionNumber
-import org.gradle.util.RelativePathUtil
 
 import static org.gradle.playframework.fixtures.Repositories.playRepositories
 
@@ -146,7 +146,7 @@ abstract class PlayApp {
                     return
                 }
 
-                def subpath = RelativePathUtil.relativePath(baseDirFile, source.parentFile)
+                def subpath = PathUtil.relativePath(baseDirFile, source.parentFile)
 
                 if(isTemplate(source)) {
                     String content = renderTemplate(getResourcePath(resourcePath + "/" + subpath + "/" + source.name))
