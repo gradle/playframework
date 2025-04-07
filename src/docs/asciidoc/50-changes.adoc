@@ -1,6 +1,10 @@
 == Change Log
 
 [discrete]
+=== v0.15.2 (2025-04-07)
+* Fix broken release
+
+[discrete]
 === v0.15.1 (2025-04-07)
 * Update project to use Asciidoctor 4.0.4
 * Fixes javadoc warnings upon building docs
