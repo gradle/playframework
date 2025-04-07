@@ -2,7 +2,7 @@ package org.gradle.playframework
 
 import org.ajoberstar.gradle.git.publish.GitPublishExtension
 import org.ajoberstar.gradle.git.publish.GitPublishPlugin
-import org.asciidoctor.gradle.AsciidoctorTask
+import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.javadoc.Javadoc

@@ -58,6 +58,7 @@ public final class CollectionUtils {
      *
      * If a non null object cannot be cast to the target type, a ClassCastException will be thrown.
      *
+     * @param type Class token for the target type {@code <T>} in the flattened list
      * @param things The things to flatten
      * @param <T> The target type in the flattened list
      * @return A flattened list of the given things
@@ -121,6 +122,15 @@ public final class CollectionUtils {
         return set;
     }
 
+    /**
+     * Given a set of values, derive a set of keys and populate a map.
+     *
+     * @param destination The map to populate
+     * @param items The values to derive keys from
+     * @param keyGenerator The function to derive keys from the values
+     * @param <K> The type of the keys
+     * @param <V> The type of the values
+     */
     public static <K, V> void collectMap(Map<K, V> destination, Iterable<? extends V> items, Transformer<? extends K, ? super V> keyGenerator) {
         for (V item : items) {
             destination.put(keyGenerator.transform(item), item);
@@ -129,6 +139,12 @@ public final class CollectionUtils {
 
     /**
      * Given a set of values, derive a set of keys and return a map
+     *
+     * @param items The values to derive keys from
+     * @param keyGenerator The function to derive keys from the values
+     * @param <K> The type of the keys
+     * @param <V> The type of the values
+     * @return The resulting map of keys to values
      */
     public static <K, V> Map<K, V> collectMap(Iterable<? extends V> items, Transformer<? extends K, ? super V> keyGenerator) {
         Map<K, V> map = new LinkedHashMap<K, V>();
