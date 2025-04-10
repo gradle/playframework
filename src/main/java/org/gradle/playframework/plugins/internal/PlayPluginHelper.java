@@ -5,7 +5,7 @@ import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.internal.tasks.DefaultSourceSet;
-import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
 
 public final class PlayPluginHelper {
@@ -13,13 +13,16 @@ public final class PlayPluginHelper {
     private PlayPluginHelper() {}
 
     public static SourceSet getMainJavaSourceSet(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        return javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+        return getSourceSet(project, SourceSet.MAIN_SOURCE_SET_NAME);
     }
 
     public static SourceSet getTestJavaSourceSet(Project project) {
-        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-        return javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
+        return getSourceSet(project, SourceSet.TEST_SOURCE_SET_NAME);
+    }
+
+    private static SourceSet getSourceSet(Project project, String testSourceSetName) {
+        JavaPluginExtension javaConvention = project.getExtensions().getByType(JavaPluginExtension.class);
+        return javaConvention.getSourceSets().getByName(testSourceSetName);
     }
 
     public static SourceDirectorySet getMainScalaSourceDirectorySet(Project project) {
