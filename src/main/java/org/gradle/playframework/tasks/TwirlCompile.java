@@ -114,31 +114,20 @@ public class TwirlCompile extends SourceTask {
         RelativeFileCollector relativeFileCollector = new RelativeFileCollector();
         getSource().visit(relativeFileCollector);
         final TwirlCompileSpec spec = new DefaultTwirlCompileSpec(relativeFileCollector.relativeFiles, getOutputDirectory().get().getAsFile(), getDefaultImports().get(), userTemplateFormats.get(), additionalImports.get(), constructorAnnotations.get());
-
-        if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
-            workerExecutor.submit(TwirlCompileRunnable.class, workerConfiguration -> {
-                workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
-                workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-                workerConfiguration.params(spec, getCompiler());
-                workerConfiguration.classpath(twirlCompilerClasspath);
-                workerConfiguration.setDisplayName("Generating Scala source from Twirl templates");
-            });
-        } else {
-            WorkQueue workQueue = workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
-                @Override
-                public void execute(ProcessWorkerSpec workerSpec) {
-                    workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-                    workerSpec.getClasspath().from(twirlCompilerClasspath);
-                }
-            });
-            workQueue.submit(TwirlCompileWorkAction.class, new Action<TwirlCompileParameters>() {
-                @Override
-                public void execute(TwirlCompileParameters parameters) {
-                    parameters.getTwirlCompileSpec().set(spec);
-                    parameters.getCompiler().set(TwirlCompile.this.getCompiler());
-                }
-            });
-        }
+        WorkQueue workQueue = workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
+            @Override
+            public void execute(ProcessWorkerSpec workerSpec) {
+                workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+                workerSpec.getClasspath().from(twirlCompilerClasspath);
+            }
+        });
+        workQueue.submit(TwirlCompileWorkAction.class, new Action<TwirlCompileParameters>() {
+            @Override
+            public void execute(TwirlCompileParameters parameters) {
+                parameters.getTwirlCompileSpec().set(spec);
+                parameters.getCompiler().set(TwirlCompile.this.getCompiler());
+            }
+        });
     }
 
     private Compiler<TwirlCompileSpec> getCompiler() {

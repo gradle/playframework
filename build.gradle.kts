@@ -7,7 +7,7 @@ plugins {
     org.gradle.playframework.`user-guide`
     org.gradle.playframework.`github-pages`
     org.gradle.playframework.`documentation-test`
-    id("com.gradle.plugin-publish") version "1.1.0"
+    id("com.gradle.plugin-publish") version "1.2.1"
 }
 
 group = "org.gradle.playframework"
@@ -39,6 +39,8 @@ java {
 
 gradlePlugin {
     testSourceSets(sourceSets.integTest.get(), sourceSets.docTest.get())
+    website = "https://gradle.github.io/playframework/"
+    vcsUrl = "https://github.com/gradle/playframework"
 
     plugins {
         register("play-twirl-plugin") {
@@ -46,6 +48,7 @@ gradlePlugin {
             displayName = "Play Twirl Plugin"
             description = "Plugin for compiling Twirl sources in a Play application."
             implementationClass = "org.gradle.playframework.plugins.PlayTwirlPlugin"
+            tags.set(listOf("playframework", "web", "java", "scala"))
         }
 
         register("play-routes-plugin") {
@@ -53,6 +56,7 @@ gradlePlugin {
             displayName = "Play Routes Plugin"
             description = "Plugin for compiling Play routes sources in a Play application."
             implementationClass = "org.gradle.playframework.plugins.PlayRoutesPlugin"
+            tags.set(listOf("playframework", "web", "java", "scala"))
         }
 
         register("play-application-plugin") {
@@ -60,6 +64,7 @@ gradlePlugin {
             displayName = "Play Application Plugin"
             description = "Plugin for building a Play application."
             implementationClass = "org.gradle.playframework.plugins.PlayApplicationPlugin"
+            tags.set(listOf("playframework", "web", "java", "scala"))
         }
 
         register("play-javascript-plugin") {
@@ -67,6 +72,7 @@ gradlePlugin {
             displayName = "Play JavaScript Plugin"
             description = "Plugin for adding JavaScript processing to a Play application."
             implementationClass = "org.gradle.playframework.plugins.PlayJavaScriptPlugin"
+            tags.set(listOf("playframework", "web", "java", "scala"))
         }
 
         register("play-distribution-plugin") {
@@ -74,6 +80,7 @@ gradlePlugin {
             displayName = "Play Distribution Plugin"
             description = "Plugin for generating distributions for Play applications."
             implementationClass = "org.gradle.playframework.plugins.PlayDistributionPlugin"
+            tags.set(listOf("playframework", "web", "java", "scala"))
         }
 
         register("play-ide-plugin") {
@@ -81,6 +88,7 @@ gradlePlugin {
             displayName = "Play IDE Plugin"
             description = "Plugin for generating IDE project files for Play applications."
             implementationClass = "org.gradle.playframework.plugins.PlayIdePlugin"
+            tags.set(listOf("playframework", "web", "java", "scala"))
         }
 
         register("play-plugin") {
@@ -88,6 +96,7 @@ gradlePlugin {
             displayName = "Play Plugin"
             description = "Plugin that supports building, testing and running Play applications with Gradle."
             implementationClass = "org.gradle.playframework.plugins.PlayPlugin"
+            tags.set(listOf("playframework", "web", "java", "scala"))
         }
     }
 }
@@ -97,15 +106,9 @@ setFromEnvOrGradleProperty("gradle.publish.key", "GRADLE_PUBLISH_KEY")
 setFromEnvOrGradleProperty("gradle.publish.secret", "GRADLE_PUBLISH_SECRET")
 
 fun Project.setFromEnvOrGradleProperty(gradleProperty: String, environmentVariable: String) {
-    val envVar = providers.environmentVariable(environmentVariable).forUseAtConfigurationTime()
-    val gradleProp = providers.gradleProperty(gradleProperty).forUseAtConfigurationTime()
+    val envVar = providers.environmentVariable(environmentVariable)
+    val gradleProp = providers.gradleProperty(gradleProperty)
     ext[gradleProperty] = envVar.orElse(gradleProp).getOrNull()
-}
-
-pluginBundle {
-    website = "https://gradle.github.io/playframework/"
-    vcsUrl = "https://github.com/gradle/playframework"
-    tags = listOf("playframework", "web", "java", "scala")
 }
 
 tasks.named<ProcessResources>("processIntegTestFixturesResources") {

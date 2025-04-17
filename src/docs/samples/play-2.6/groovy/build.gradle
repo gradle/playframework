@@ -19,12 +19,12 @@ dependencies {
 repositories {
     mavenCentral()
     maven {
-        name "lightbend-maven-releases"
-        url "https://repo.lightbend.com/lightbend/maven-release"
+        name = "lightbend-maven-releases"
+        url = "https://repo.lightbend.com/lightbend/maven-release"
     }
     ivy {
-        name "lightbend-ivy-release"
-        url "https://repo.lightbend.com/lightbend/ivy-releases"
+        name = "lightbend-ivy-release"
+        url = "https://repo.lightbend.com/lightbend/ivy-releases"
         layout "ivy"
     }
 }
