@@ -1,5 +1,6 @@
 package org.gradle.playframework.plugins;
 
+import org.gradle.playframework.plugins.internal.DefaultJavaScriptSourceDirectorySet;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.sourcesets.JavaScriptSourceSet;
 import org.gradle.playframework.sourcesets.internal.DefaultJavaScriptSourceSet;
@@ -21,8 +22,12 @@ public class PlayJavaScriptPlugin implements PlayGeneratedSourcePlugin {
     public void apply(Project project) {
         Configuration compilerConfiguration = createCompilerConfiguration(project);
         declareDefaultDependencies(project, compilerConfiguration);
-        JavaScriptSourceSet javaScriptSourceSet = PlayPluginHelper.createCustomSourceSet(project, DefaultJavaScriptSourceSet.class, "javaScript");
-        createDefaultJavaScriptMinifyTask(project, javaScriptSourceSet.getJavaScript(), compilerConfiguration);
+        //JavaScriptSourceSet javaScriptSourceSet = PlayPluginHelper.createCustomSourceSet(project, DefaultJavaScriptSourceSet.class, "javaScript");
+        createDefaultJavaScriptMinifyTask(
+            project,
+            PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultJavaScriptSourceDirectorySet.class, "javaScript"),
+            compilerConfiguration
+        );
     }
 
     private Configuration createCompilerConfiguration(Project project) {
