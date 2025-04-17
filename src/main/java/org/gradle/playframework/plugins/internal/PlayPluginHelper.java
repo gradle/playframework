@@ -7,6 +7,8 @@ import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.internal.tasks.DefaultSourceSet;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.internal.deprecation.DeprecationLogger;
+
 
 public final class PlayPluginHelper {
 
@@ -40,7 +42,7 @@ public final class PlayPluginHelper {
     public static <T> T createCustomSourceSet(Project project, Class<? extends T> t, String name) {
         SourceSet mainSourceSet = getMainJavaSourceSet(project);
         T customSourceSet = project.getObjects().newInstance(t, name, ((DefaultSourceSet) mainSourceSet).getDisplayName(), project.getObjects());
-        new DslObject(mainSourceSet).getConvention().getPlugins().put(name, customSourceSet);
+        DeprecationLogger.whileDisabled(() -> new DslObject(mainSourceSet).getConvention().getPlugins().put(name, customSourceSet));
         return customSourceSet;
     }
 }

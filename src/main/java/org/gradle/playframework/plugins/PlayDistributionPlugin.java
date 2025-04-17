@@ -91,7 +91,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.getArchiveBaseName().convention(mainJarTask.flatMap(AbstractArchiveTask::getArchiveBaseName));
 
             Map<String, Object> classpath = new HashMap<>();
-            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchivePath()));
+            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchiveFile().get().getAsFile()));
             jar.getManifest().attributes(classpath);
         });
 

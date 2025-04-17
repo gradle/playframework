@@ -21,10 +21,6 @@ dependencies {
     implementation("org.asciidoctor:asciidoctor-gradle-jvm:4.0.4")
 }
 
-kotlinDslPluginOptions {
-    experimentalWarning.set(false)
-}
-
 gradlePlugin {
     plugins {
         register("integration-test-setup-plugin") {

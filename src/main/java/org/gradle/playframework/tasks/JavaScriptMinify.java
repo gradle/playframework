@@ -86,29 +86,19 @@ public class JavaScriptMinify extends SourceTask {
 
         JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, destinationDir.get().getAsFile());
 
-        if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
-            workerExecutor.submit(JavaScriptMinifyRunnable.class, workerConfiguration -> {
-                workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
-                workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-                workerConfiguration.params(spec);
-                workerConfiguration.classpath(compilerClasspath);
-                workerConfiguration.setDisplayName("Minifying JavaScript source files");
-            });
-        } else {
-            WorkQueue workQueue = workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
-                @Override
-                public void execute(ProcessWorkerSpec workerSpec) {
-                    workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-                    workerSpec.getClasspath().from(compilerClasspath);
-                }
-            });
-            workQueue.submit(JavaScriptMinifyWorkAction.class, new Action<JavaScriptMinifyParameters>() {
-                @Override
-                public void execute(JavaScriptMinifyParameters parameters) {
-                    parameters.getSpec().set(spec);
-                }
-            });
-        }
+        WorkQueue workQueue = workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
+            @Override
+            public void execute(ProcessWorkerSpec workerSpec) {
+                workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+                workerSpec.getClasspath().from(compilerClasspath);
+            }
+        });
+        workQueue.submit(JavaScriptMinifyWorkAction.class, new Action<JavaScriptMinifyParameters>() {
+            @Override
+            public void execute(JavaScriptMinifyParameters parameters) {
+                parameters.getSpec().set(spec);
+            }
+        });
     }
 
     /**

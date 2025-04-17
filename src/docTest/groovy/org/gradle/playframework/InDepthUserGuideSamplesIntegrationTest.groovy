@@ -19,7 +19,7 @@ import spock.lang.Specification
 @RunWith(GradlePluginSamplesRunner)
 @SamplesRoot("src/docs/samples")
 abstract class InDepthUserGuideSamplesIntegrationTest extends Specification {
-    protected static final String[] VERSIONS_UNDER_TEST = ["5.1.1", "5.2.1", "5.5.1", "5.6.4", "6.0.1", "6.9.3", "7.0.1", "7.6.1", "8.1.1"]
+    protected static final String[] VERSIONS_UNDER_TEST = ["5.1.1", "5.2.1", "5.5.1", "5.6.4", "6.0.1", "6.9.3", "7.0.1", "7.6.1", "8.1.1", "8.13"]
 
     @Rule
     Sample sample = Sample.from("src/docs/samples")

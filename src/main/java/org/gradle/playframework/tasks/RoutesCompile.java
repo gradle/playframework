@@ -28,6 +28,7 @@ import org.gradle.workers.ProcessWorkerSpec;
 import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
+import java.io.File;
 
 /**
  * Task for compiling routes templates into Scala code.
@@ -51,6 +52,8 @@ public class RoutesCompile extends SourceTask {
     private final Property<PlayPlatform> platform;
     private final Property<Boolean> injectedRoutesGenerator;
     private final ConfigurableFileCollection routesCompilerClasspath;
+    private final File projectDir;
+
     @Inject
     public RoutesCompile(WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
@@ -64,6 +67,7 @@ public class RoutesCompile extends SourceTask {
         this.injectedRoutesGenerator = getProject().getObjects().property(Boolean.class);
         this.injectedRoutesGenerator.set(false);
         this.routesCompilerClasspath = getProject().files();
+        this.projectDir = getProject().getProjectDir();
     }
 
     /**
@@ -103,31 +107,29 @@ public class RoutesCompile extends SourceTask {
     @TaskAction
     @SuppressWarnings("Convert2Lambda")
     void compile() {
-        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(getSource().getFiles(), getOutputDirectory().get().getAsFile(), isJavaProject(), getNamespaceReverseRouter().get(), getGenerateReverseRoutes().get(), getInjectedRoutesGenerator().get(), getAdditionalImports().get(), getProject().getProjectDir());
-
-        if (GradleVersion.current().compareTo(GradleVersion.version("5.6")) < 0) {
-            workerExecutor.submit(RoutesCompileRunnable.class, workerConfiguration -> {
-                workerConfiguration.setIsolationMode(IsolationMode.PROCESS);
-                workerConfiguration.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-                workerConfiguration.params(spec, getCompiler());
-                workerConfiguration.classpath(routesCompilerClasspath);
-                workerConfiguration.setDisplayName("Generating Scala source from routes templates");
-            });
-        } else {
-            workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
-                @Override
-                public void execute(ProcessWorkerSpec workerSpec) {
-                    workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
-                    workerSpec.getClasspath().from(routesCompilerClasspath);
-                }
-            }).submit(RoutesCompileWorkAction.class, new Action<RoutesCompileParameters>() {
-                @Override
-                public void execute(RoutesCompileParameters parameters) {
-                    parameters.getCompiler().set(RoutesCompile.this.getCompiler());
-                    parameters.getSpec().set(spec);
-                }
-            });
-        }
+        RoutesCompileSpec spec = new DefaultRoutesCompileSpec(
+            getSource().getFiles(),
+            getOutputDirectory().get().getAsFile(),
+            isJavaProject(),
+            getNamespaceReverseRouter().get(),
+            getGenerateReverseRoutes().get(),
+            getInjectedRoutesGenerator().get(),
+            getAdditionalImports().get(),
+            projectDir
+        );
+        workerExecutor.processIsolation(new Action<ProcessWorkerSpec>() {
+            @Override
+            public void execute(ProcessWorkerSpec workerSpec) {
+                workerSpec.forkOptions(options -> options.jvmArgs("-XX:MaxMetaspaceSize=256m"));
+                workerSpec.getClasspath().from(routesCompilerClasspath);
+            }
+        }).submit(RoutesCompileWorkAction.class, new Action<RoutesCompileParameters>() {
+            @Override
+            public void execute(RoutesCompileParameters parameters) {
+                parameters.getCompiler().set(RoutesCompile.this.getCompiler());
+                parameters.getSpec().set(spec);
+            }
+        });
     }
 
     private Compiler<RoutesCompileSpec> getCompiler() {
