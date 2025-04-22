@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "org.gradle.playframework"
-version = "0.15.3"
+version = "0.15.4"
 
 repositories {
     mavenCentral()
@@ -23,9 +23,9 @@ dependencies {
     }
     testImplementation("org.junit.platform:junit-platform-launcher")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
-    integTestFixturesImplementation("com.google.guava:guava:23.0")
+    integTestFixturesImplementation("com.google.guava:guava:32.0.1-jre")
     integTestFixturesImplementation("org.hamcrest:hamcrest-library:1.3")
-    integTestFixturesImplementation("org.apache.ant:ant:1.9.3")
+    integTestFixturesImplementation("org.apache.ant:ant:1.10.11")
     integTestFixturesImplementation("org.freemarker:freemarker:2.3.30")
     docTestImplementation("org.gradle.exemplar:samples-check:1.0.0")
     docTestRuntimeOnly("org.slf4j:slf4j-simple:1.7.16")
