@@ -45,7 +45,7 @@ public final class PlayPluginHelper {
         }
     }
 
-    public static <T extends SourceDirectorySet> T createCustomSourceDirectorySet(Project project, Class<T> sourceDirectorySetType, String name    ) {
+    public static <T extends SourceDirectorySet> T createCustomSourceDirectorySet(Project project, Class<T> sourceDirectorySetType, String name) {
         SourceSet mainJavaSourceSet = getMainJavaSourceSet(project);
         T sourceDirectorySet = project.getObjects().newInstance(sourceDirectorySetType, project.getObjects().sourceDirectorySet(name, ((DefaultSourceSet) mainJavaSourceSet).getDisplayName()));
         mainJavaSourceSet.getExtensions().add(name, sourceDirectorySet);
@@ -57,5 +57,4 @@ public final class PlayPluginHelper {
 //            return project.getObjects().newInstance(sourceDirectorySetType, project.getObjects().sourceDirectorySet(name, ((DefaultSourceSet) mainJavaSourceSet).getDisplayName())); // TODO (donat) does this even work with old versions not knowing about TaskDependencyFactory
 //        }
     }
-
 }

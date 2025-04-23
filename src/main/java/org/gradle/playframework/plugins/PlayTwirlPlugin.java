@@ -7,8 +7,6 @@ import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.plugins.internal.DefaultTwirlSourceDirectorySet;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.sourcesets.TwirlImports;
-import org.gradle.playframework.sourcesets.TwirlSourceSet;
-import org.gradle.playframework.sourcesets.internal.DefaultTwirlSourceSet;
 import org.gradle.playframework.tasks.TwirlCompile;
 import org.gradle.playframework.tools.internal.twirl.TwirlCompilerFactory;
 
@@ -28,7 +26,6 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
 
         Configuration twirlCompilerConfiguration = createTwirlCompilerConfiguration(project);
         declareDefaultDependencies(project, twirlCompilerConfiguration, playExtension);
-//        TwirlSourceSet twirlSourceSet = PlayPluginHelper.createCustomSourceSet(project, DefaultTwirlSourceSet.class, "twirl");
         TwirlSourceDirectorySet twirl = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultTwirlSourceDirectorySet.class, "twirl");
         TaskProvider<TwirlCompile> twirlCompile = createDefaultTwirlCompileTask(project, twirl, twirlCompilerConfiguration, playExtension);
 
