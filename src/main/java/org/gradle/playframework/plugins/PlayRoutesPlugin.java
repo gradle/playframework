@@ -1,6 +1,8 @@
 package org.gradle.playframework.plugins;
 
 import org.gradle.internal.deprecation.DeprecationLogger;
+import org.gradle.playframework.plugins.internal.DefaultRoutesSourceDirectorySet;
+import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.sourcesets.internal.DefaultRoutesSourceSet;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.sourcesets.RoutesSourceSet;
@@ -14,7 +16,6 @@ import org.gradle.api.provider.Provider;
 import java.util.ArrayList;
 
 import static org.gradle.playframework.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
-import static org.gradle.playframework.plugins.internal.PlayPluginHelper.createCustomSourceSet;
 
 /**
  * Plugin for compiling Play routes sources in a Play application.
@@ -30,8 +31,8 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
         Configuration routesCompilerConfiguration = createRoutesCompilerConfiguration(project);
         declareDefaultDependencies(project, routesCompilerConfiguration, playExtension);
-        RoutesSourceSet routesSourceSet = createCustomSourceSet(project, DefaultRoutesSourceSet.class, "routes");
-        createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
+        RoutesSourceDirectorySet routesSourceSet = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultRoutesSourceDirectorySet.class, "routes");
+        createDefaultRoutesCompileTask(project, routesSourceSet, routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
     }
 
     private Configuration createRoutesCompilerConfiguration(Project project) {

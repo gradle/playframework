@@ -10,23 +10,10 @@ import org.gradle.playframework.sourcesets.JavaScriptSourceSet;
 import javax.inject.Inject;
 
 public class DefaultJavaScriptSourceDirectorySet extends DefaultSourceDirectorySet implements JavaScriptSourceDirectorySet {
-    private final SourceDirectorySet sourceDirSet;
-
-//    @Inject
-//    public DefaultJavaScriptSourceDirectorySet(SourceDirectorySet sourceDirectorySet) {
-//        super(sourceDirectorySet);
-//    }
-
-
-    @Inject
+        @Inject
     public DefaultJavaScriptSourceDirectorySet(SourceDirectorySet sourceDirectorySet, TaskDependencyFactory taskDependencyFactory) {
         super(sourceDirectorySet, taskDependencyFactory);
-        this.sourceDirSet = sourceDirectorySet;
+        srcDirs("app/assets");
+        include("**/*.js");
     }
-
-//    @Override
-//    public JavaScriptSourceDirectorySet javaScript(Action<? super SourceDirectorySet> configureAction) {
-//            configureAction.execute(sourceDirSet);
-//            return this;
-//        }
 }

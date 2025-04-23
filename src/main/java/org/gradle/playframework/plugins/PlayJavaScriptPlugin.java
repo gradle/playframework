@@ -1,15 +1,15 @@
 package org.gradle.playframework.plugins;
 
-import org.gradle.playframework.extensions.internal.DefaultPlayJavaScriptExtension;
 import org.gradle.playframework.plugins.internal.DefaultJavaScriptSourceDirectorySet;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
-import org.gradle.playframework.sourcesets.JavaScriptSourceSet;
-import org.gradle.playframework.sourcesets.internal.DefaultJavaScriptSourceSet;
 import org.gradle.playframework.tasks.JavaScriptMinify;
 import org.gradle.playframework.tools.internal.javascript.GoogleClosureCompiler;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.SourceDirectorySet;
+
+import java.io.File;
+import java.util.stream.Collectors;
 
 /**
  * Plugin for adding javascript processing to a Play application.
@@ -23,8 +23,7 @@ public class PlayJavaScriptPlugin implements PlayGeneratedSourcePlugin {
     public void apply(Project project) {
         Configuration compilerConfiguration = createCompilerConfiguration(project);
         declareDefaultDependencies(project, compilerConfiguration);
-//        SourceDirectorySet javaScript = PlayPluginHelper.createCustomSourceSet(project, DefaultJavaScriptSourceSet.class, "javaScript").getJavaScript();
-        SourceDirectorySet javaScript = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultJavaScriptSourceDirectorySet.class, "javaScript", DefaultPlayJavaScriptExtension.class);
+        SourceDirectorySet javaScript = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultJavaScriptSourceDirectorySet.class, "javaScript"        );
         createDefaultJavaScriptMinifyTask(
             project,
             javaScript,

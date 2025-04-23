@@ -4,6 +4,7 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.playframework.extensions.PlayExtension;
+import org.gradle.playframework.plugins.internal.DefaultTwirlSourceDirectorySet;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.sourcesets.TwirlImports;
 import org.gradle.playframework.sourcesets.TwirlSourceSet;
@@ -27,8 +28,9 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
 
         Configuration twirlCompilerConfiguration = createTwirlCompilerConfiguration(project);
         declareDefaultDependencies(project, twirlCompilerConfiguration, playExtension);
-        TwirlSourceSet twirlSourceSet = PlayPluginHelper.createCustomSourceSet(project, DefaultTwirlSourceSet.class, "twirl");
-        TaskProvider<TwirlCompile> twirlCompile = createDefaultTwirlCompileTask(project, twirlSourceSet, twirlCompilerConfiguration, playExtension);
+//        TwirlSourceSet twirlSourceSet = PlayPluginHelper.createCustomSourceSet(project, DefaultTwirlSourceSet.class, "twirl");
+        TwirlSourceDirectorySet twirl = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultTwirlSourceDirectorySet.class, "twirl");
+        TaskProvider<TwirlCompile> twirlCompile = createDefaultTwirlCompileTask(project, twirl, twirlCompilerConfiguration, playExtension);
 
         project.afterEvaluate(project1 -> {
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
@@ -55,12 +57,12 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         });
     }
 
-    private TaskProvider<TwirlCompile> createDefaultTwirlCompileTask(Project project, TwirlSourceSet twirlSourceSet, Configuration compilerConfiguration, PlayExtension playExtension) {
+    private TaskProvider<TwirlCompile> createDefaultTwirlCompileTask(Project project, TwirlSourceDirectorySet twirlSourceSet, Configuration compilerConfiguration, PlayExtension playExtension) {
         return project.getTasks().register(TWIRL_COMPILE_TASK_NAME, TwirlCompile.class, twirlCompile -> {
-            twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getTwirl().getDisplayName() + "' source set.");
+            twirlCompile.setDescription("Compiles Twirl templates for the '" + twirlSourceSet.getDisplayName() + "' source set.");
             twirlCompile.getPlatform().set(project.provider(() -> playExtension.getPlatform()));
-            twirlCompile.setSource(twirlSourceSet.getTwirl());
-            twirlCompile.getOutputDirectory().set(getOutputDir(project, twirlSourceSet.getTwirl()));
+            twirlCompile.setSource(twirlSourceSet);
+            twirlCompile.getOutputDirectory().set(getOutputDir(project, twirlSourceSet));
             twirlCompile.getDefaultImports().set(twirlSourceSet.getDefaultImports());
             twirlCompile.getUserTemplateFormats().set(twirlSourceSet.getUserTemplateFormats());
             twirlCompile.getAdditionalImports().set(twirlSourceSet.getAdditionalImports());
