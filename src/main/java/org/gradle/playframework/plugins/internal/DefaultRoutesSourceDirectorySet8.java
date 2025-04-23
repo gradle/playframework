@@ -7,9 +7,9 @@ import org.gradle.playframework.plugins.RoutesSourceDirectorySet;
 
 import javax.inject.Inject;
 
-public class DefaultRoutesSourceDirectorySet extends DefaultSourceDirectorySet implements RoutesSourceDirectorySet {
+public class DefaultRoutesSourceDirectorySet8 extends DefaultSourceDirectorySet implements RoutesSourceDirectorySet {
     @Inject
-    public DefaultRoutesSourceDirectorySet(SourceDirectorySet sourceSet, TaskDependencyFactory taskDependencyFactory) {
+    public DefaultRoutesSourceDirectorySet8(SourceDirectorySet sourceSet, TaskDependencyFactory taskDependencyFactory) {
         super(sourceSet, taskDependencyFactory);
         srcDirs("conf");
         include("routes", "*.routes");

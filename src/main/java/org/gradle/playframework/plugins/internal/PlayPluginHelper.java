@@ -3,10 +3,10 @@ package org.gradle.playframework.plugins.internal;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.gradle.api.Project;
 import org.gradle.api.file.SourceDirectorySet;
-import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.internal.tasks.DefaultSourceSet;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.util.GradleVersion;
 
 
 public final class PlayPluginHelper {
@@ -45,16 +45,24 @@ public final class PlayPluginHelper {
         }
     }
 
-    public static <T extends SourceDirectorySet> T createCustomSourceDirectorySet(Project project, Class<T> sourceDirectorySetType, String name) {
+    public static <T extends SourceDirectorySet> T createCustomSourceDirectorySet(
+        Project project,
+        Class<? extends T> sourceDirectorySetType8,
+        String name,
+        Class<? extends T> sourceDirectorySetTypeBefore8
+    ) {
         SourceSet mainJavaSourceSet = getMainJavaSourceSet(project);
+        Class<? extends T> sourceDirectorySetType = getSourceSetType(sourceDirectorySetType8, sourceDirectorySetTypeBefore8);
         T sourceDirectorySet = project.getObjects().newInstance(sourceDirectorySetType, project.getObjects().sourceDirectorySet(name, ((DefaultSourceSet) mainJavaSourceSet).getDisplayName()));
         mainJavaSourceSet.getExtensions().add(name, sourceDirectorySet);
         return sourceDirectorySet;
-//        if (GradleVersion.current().compareTo(GradleVersion.version("8.13")) >= 0) {
-//            // instantiate DefaultScalaSourceDirectorySet with non-deprecated constructor
-//        } else {
-//            // instantiate DefaultScalaSourceDirectorySet with old constructor
-//            return project.getObjects().newInstance(sourceDirectorySetType, project.getObjects().sourceDirectorySet(name, ((DefaultSourceSet) mainJavaSourceSet).getDisplayName())); // TODO (donat) does this even work with old versions not knowing about TaskDependencyFactory
-//        }
+    }
+
+    private static <T extends SourceDirectorySet> Class<? extends T> getSourceSetType(Class<? extends T> sourceDirectorySetType8, Class<? extends T> sourceDirectorySetTypeBefore8) {
+        if (GradleVersion.current().compareTo(GradleVersion.version("8.0")) >= 0) {
+            return sourceDirectorySetType8;
+        } else {
+            return sourceDirectorySetTypeBefore8;
+        }
     }
 }

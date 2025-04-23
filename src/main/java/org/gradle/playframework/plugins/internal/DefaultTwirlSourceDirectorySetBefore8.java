@@ -14,15 +14,15 @@ import org.gradle.playframework.sourcesets.internal.DefaultTwirlTemplateFormat;
 import javax.inject.Inject;
 import java.util.Arrays;
 
-public class DefaultTwirlSourceDirectorySet extends DefaultSourceDirectorySet implements TwirlSourceDirectorySet {
+public class DefaultTwirlSourceDirectorySetBefore8 extends DefaultSourceDirectorySet implements TwirlSourceDirectorySet {
     private final Property<TwirlImports> defaultImports;
     private final ListProperty<TwirlTemplateFormat> userTemplateFormats;
     private final ListProperty<String> additionalImports;
     private final ListProperty<String> constructorAnnotations;
 
     @Inject
-    public DefaultTwirlSourceDirectorySet(SourceDirectorySet sourceSet, TaskDependencyFactory taskDependencyFactory, ObjectFactory objectFactory) {
-        super(sourceSet, taskDependencyFactory);
+    public DefaultTwirlSourceDirectorySetBefore8(SourceDirectorySet sourceSet, ObjectFactory objectFactory) {
+        super(sourceSet);
         srcDirs("app");
         include("**/*.scala.*");
 
