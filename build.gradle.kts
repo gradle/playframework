@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException
+
 plugins {
     groovy
     `java-gradle-plugin`
@@ -27,7 +29,7 @@ dependencies {
     integTestFixturesImplementation("org.hamcrest:hamcrest-library:1.3")
     integTestFixturesImplementation("org.apache.ant:ant:1.10.11")
     integTestFixturesImplementation("org.freemarker:freemarker:2.3.30")
-    docTestImplementation("org.gradle.exemplar:samples-check:1.0.0")
+    docTestImplementation("org.gradle.exemplar:samples-check:1.0.3")
     docTestRuntimeOnly("org.slf4j:slf4j-simple:1.7.16")
 }
 
@@ -119,4 +121,27 @@ tasks.withType<Test>().configureEach {
     if (name != "docTest") {
         useJUnitPlatform() // required for Spock 2+, but Samples use JUnit 4 rule
     }
+}
+
+val readReleaseNotes by tasks.registering {
+    description = "Ensure we've got some release notes handy"
+    doLast {
+        val releaseNotesFile = file("release-notes-$version.txt")
+        if (!releaseNotesFile.exists()) {
+            throw FileNotFoundException("Couldn't find release notes file ${releaseNotesFile.absolutePath}")
+        }
+        val releaseNotes = releaseNotesFile.readText().trim()
+        require(!releaseNotes.isBlank()) { "Release notes file ${releaseNotesFile.absolutePath} is empty" }
+        gradlePlugin.plugins["play-twirl-plugin"].description = releaseNotes
+        gradlePlugin.plugins["play-routes-plugin"].description = releaseNotes
+        gradlePlugin.plugins["play-application-plugin"].description = releaseNotes
+        gradlePlugin.plugins["play-javascript-plugin"].description = releaseNotes
+        gradlePlugin.plugins["play-distribution-plugin"].description = releaseNotes
+        gradlePlugin.plugins["play-ide-plugin"].description = releaseNotes
+        gradlePlugin.plugins["play-plugin"].description = releaseNotes
+    }
+}
+
+tasks.publishPlugins {
+    dependsOn(readReleaseNotes)
 }
