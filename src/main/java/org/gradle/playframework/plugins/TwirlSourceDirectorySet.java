@@ -1,12 +1,13 @@
-package org.gradle.playframework.sourcesets;
+package org.gradle.playframework.plugins;
 
-import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.playframework.sourcesets.TwirlImports;
+import org.gradle.playframework.sourcesets.TwirlTemplateFormat;
 
 /**
- * Represents a source set containing Twirl templates.
+ * Represents a source directory set containing Twirl templates.
  * <p>
  * The following example demonstrate the use of the source set in a build script using the Groovy DSL:
  * <pre>
@@ -20,23 +21,7 @@ import org.gradle.api.provider.Property;
  * }
  * </pre>
  */
-public interface TwirlSourceSet {
-
-    /**
-     * Returns the source directory set.
-     *
-     * @return The source directory set
-     */
-    SourceDirectorySet getTwirl();
-
-    /**
-     * Configures the source set.
-     *
-     * @param configureAction The configuration action
-     * @return The source set
-     */
-    TwirlSourceSet twirl(Action<? super SourceDirectorySet> configureAction);
-
+public interface TwirlSourceDirectorySet extends SourceDirectorySet {
     /**
      * The default imports that should be added to generated source files.
      *

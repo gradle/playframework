@@ -1,46 +1,33 @@
-package org.gradle.playframework.sourcesets.internal;
+package org.gradle.playframework.plugins.internal;
 
-import org.gradle.playframework.sourcesets.TwirlSourceSet;
-import org.gradle.playframework.sourcesets.TwirlImports;
-import org.gradle.playframework.sourcesets.TwirlTemplateFormat;
-import org.gradle.api.Action;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.file.DefaultSourceDirectorySet;
+import org.gradle.api.internal.tasks.TaskDependencyFactory;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.playframework.plugins.TwirlSourceDirectorySet;
+import org.gradle.playframework.sourcesets.TwirlImports;
+import org.gradle.playframework.sourcesets.TwirlTemplateFormat;
+import org.gradle.playframework.sourcesets.internal.DefaultTwirlTemplateFormat;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 
-public class DefaultTwirlSourceSet implements TwirlSourceSet {
-
-    private final SourceDirectorySet twirl;
+public class DefaultTwirlSourceDirectorySet8 extends DefaultSourceDirectorySet implements TwirlSourceDirectorySet {
     private final Property<TwirlImports> defaultImports;
     private final ListProperty<TwirlTemplateFormat> userTemplateFormats;
     private final ListProperty<String> additionalImports;
     private final ListProperty<String> constructorAnnotations;
 
     @Inject
-    public DefaultTwirlSourceSet(String name, String displayName, ObjectFactory objectFactory) {
-        twirl = objectFactory.sourceDirectorySet(name, displayName + " Twirl source");
-        twirl.srcDirs("app");
-        twirl.include("**/*.scala.*");
+    public DefaultTwirlSourceDirectorySet8(SourceDirectorySet sourceSet, TaskDependencyFactory taskDependencyFactory, ObjectFactory objectFactory) {
+        super(sourceSet, taskDependencyFactory);
         defaultImports = objectFactory.property(TwirlImports.class);
         defaultImports.set(TwirlImports.SCALA);
         userTemplateFormats = objectFactory.listProperty(TwirlTemplateFormat.class).empty();
         additionalImports = objectFactory.listProperty(String.class).empty();
         constructorAnnotations = objectFactory.listProperty(String.class).empty();
-    }
-
-    @Override
-    public SourceDirectorySet getTwirl() {
-        return twirl;
-    }
-
-    @Override
-    public TwirlSourceSet twirl(Action<? super SourceDirectorySet> configureAction) {
-        configureAction.execute(getTwirl());
-        return this;
     }
 
     @Override
@@ -54,7 +41,7 @@ public class DefaultTwirlSourceSet implements TwirlSourceSet {
     }
 
     @Override
-    public TwirlTemplateFormat newUserTemplateFormat(final String extension, String templateType, String... imports) {
+    public TwirlTemplateFormat newUserTemplateFormat(String extension, String templateType, String... imports) {
         return new DefaultTwirlTemplateFormat(extension, templateType, Arrays.asList(imports));
     }
 

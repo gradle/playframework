@@ -17,9 +17,6 @@ class PlayIdeaPluginAdvancedIntegrationTest extends PlayIdeaPluginIntegrationTes
     private static final String ROUTES_COMPILE_TASK_PATH = ":$ROUTES_COMPILE_TASK_NAME".toString()
     private static final String TWIRL_COMPILE_TASK_PATH = ":$TWIRL_COMPILE_TASK_NAME".toString()
     private static final String JS_MINIFY_TASK_PATH = ":$JS_MINIFY_TASK_NAME".toString()
-    static final Map PLAY_VERSION_TO_CLASSPATH_SIZE = [(PlayMajorVersion.PLAY_2_4_X): 108,
-                                                       (PlayMajorVersion.PLAY_2_5_X): 121,
-                                                       (PlayMajorVersion.PLAY_2_6_X): 111]
 
     @Override
     PlayApp getPlayApp() {

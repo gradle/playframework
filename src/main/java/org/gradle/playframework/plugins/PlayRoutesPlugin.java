@@ -1,9 +1,10 @@
 package org.gradle.playframework.plugins;
 
 import org.gradle.internal.deprecation.DeprecationLogger;
-import org.gradle.playframework.sourcesets.internal.DefaultRoutesSourceSet;
+import org.gradle.playframework.plugins.internal.DefaultPlaySourceDirectorySet8;
+import org.gradle.playframework.plugins.internal.DefaultPlaySourceDirectorySetBefore8;
+import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.extensions.PlayExtension;
-import org.gradle.playframework.sourcesets.RoutesSourceSet;
 import org.gradle.playframework.tasks.RoutesCompile;
 import org.gradle.playframework.tools.internal.routes.RoutesCompilerFactory;
 import org.gradle.api.Project;
@@ -14,7 +15,6 @@ import org.gradle.api.provider.Provider;
 import java.util.ArrayList;
 
 import static org.gradle.playframework.plugins.PlayApplicationPlugin.PLAY_EXTENSION_NAME;
-import static org.gradle.playframework.plugins.internal.PlayPluginHelper.createCustomSourceSet;
 
 /**
  * Plugin for compiling Play routes sources in a Play application.
@@ -30,8 +30,11 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
         Configuration routesCompilerConfiguration = createRoutesCompilerConfiguration(project);
         declareDefaultDependencies(project, routesCompilerConfiguration, playExtension);
-        RoutesSourceSet routesSourceSet = createCustomSourceSet(project, DefaultRoutesSourceSet.class, "routes");
-        createDefaultRoutesCompileTask(project, routesSourceSet.getRoutes(), routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
+        SourceDirectorySet routesSourceSet = PlayPluginHelper.createCustomSourceDirectorySet(project, "routes", DefaultPlaySourceDirectorySet8.class, DefaultPlaySourceDirectorySetBefore8.class);
+        routesSourceSet.srcDirs("conf");
+        routesSourceSet.include("routes", "*.routes");
+
+        createDefaultRoutesCompileTask(project, routesSourceSet, routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
     }
 
     private Configuration createRoutesCompilerConfiguration(Project project) {

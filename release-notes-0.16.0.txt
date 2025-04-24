@@ -1,0 +1,2 @@
+- support Gradle 9.0
+    - don't use deprecated APIs
