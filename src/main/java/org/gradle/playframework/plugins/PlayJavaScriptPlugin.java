@@ -1,7 +1,7 @@
 package org.gradle.playframework.plugins;
 
-import org.gradle.playframework.plugins.internal.DefaultJavaScriptSourceDirectorySet8;
-import org.gradle.playframework.plugins.internal.DefaultJavaScriptSourceDirectorySetBefore8;
+import org.gradle.playframework.plugins.internal.DefaultPlaySourceDirectorySet8;
+import org.gradle.playframework.plugins.internal.DefaultPlaySourceDirectorySetBefore8;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.tasks.JavaScriptMinify;
 import org.gradle.playframework.tools.internal.javascript.GoogleClosureCompiler;
@@ -21,7 +21,9 @@ public class PlayJavaScriptPlugin implements PlayGeneratedSourcePlugin {
     public void apply(Project project) {
         Configuration compilerConfiguration = createCompilerConfiguration(project);
         declareDefaultDependencies(project, compilerConfiguration);
-        SourceDirectorySet javaScript = PlayPluginHelper.createCustomSourceDirectorySet(project, "javaScript", DefaultJavaScriptSourceDirectorySet8.class, DefaultJavaScriptSourceDirectorySetBefore8.class);
+        SourceDirectorySet javaScript = PlayPluginHelper.createCustomSourceDirectorySet(project, "javaScript", DefaultPlaySourceDirectorySet8.class, DefaultPlaySourceDirectorySetBefore8.class);
+        javaScript.srcDirs("app/assets");
+        javaScript.include("**/*.js");
         createDefaultJavaScriptMinifyTask(
             project,
             javaScript,

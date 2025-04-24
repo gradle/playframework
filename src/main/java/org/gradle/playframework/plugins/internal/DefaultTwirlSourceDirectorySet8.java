@@ -23,9 +23,6 @@ public class DefaultTwirlSourceDirectorySet8 extends DefaultSourceDirectorySet i
     @Inject
     public DefaultTwirlSourceDirectorySet8(SourceDirectorySet sourceSet, TaskDependencyFactory taskDependencyFactory, ObjectFactory objectFactory) {
         super(sourceSet, taskDependencyFactory);
-        srcDirs("app");
-        include("**/*.scala.*");
-
         defaultImports = objectFactory.property(TwirlImports.class);
         defaultImports.set(TwirlImports.SCALA);
         userTemplateFormats = objectFactory.listProperty(TwirlTemplateFormat.class).empty();

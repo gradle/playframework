@@ -1,8 +1,8 @@
 package org.gradle.playframework.plugins;
 
 import org.gradle.internal.deprecation.DeprecationLogger;
-import org.gradle.playframework.plugins.internal.DefaultRoutesSourceDirectorySet8;
-import org.gradle.playframework.plugins.internal.DefaultRoutesSourceDirectorySetBefore8;
+import org.gradle.playframework.plugins.internal.DefaultPlaySourceDirectorySet8;
+import org.gradle.playframework.plugins.internal.DefaultPlaySourceDirectorySetBefore8;
 import org.gradle.playframework.plugins.internal.PlayPluginHelper;
 import org.gradle.playframework.extensions.PlayExtension;
 import org.gradle.playframework.tasks.RoutesCompile;
@@ -30,7 +30,10 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
         Configuration routesCompilerConfiguration = createRoutesCompilerConfiguration(project);
         declareDefaultDependencies(project, routesCompilerConfiguration, playExtension);
-        RoutesSourceDirectorySet routesSourceSet = PlayPluginHelper.createCustomSourceDirectorySet(project, "routes", DefaultRoutesSourceDirectorySet8.class, DefaultRoutesSourceDirectorySetBefore8.class);
+        SourceDirectorySet routesSourceSet = PlayPluginHelper.createCustomSourceDirectorySet(project, "routes", DefaultPlaySourceDirectorySet8.class, DefaultPlaySourceDirectorySetBefore8.class);
+        routesSourceSet.srcDirs("conf");
+        routesSourceSet.include("routes", "*.routes");
+
         createDefaultRoutesCompileTask(project, routesSourceSet, routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
     }
 

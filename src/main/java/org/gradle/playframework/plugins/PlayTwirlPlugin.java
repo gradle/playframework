@@ -28,8 +28,10 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
         Configuration twirlCompilerConfiguration = createTwirlCompilerConfiguration(project);
         declareDefaultDependencies(project, twirlCompilerConfiguration, playExtension);
         TwirlSourceDirectorySet twirl = PlayPluginHelper.createCustomSourceDirectorySet(project, "twirl", DefaultTwirlSourceDirectorySet8.class, DefaultTwirlSourceDirectorySetBefore8.class);
-        TaskProvider<TwirlCompile> twirlCompile = createDefaultTwirlCompileTask(project, twirl, twirlCompilerConfiguration, playExtension);
+        twirl.srcDirs("app");
+        twirl.include("**/*.scala.*");
 
+        TaskProvider<TwirlCompile> twirlCompile = createDefaultTwirlCompileTask(project, twirl, twirlCompilerConfiguration, playExtension);
         project.afterEvaluate(project1 -> {
             if (hasTwirlSourceSetsWithJavaImports(twirlCompile)) {
                 project.getDependencies().add(PlayApplicationPlugin.PLATFORM_CONFIGURATION, playExtension.getPlatform().getDependencyNotation("play-java").get());

@@ -7,11 +7,9 @@ import org.gradle.playframework.plugins.JavaScriptSourceDirectorySet;
 
 import javax.inject.Inject;
 
-public class DefaultJavaScriptSourceDirectorySet8 extends DefaultSourceDirectorySet implements JavaScriptSourceDirectorySet {
+public class DefaultPlaySourceDirectorySet8 extends DefaultSourceDirectorySet {
     @Inject
-    public DefaultJavaScriptSourceDirectorySet8(SourceDirectorySet sourceDirectorySet, TaskDependencyFactory taskDependencyFactory) {
+    public DefaultPlaySourceDirectorySet8(SourceDirectorySet sourceDirectorySet, TaskDependencyFactory taskDependencyFactory) {
         super(sourceDirectorySet, taskDependencyFactory);
-        srcDirs("app/assets");
-        include("**/*.js");
     }
 }
