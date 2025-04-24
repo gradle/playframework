@@ -45,24 +45,53 @@ public final class PlayPluginHelper {
         }
     }
 
+    /**
+     * Creates a custom source directory set compatible with the current Gradle version.
+     *
+     * @param project The Gradle project
+     * @param name Name of the source directory set
+     * @param sourceDirectorySetType8 Source directory set type for Gradle 8.0+
+     * @param sourceDirectorySetTypeBefore8 Source directory set type for Gradle before 8.0
+     * @return The created source directory set
+     */
     public static <T extends SourceDirectorySet> T createCustomSourceDirectorySet(
         Project project,
-        Class<? extends T> sourceDirectorySetType8,
         String name,
+        Class<? extends T> sourceDirectorySetType8,
         Class<? extends T> sourceDirectorySetTypeBefore8
     ) {
         SourceSet mainJavaSourceSet = getMainJavaSourceSet(project);
-        Class<? extends T> sourceDirectorySetType = getSourceSetType(sourceDirectorySetType8, sourceDirectorySetTypeBefore8);
-        T sourceDirectorySet = project.getObjects().newInstance(sourceDirectorySetType, project.getObjects().sourceDirectorySet(name, ((DefaultSourceSet) mainJavaSourceSet).getDisplayName()));
+
+        Class<? extends T> sourceDirectorySetType = selectGradleVersionCompatibleType(
+            sourceDirectorySetType8,
+            sourceDirectorySetTypeBefore8
+        );
+
+        T sourceDirectorySet = project.getObjects().newInstance(
+            sourceDirectorySetType,
+            project.getObjects().sourceDirectorySet(
+                name,
+                ((DefaultSourceSet) mainJavaSourceSet).getDisplayName()
+            )
+        );
+
         mainJavaSourceSet.getExtensions().add(name, sourceDirectorySet);
+
         return sourceDirectorySet;
     }
 
-    private static <T extends SourceDirectorySet> Class<? extends T> getSourceSetType(Class<? extends T> sourceDirectorySetType8, Class<? extends T> sourceDirectorySetTypeBefore8) {
-        if (GradleVersion.current().compareTo(GradleVersion.version("8.0")) >= 0) {
-            return sourceDirectorySetType8;
-        } else {
-            return sourceDirectorySetTypeBefore8;
-        }
+    /**
+     * Selects the appropriate source directory set type based on the Gradle version.
+     *
+     * @param typeForGradle8Plus Type to use for Gradle 8.0 and newer
+     * @param typeForOlderGradle Type to use for Gradle versions before 8.0
+     * @return The appropriate source directory set type
+     */
+    private static <T> Class<? extends T> selectGradleVersionCompatibleType(
+        Class<? extends T> typeForGradle8Plus,
+        Class<? extends T> typeForOlderGradle
+    ) {
+        boolean isGradle8OrNewer = GradleVersion.current().compareTo(GradleVersion.version("8.0")) >= 0;
+        return isGradle8OrNewer ? typeForGradle8Plus : typeForOlderGradle;
     }
 }

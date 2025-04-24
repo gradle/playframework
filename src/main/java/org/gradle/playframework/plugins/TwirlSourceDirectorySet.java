@@ -21,7 +21,7 @@ import org.gradle.playframework.sourcesets.TwirlTemplateFormat;
  * }
  * </pre>
  */
-public interface TwirlSourceDirectorySet extends  SourceDirectorySet {
+public interface TwirlSourceDirectorySet extends SourceDirectorySet {
     /**
      * The default imports that should be added to generated source files.
      *

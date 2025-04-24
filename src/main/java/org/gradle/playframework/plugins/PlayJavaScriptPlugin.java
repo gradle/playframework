@@ -21,7 +21,7 @@ public class PlayJavaScriptPlugin implements PlayGeneratedSourcePlugin {
     public void apply(Project project) {
         Configuration compilerConfiguration = createCompilerConfiguration(project);
         declareDefaultDependencies(project, compilerConfiguration);
-        SourceDirectorySet javaScript = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultJavaScriptSourceDirectorySet8.class, "javaScript", DefaultJavaScriptSourceDirectorySetBefore8.class);
+        SourceDirectorySet javaScript = PlayPluginHelper.createCustomSourceDirectorySet(project, "javaScript", DefaultJavaScriptSourceDirectorySet8.class, DefaultJavaScriptSourceDirectorySetBefore8.class);
         createDefaultJavaScriptMinifyTask(
             project,
             javaScript,

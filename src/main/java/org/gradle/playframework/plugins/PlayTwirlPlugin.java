@@ -27,7 +27,7 @@ public class PlayTwirlPlugin implements PlayGeneratedSourcePlugin {
 
         Configuration twirlCompilerConfiguration = createTwirlCompilerConfiguration(project);
         declareDefaultDependencies(project, twirlCompilerConfiguration, playExtension);
-        TwirlSourceDirectorySet twirl = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultTwirlSourceDirectorySet8.class, "twirl", DefaultTwirlSourceDirectorySetBefore8.class);
+        TwirlSourceDirectorySet twirl = PlayPluginHelper.createCustomSourceDirectorySet(project, "twirl", DefaultTwirlSourceDirectorySet8.class, DefaultTwirlSourceDirectorySetBefore8.class);
         TaskProvider<TwirlCompile> twirlCompile = createDefaultTwirlCompileTask(project, twirl, twirlCompilerConfiguration, playExtension);
 
         project.afterEvaluate(project1 -> {

@@ -30,7 +30,7 @@ public class PlayRoutesPlugin implements PlayGeneratedSourcePlugin {
 
         Configuration routesCompilerConfiguration = createRoutesCompilerConfiguration(project);
         declareDefaultDependencies(project, routesCompilerConfiguration, playExtension);
-        RoutesSourceDirectorySet routesSourceSet = PlayPluginHelper.createCustomSourceDirectorySet(project, DefaultRoutesSourceDirectorySet8.class, "routes", DefaultRoutesSourceDirectorySetBefore8.class);
+        RoutesSourceDirectorySet routesSourceSet = PlayPluginHelper.createCustomSourceDirectorySet(project, "routes", DefaultRoutesSourceDirectorySet8.class, DefaultRoutesSourceDirectorySetBefore8.class);
         createDefaultRoutesCompileTask(project, routesSourceSet, routesCompilerConfiguration, playExtension, playExtension.getInjectedRoutesGenerator());
     }
 
