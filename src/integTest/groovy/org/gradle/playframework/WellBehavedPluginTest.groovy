@@ -4,9 +4,6 @@ import static org.gradle.playframework.fixtures.Repositories.playRepositories
 
 abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
 
-    {
-        enableCC = false
-    }
 
     def setup() {
         buildFile << """
@@ -21,6 +18,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
 
     // TODO: End result should be that only the help task is realized
     def "does not realize all possible tasks"() {
+        enableCC = false
         buildFile << """
             def configuredTasks = []
             tasks.configureEach {
