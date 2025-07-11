@@ -10,6 +10,8 @@ import spock.lang.TempDir
 
 class AbstractIntegrationTest extends Specification {
 
+    boolean enableCC = true
+
     @TempDir
     File temporaryFolder
 
@@ -32,9 +34,13 @@ class AbstractIntegrationTest extends Specification {
     }
 
     private GradleRunner createAndConfigureGradleRunner(String... arguments) {
+        def args = (arguments + ['-s']) as List<String>
+        if (enableCC) {
+            args += '--configuration-cache'
+        }
         GradleRunner.create()
                 .withProjectDir(projectDir)
-                .withArguments((arguments + ['-s','--configuration-cache']) as List<String>)
+                .withArguments(args)
                 .withPluginClasspath().forwardOutput()
     }
 

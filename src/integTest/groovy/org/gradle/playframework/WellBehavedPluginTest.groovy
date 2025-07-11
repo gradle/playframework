@@ -4,6 +4,10 @@ import static org.gradle.playframework.fixtures.Repositories.playRepositories
 
 abstract class WellBehavedPluginTest extends AbstractIntegrationTest {
 
+    {
+        enableCC = false
+    }
+
     def setup() {
         buildFile << """
             plugins {
