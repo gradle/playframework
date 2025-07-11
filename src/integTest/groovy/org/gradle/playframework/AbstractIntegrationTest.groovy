@@ -34,7 +34,7 @@ class AbstractIntegrationTest extends Specification {
     private GradleRunner createAndConfigureGradleRunner(String... arguments) {
         GradleRunner.create()
                 .withProjectDir(projectDir)
-                .withArguments(arguments + '-s' as List<String>)
+                .withArguments((arguments + ['-s','--configuration-cache']) as List<String>)
                 .withPluginClasspath().forwardOutput()
     }
 

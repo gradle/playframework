@@ -1,7 +1,6 @@
 package org.gradle.playframework.plugins;
 
 import org.gradle.api.*;
-import org.gradle.api.artifacts.ArtifactCollection;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.component.ComponentIdentifier;
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier;
@@ -11,6 +10,7 @@ import org.gradle.api.distribution.Distribution;
 import org.gradle.api.distribution.DistributionContainer;
 import org.gradle.api.distribution.plugins.DistributionPlugin;
 import org.gradle.api.file.CopySpec;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileCopyDetails;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.provider.ProviderFactory;
@@ -27,10 +27,7 @@ import org.gradle.playframework.extensions.internal.PlayMajorVersion;
 import org.gradle.util.GradleVersion;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -83,6 +80,14 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         final String capitalizedDistName = capitalizeDistributionName(distribution.getName());
         final String jarTaskName = "create" + capitalizedDistName + "DistributionJar";
 
+        Configuration runtimeClasspath = project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME);
+        Provider<Set<ResolvedArtifactResult>> artifactsProvider = runtimeClasspath.getIncoming().getArtifacts().getResolvedArtifacts();
+        Provider<Set<ComponentIdAndFile>> componentAndFileProvider = artifactsProvider.map(resultSet ->
+            resultSet.stream()
+                .map(result -> new ComponentIdAndFile(result.getId().getComponentIdentifier(), result.getFile()))
+                .collect(Collectors.toSet())
+        );
+
         TaskProvider<Jar> distributionJarTask = project.getTasks().register(jarTaskName, Jar.class, jar -> {
             jar.setDescription("Assembles an application jar suitable for deployment.");
             jar.dependsOn(mainJarTask, assetsJarTask);
@@ -91,7 +96,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             jar.getArchiveBaseName().convention(mainJarTask.flatMap(AbstractArchiveTask::getArchiveBaseName));
 
             Map<String, Object> classpath = new HashMap<>();
-            classpath.put("Class-Path", new PlayManifestClasspath(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME), assetsJarTask.get().getArchiveFile().get().getAsFile()));
+            classpath.put("Class-Path", new PlayManifestClasspath(runtimeClasspath, componentAndFileProvider, assetsJarTask.get().getArchiveFile().get().getAsFile()));
             jar.getManifest().attributes(classpath);
         });
 
@@ -114,7 +119,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
             copySpec.from(distributionJarTask);
             copySpec.from(assetsJarTask.flatMap(AbstractArchiveTask::getArchiveFile));
             copySpec.from(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME));
-            copySpec.eachFile(new PrefixArtifactFileNames(project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME)));
+            copySpec.eachFile(new PrefixArtifactFileNames(componentAndFileProvider));
         });
 
         distSpec.into("bin", copySpec -> {
@@ -219,10 +224,12 @@ public class PlayDistributionPlugin implements Plugin<Project> {
      * Represents a classpath to be defined in a jar manifest
      */
     static class PlayManifestClasspath {
-        final Configuration configuration;
         final File assetsJarFile;
+        private final Provider<Set<ComponentIdAndFile>> componentAndFileProvider;
+        private final FileCollection configuration;
 
-        public PlayManifestClasspath(Configuration configuration, File assetsJarFile) {
+        public PlayManifestClasspath(FileCollection configuration, Provider<Set<ComponentIdAndFile>> componentAndFileProvider, File assetsJarFile) {
+            this.componentAndFileProvider = componentAndFileProvider;
             this.configuration = configuration;
             this.assetsJarFile = assetsJarFile;
         }
@@ -230,7 +237,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         @Override
         public String toString() {
             Stream<File> allFiles = Stream.concat(configuration.getFiles().stream(), Collections.singleton(assetsJarFile).stream());
-            Stream<String> transformedFiles = allFiles.map(new PrefixArtifactFileNames(configuration));
+            Stream<String> transformedFiles = allFiles.map(new PrefixArtifactFileNames(componentAndFileProvider));
             return String.join(" ",
                     transformedFiles.collect(Collectors.toList())
             );
@@ -238,11 +245,11 @@ public class PlayDistributionPlugin implements Plugin<Project> {
     }
 
     static class PrefixArtifactFileNames implements Action<FileCopyDetails>, Function<File, String> {
-        private final Configuration configuration;
+        private final Provider<Set<ComponentIdAndFile>> componentAndFileProvider;
         Map<File, String> renames;
 
-        PrefixArtifactFileNames(Configuration configuration) {
-            this.configuration = configuration;
+        PrefixArtifactFileNames(Provider<Set<ComponentIdAndFile>> componentAndFileProvider) {
+            this.componentAndFileProvider = componentAndFileProvider;
         }
 
         @Override
@@ -268,26 +275,25 @@ public class PlayDistributionPlugin implements Plugin<Project> {
 
         private Map<File, String> calculate() {
             Map<File, String> files = new HashMap<>();
-            for (ResolvedArtifactResult artifact : getResolvedArtifacts()) {
-                ComponentIdentifier componentId = artifact.getId().getComponentIdentifier();
+            for (ComponentIdAndFile artifact : getResolvedArtifacts()) {
+                ComponentIdentifier componentId = artifact.getComponentId();
                 if (componentId instanceof ProjectComponentIdentifier) {
                     // rename project dependencies
                     ProjectComponentIdentifier projectComponentIdentifier = (ProjectComponentIdentifier) componentId;
-                    files.put(artifact.getFile(), renameForProject(projectComponentIdentifier, artifact.getFile()));
+                    files.put(artifact.getArtifactFile(), renameForProject(projectComponentIdentifier, artifact.getArtifactFile()));
                 } else if (componentId instanceof ModuleComponentIdentifier) {
                     ModuleComponentIdentifier moduleComponentIdentifier = (ModuleComponentIdentifier) componentId;
-                    files.put(artifact.getFile(), renameForModule(moduleComponentIdentifier, artifact.getFile()));
+                    files.put(artifact.getArtifactFile(), renameForModule(moduleComponentIdentifier, artifact.getArtifactFile()));
                 } else {
                     // don't rename other types of dependencies
-                    files.put(artifact.getFile(), artifact.getFile().getName());
+                    files.put(artifact.getArtifactFile(), artifact.getArtifactFile().getName());
                 }
             }
             return Collections.unmodifiableMap(files);
         }
 
-        Set<ResolvedArtifactResult> getResolvedArtifacts() {
-            ArtifactCollection artifacts = configuration.getIncoming().getArtifacts();
-            return artifacts.getArtifacts();
+        Set<ComponentIdAndFile> getResolvedArtifacts() {
+            return componentAndFileProvider.get();
         }
 
         static String renameForProject(ProjectComponentIdentifier id, File file) {
@@ -328,5 +334,36 @@ public class PlayDistributionPlugin implements Plugin<Project> {
 
     private static boolean hasExtension(File file, String extension) {
         return file.getPath().endsWith(extension);
+    }
+}
+
+class ComponentIdAndFile {
+    private final ComponentIdentifier componentId;
+    private final File artifactFile;
+
+
+    ComponentIdAndFile(ComponentIdentifier componentId, File artifactFile) {
+        this.componentId = componentId;
+        this.artifactFile = artifactFile;
+    }
+
+    public ComponentIdentifier getComponentId() {
+        return componentId;
+    }
+
+    public File getArtifactFile() {
+        return artifactFile;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ComponentIdAndFile componentIdAndFile = (ComponentIdAndFile) o;
+        return Objects.equals(componentId, componentIdAndFile.componentId) && Objects.equals(artifactFile, componentIdAndFile.artifactFile);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(componentId, artifactFile);
     }
 }
