@@ -80,6 +80,7 @@ public class PlayDistributionPlugin implements Plugin<Project> {
         final String capitalizedDistName = capitalizeDistributionName(distribution.getName());
         final String jarTaskName = "create" + capitalizedDistName + "DistributionJar";
 
+        // Workaround for gradle/gradle#25372: how to safely use ResolvedArtifactResult as task input.
         Configuration runtimeClasspath = project.getConfigurations().getByName(RUNTIME_CLASSPATH_CONFIGURATION_NAME);
         Provider<Set<ResolvedArtifactResult>> artifactsProvider = runtimeClasspath.getIncoming().getArtifacts().getResolvedArtifacts();
         Provider<Set<ComponentIdAndFile>> componentAndFileProvider = artifactsProvider.map(resultSet ->
