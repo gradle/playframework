@@ -1,6 +1,7 @@
 package org.gradle.playframework.tasks;
 
 import org.gradle.api.Action;
+import org.gradle.api.file.*;
 import org.gradle.playframework.tasks.internal.JavaScriptMinifyParameters;
 import org.gradle.playframework.tasks.internal.JavaScriptMinifyRunnable;
 import org.gradle.playframework.tasks.internal.JavaScriptMinifyWorkAction;
@@ -8,11 +9,6 @@ import org.gradle.playframework.tools.internal.javascript.DefaultJavaScriptCompi
 import org.gradle.playframework.tools.internal.javascript.JavaScriptCompileSpec;
 import org.gradle.playframework.tools.internal.javascript.SimpleStaleClassCleaner;
 import org.gradle.playframework.tools.internal.javascript.StaleClassCleaner;
-import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.Directory;
-import org.gradle.api.file.FileTree;
-import org.gradle.api.file.FileVisitDetails;
-import org.gradle.api.file.FileVisitor;
 import org.gradle.api.internal.file.FileOperations;
 import org.gradle.api.internal.file.RelativeFile;
 import org.gradle.api.internal.project.ProjectInternal;
@@ -41,11 +37,13 @@ public class JavaScriptMinify extends SourceTask {
     private final WorkerExecutor workerExecutor;
     private final Property<Directory> destinationDir;
     private final ConfigurableFileCollection compilerClasspath;
+    private final FileSystemOperations fileSystemOperations;
 
     @Inject
-    public JavaScriptMinify(WorkerExecutor workerExecutor) {
+    public JavaScriptMinify(WorkerExecutor workerExecutor, FileSystemOperations fileSystemOperations) {
         this.workerExecutor = workerExecutor;
-        this.include("**/*.js");
+        this.fileSystemOperations = fileSystemOperations;
+        this.include("/*.js");
         this.destinationDir = getProject().getObjects().directoryProperty();
         this.compilerClasspath = getProject().files();
     }
@@ -81,7 +79,7 @@ public class JavaScriptMinify extends SourceTask {
         cleaner.addDirToClean(destinationDir.get().getAsFile());
         cleaner.execute();
 
-        MinifyFileVisitor visitor = new MinifyFileVisitor();
+        MinifyFileVisitor visitor = new MinifyFileVisitor(fileSystemOperations);
         getSource().visit(visitor);
 
         JavaScriptCompileSpec spec = new DefaultJavaScriptCompileSpec(visitor.relativeFiles, destinationDir.get().getAsFile());
@@ -105,7 +103,12 @@ public class JavaScriptMinify extends SourceTask {
      * Copies each file in the source set to the output directory and gathers relative files for compilation
      */
     class MinifyFileVisitor implements FileVisitor {
+        private final FileSystemOperations fileSystemOperations;
         List<RelativeFile> relativeFiles = new ArrayList<>();
+
+        MinifyFileVisitor(FileSystemOperations fileSystemOperations) {
+            this.fileSystemOperations = fileSystemOperations;
+        }
 
         @Override
         public void visitDir(FileVisitDetails dirDetails) {
@@ -116,9 +119,8 @@ public class JavaScriptMinify extends SourceTask {
         public void visitFile(final FileVisitDetails fileDetails) {
             final File outputFileDir = new File(destinationDir.get().getAsFile(), fileDetails.getRelativePath().getParent().getPathString());
 
-            // Copy the raw form
-            FileOperations fileOperations = ((ProjectInternal) getProject()).getFileOperations();
-            fileOperations.copy(copySpec -> copySpec.from(fileDetails.getFile()).into(outputFileDir));
+            // Use FileSystemOperations to copy
+            fileSystemOperations.copy(copySpec -> copySpec.from(fileDetails.getFile()).into(outputFileDir));
 
             // Capture the relative file
             relativeFiles.add(new RelativeFile(fileDetails.getFile(), fileDetails.getRelativePath()));
