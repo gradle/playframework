@@ -47,7 +47,7 @@ abstract class InDepthUserGuideSamplesIntegrationTest extends Specification {
     }
 
     List<ArchiveTestFixture> distributionArchives(File sampleDir) {
-        [new ZipTestFixture(new File(sampleDir, "build/distributions/main.zip")),
-         new TarTestFixture(new File(sampleDir, "build/distributions/main.tar"))]
+        [new ZipTestFixture(new File(sampleDir, "build/distributions/custom-distribution.zip")),
+         new TarTestFixture(new File(sampleDir, "build/distributions/custom-distribution.tar"))]
     }
 }
