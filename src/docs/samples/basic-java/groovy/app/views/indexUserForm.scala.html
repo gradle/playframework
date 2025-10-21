@@ -1,0 +1,27 @@
+@(message: String, userForm : play.data.Form[model.User])
+
+@main("Welcome to Play") {
+
+<h1>@message</h1>
+
+<h2>User Form</h2>
+
+@helper.form(action = routes.Application.index, 'id -> "userFormId") {
+
+    <div>
+        @helper.inputText(
+            field = userForm("username"),
+            args = '_label -> "Username", 'id -> "username"
+        )
+    </div>
+
+    <div>
+        @helper.inputText(
+            field = userForm("mobile"),
+            args = '_label -> "Mobile", 'id -> "mobile"
+        )
+    </div>
+
+}
+
+}
