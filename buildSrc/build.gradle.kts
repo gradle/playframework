@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("gradle-plugin"))
-    implementation("org.ajoberstar:gradle-git-publish:0.3.3")
+    implementation("org.ajoberstar.git-publish:gradle-git-publish:5.1.1")
 
     implementation("org.asciidoctor:asciidoctor-gradle-jvm:4.0.4")
 }
