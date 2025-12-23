@@ -20,15 +20,15 @@ class PlayDistributionAdvancedAppIntegrationTest extends PlayDistributionApplica
         super.verifyArchives()
 
         archives()*.containsDescendants(
-                "main/conf/jva.routes",
-                "main/conf/scala.routes")
+                "${playApp.name}/conf/jva.routes",
+                "${playApp.name}/conf/scala.routes")
     }
 
     @Override
     void verifyStagedFiles() {
         super.verifyStagedFiles()
 
-        File stageMainDir = file("build/stage/main")
+        File stageMainDir = file("build/stage/${playApp.name}")
         [
             "conf/jva.routes",
             "conf/scala.routes"

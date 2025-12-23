@@ -32,6 +32,6 @@ class DistributionZipIntegrationTest extends AbstractIntegrationTest {
         build "dist"
 
         then:
-        zip("build/distributions/main.zip").containsDescendants("main/additionalFile.txt")
+        zip("build/distributions/dist-play-app.zip").containsDescendants("dist-play-app/additionalFile.txt")
     }
 }
